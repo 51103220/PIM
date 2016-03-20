@@ -1,0 +1,48 @@
+/************
+**MENU LIST
+*************/
+@media(min-width:768px){
+	#main #menuList {
+	width: 15% !important;	
+	padding-top:20px;
+}
+}
+
+
+#main #menuList .navbar {
+	background-color: transparent !important;
+	border: 0px !important;
+}
+
+#main #menuList .navbar .navbar-brand {
+	float: none !important;
+	display: block;
+}
+
+#main #menuList .navbar .navbar-collapse {
+	padding: 0;
+	max-height: none;
+}
+
+#main #menuList  .navbar ul {
+	float: none !important;
+	display: block;
+}
+
+#main #menuList  .navbar li {
+	float: none !important;
+	display: block;
+}
+
+#main #menuList  .navbar li a {
+	padding-top: 12px;
+	padding-bottom: 12px;
+}
+/*************
+**BODY CONTENT
+**************/
+#main #contentBody{
+	border-left : 1px solid #e7e7e7;
+	height:100%;
+	padding-top:20px;
+}
