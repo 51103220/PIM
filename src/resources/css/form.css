@@ -1,0 +1,137 @@
+.formName {
+	color: #777;
+	font-size: 18px;
+}
+
+.formContent {
+	border-top: 1px solid #e7e7e7;
+	padding-top: 20px;
+}
+
+.table>tbody>tr>td {
+	border-top: 0px !important;
+	border-right: 1px solid #ddd;
+}
+
+.table>thead>tr>th {
+	color: #777;
+	font-weight: normal;
+	border-bottom: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
+
+.table {
+	border: 1px solid #ddd;
+	background-color: #fff;
+}
+/****************************
+	PROJECT LIST FORM
+*****************************/
+#searchInputs .form-group:first-child, #searchInputs .form-group:last-child
+	{
+	margin-right: 10px;
+}
+
+#searchInputs .form-group {
+	margin-right: 35px;
+}
+
+@media ( min-width :768px) {
+	#searchInputs .form-group:first-child input {
+		width: 300px !important;
+	}
+	#searchInputs select {
+		width: 200px !important;
+	}
+}
+
+select option {
+	color: black;
+}
+
+select.empty {
+	color: grey;
+}
+
+#searchInputs select option[disabled]:first-child {
+	display: none;
+}
+
+#searchDatas {
+	margin-top: 30px;
+}
+
+[type="checkbox"] {
+	content: '';
+	width: 15px;
+	height: 15px;
+	border: 1px solid #ddd;
+	background: transparent;
+	border-radius: 0px;
+}
+
+#searchDatas .deleteIcon {
+	color: red;
+}
+/****************************
+	OTHER FORMS
+*****************************/
+.general-content {
+	max-width: 780px;
+}
+
+.general-form {
+	padding-left: 20px;
+	max-width: 780px;
+	padding-bottom: 38px;
+	border-bottom: 1px solid #ddd;
+}
+
+.general-form .control-label {
+	text-align: left !important;
+	color: #777;
+}
+
+.general-form  .rightLabel {
+	text-align: center !important;
+}
+
+.general-form .isRequired {
+	color: red;
+	margin-left: 5px;
+}
+
+.general-form .shortWidth {
+	max-width: 200px;
+}
+
+.general-form .form-control {
+	height: 30px;
+}
+
+.general-form .form-group {
+	margin-top: 38px;
+}
+
+@media ( min-width :768px) {
+	.general-form .expand {
+		width: 200px !important;
+		margin-left: -30px;
+	}
+}
+
+.btnGroup {
+	max-width: 780px;
+}
+
+.btnGroup .btn {
+	margin-top: 30px;
+	float: right;
+	width: 150px;
+	height: 35px;
+	float: right;
+}
+
+.btnGroup .cancelBtn {
+	margin-right: 60px;
+}

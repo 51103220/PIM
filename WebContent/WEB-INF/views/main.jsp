@@ -29,6 +29,7 @@
 			</div>
 		</div>
 		<div class="col-md-9" id="contentBody">
+			<jsp:include page="forms/newProject.jsp" />
 		</div>
 	</div>
 </div>
