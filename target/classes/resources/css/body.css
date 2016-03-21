@@ -52,6 +52,25 @@
 	padding-top: 12px;
 	padding-bottom: 12px;
 }
+#main #menuList  .navbar li a.navbar-brand{
+	font-family: "Segoe UI Semibold";
+	size: 18pt;
+	color: #2F85FA;
+}
+#main #menuList  .navbar li a.navbar-brand.selected{
+	font-family: "Segoe UI Semibold";
+	size: 18pt;
+	color: #333333;
+}
+#main #menuList  .navbar li a.selected {
+	font-family: "Segoe UI Semibold";
+	size: 14pt;
+	color: #333333;
+}
+#main #menuList  .navbar li a{
+	font-family: "Segoe UI regular";
+	color: #666666;
+}
 /*************
 **BODY CONTENT
 **************/

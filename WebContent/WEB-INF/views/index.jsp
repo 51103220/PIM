@@ -35,7 +35,7 @@
 <body>
 	<div class="wrapper">
 		<jsp:include page="header.jsp" />
-		<jsp:include page="main.jsp" />
+		<jsp:include page="body.jsp" />
 	</div>
 	<jsp:include page="footer.jsp" />
 </body>

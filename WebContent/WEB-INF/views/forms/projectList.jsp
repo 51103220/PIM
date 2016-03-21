@@ -43,28 +43,39 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td align="center"><input type="checkbox" class="checkIcon" value="">
-					 </td>
+					<td align="center"><input type="checkbox" class="checkIcon"
+						value=""></td>
 					<td align="right">3116</td>
 					<td>Dedorewan a very long line</td>
 					<td>New</td>
 					<td>Dedorewan</td>
 					<td>25.02.2004</td>
-					<td align="center"><a href="#" class="deleteIcon"> <span class="glyphicon glyphicon-trash"></span>
+					<td align="center"><a href="#" class="deleteIcon"> <span
+							class="glyphicon glyphicon-trash"></span>
 					</a></td>
 				</tr>
 				<tr>
-					<td align="center"><input type="checkbox" class="checkIcon" value="">
-					</td>
+					<td align="center"><input type="checkbox" class="checkIcon"
+						value=""></td>
 					<td align="right">3116</td>
 					<td>Dedorewan</td>
 					<td>New</td>
 					<td>Dedorewan</td>
 					<td>25.02.2004</td>
-					<td align="center"><a href="#" class="deleteIcon"> <span class="glyphicon glyphicon-trash"></span>
+					<td align="center"><a href="#" class="deleteIcon"> <span
+							class="glyphicon glyphicon-trash"></span>
 					</a></td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
+	<ul class="pagination">
+		<li><a href="#"><img id="logo"
+			src="resources/images/previous_page.png"></a></li>
+		<li><a href="#">2</a></li>
+		<li><a href="#">3</a></li>
+		<li><a href="#">4</a></li>
+		<li><a href="#"><img id="logo"
+			src="resources/images/nextpage_icon.png"></a></li>
+	</ul>
 </div>

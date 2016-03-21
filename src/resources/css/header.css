@@ -9,6 +9,9 @@
 .header #projectName {
 	margin-left: 20px;
 	margin-top: 10px;
+	font-family: "Segoe UI Semibold";
+	font-size: 18pt !important;
+	color: #777;
 }
 
 .header #funcOption {
@@ -23,4 +26,12 @@
 .header #langOption>li>a {
 	padding-left: 0px !important;
 	padding-right: 0px !important;
+}
+.header li>a{
+	color: #666666;
+	font-family: "Segoe UI Semibold";
+	size:14pt;
+}
+.header li>a.selected{
+	color: #2F85FA;
 }

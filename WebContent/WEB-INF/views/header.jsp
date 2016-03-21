@@ -18,13 +18,12 @@
 		</div>
 		<div class="collapse navbar-collapse" id="headingNavbar">
 			<ul class="nav navbar-nav navbar-right" id="funcOption">
-				<li><a href="#" id="helpButton">HELP</a></li>
+				<li><a href="#" id="helpButton" class="selected">HELP</a></li>
 				<li><a href="#" id="logButton">LOGOUT</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right" id="langOption">
 				<li><a href="#">EN</a></li>
-				<li><a href="#">&nbsp;|&nbsp;</a></li>
-				<li><a href="#">FR</a></li>
+				<li><a href="#" class="selected">&nbsp;|&nbsp;FR</a></li>
 			</ul>
 		</div>
 	</div>

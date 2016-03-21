@@ -1,3 +1,6 @@
+/****************************
+	GENERAL
+*****************************/
 .formName {
 	color: #777;
 	font-size: 18px;
@@ -24,6 +27,15 @@
 	border: 1px solid #ddd;
 	background-color: #fff;
 }
+[type="checkbox"] {
+	content: '';
+	width: 15px;
+	height: 15px;
+	border: 1px solid #ddd;
+	background: transparent;
+	border-radius: 0px;
+}
+
 /****************************
 	PROJECT LIST FORM
 *****************************/
@@ -60,18 +72,23 @@ select.empty {
 #searchDatas {
 	margin-top: 30px;
 }
-
-[type="checkbox"] {
-	content: '';
-	width: 15px;
-	height: 15px;
-	border: 1px solid #ddd;
-	background: transparent;
-	border-radius: 0px;
+#searchDatas >thead >tr {
+	height:32px;
 }
+#searchDatas td {
+	font-family: "Segoe UI Semibold";
+	color: #666666;
+	size:14pt;
+}
+
 
 #searchDatas .deleteIcon {
 	color: red;
+}
+
+#projectList .pagination{
+	height: 32px;
+	float: right;
 }
 /****************************
 	OTHER FORMS
@@ -89,7 +106,9 @@ select.empty {
 
 .general-form .control-label {
 	text-align: left !important;
-	color: #777;
+	font-family: "Segoe UI Semibold";
+	color: #666666;
+	size:14pt;
 }
 
 .general-form  .rightLabel {
@@ -134,4 +153,7 @@ select.empty {
 
 .btnGroup .cancelBtn {
 	margin-right: 60px;
+}
+.btnGroup .processBtn {
+	background-color: #2F85FA;
 }
