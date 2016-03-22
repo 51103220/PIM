@@ -5,6 +5,13 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <div id="newSupply">
 	<p class="formName">New Supply</p>
+	<div class ="errorPanel">
+		<p class="panelMessage">
+		</p>
+		<a href="#" class="closePanel">
+          <span class="glyphicon glyphicon-remove"></span>
+        </a>
+	</div>
 	<div class="formContent general-content">
 		<form class="form-horizontal general-form" role="form">
 			<div class="form-group">

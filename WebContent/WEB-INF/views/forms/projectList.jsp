@@ -3,8 +3,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <div id="projectList">
 	<p class="formName">Project List</p>
+	
 	<div class="formContent">
 		<form class="form-inline" role="form" id="searchInputs">
 			<div class="form-group">
@@ -42,40 +44,37 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td align="center"><input type="checkbox" class="checkIcon"
-						value=""></td>
-					<td align="right">3116</td>
-					<td>Dedorewan a very long line</td>
-					<td>New</td>
-					<td>Dedorewan</td>
-					<td>25.02.2004</td>
-					<td align="center"><a href="#" class="deleteIcon"> <span
-							class="glyphicon glyphicon-trash"></span>
-					</a></td>
-				</tr>
-				<tr>
-					<td align="center"><input type="checkbox" class="checkIcon"
-						value=""></td>
-					<td align="right">3116</td>
-					<td>Dedorewan</td>
-					<td>New</td>
-					<td>Dedorewan</td>
-					<td>25.02.2004</td>
-					<td align="center"><a href="#" class="deleteIcon"> <span
-							class="glyphicon glyphicon-trash"></span>
-					</a></td>
-				</tr>
+				<c:forEach items="${projects}" var="project">
+					<tr>
+						<td align="center"><input type="checkbox" class="checkIcon"
+							value=""></td>
+						<td align="right">${project.getProjectNumber()}</td>
+						<td>${project.getName()}</td>
+						<td>${project.getStatus().getValue()}</td>
+						<td>${project.getCustomer()}</td>
+						<fmt:formatDate value="${project.getStartDate()}" var="dateString"
+							pattern="dd.MM.yyyy" />
+						<td>${dateString}</td>
+						<td align="center"><a href="#" class="deleteIcon"> <c:choose>
+									<c:when test="${project.isNew()}">
+										<span class="glyphicon glyphicon-trash"></span>
+									</c:when>
+									<c:otherwise>
+									</c:otherwise>
+								</c:choose>
+						</a></td>
+					</tr>
+				</c:forEach>
 			</tbody>
 		</table>
 	</div>
 	<ul class="pagination">
 		<li><a href="#"><img id="logo"
-			src="resources/images/previous_page.png"></a></li>
+				src="resources/images/previous_page.png"></a></li>
 		<li><a href="#">2</a></li>
 		<li><a href="#">3</a></li>
 		<li><a href="#">4</a></li>
 		<li><a href="#"><img id="logo"
-			src="resources/images/nextpage_icon.png"></a></li>
+				src="resources/images/nextpage_icon.png"></a></li>
 	</ul>
 </div>

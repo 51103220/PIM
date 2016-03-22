@@ -6,12 +6,14 @@ function selectHandler() {
 		var class_name = $(this).attr('class').replace(/empty/g, "");
 		$(this).attr('class', class_name);
 	});
+
 };
 function fixBodyHeight() {
 	var header_height = $(".header").outerHeight();
 	var body_height = $(window).height() - header_height;
 	$("#main").css("height", body_height + "px");
 };
+
 /*******************************************************************************
  * * SET AND UNSET SELECTED LINKS
  ******************************************************************************/
@@ -24,7 +26,9 @@ function unsetLinkSelected(link) {
 	;
 	link.attr("class", newClass);
 };
+
 $(document).ready(function() {
+	selectHandler();
 	/***************************************************************************
 	 * * Language Options * clicks
 	 **************************************************************************/
@@ -56,11 +60,16 @@ $(document).ready(function() {
 			alert("error");
 		});
 	});
-	
+
 	/***************************************************************************
 	 * *Date Picking event
 	 **************************************************************************/
 	$('.datePicker').datetimepicker();
 	fixBodyHeight();
-	selectHandler();
+	$(".errorPanel .closePanel").click(function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		$(".errorPanel").hide();
+	});
+	
 });
