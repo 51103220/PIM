@@ -28,10 +28,10 @@
 	padding-right: 0px !important;
 }
 .header li>a{
-	color: #666666;
+	color: #2F85FA !important;
 	font-family: "Segoe UI Semibold";
 	size:14pt;
 }
 .header li>a.selected{
-	color: #2F85FA;
+	color: #666666 !important ;
 }

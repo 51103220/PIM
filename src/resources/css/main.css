@@ -6,7 +6,6 @@ html, body {
 .wrapper {
 
 	height:100%;
-	margin-bottom:-50px;
 }
 
 .wrapper:after {

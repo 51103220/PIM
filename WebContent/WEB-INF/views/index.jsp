@@ -37,7 +37,6 @@
 		<jsp:include page="header.jsp" />
 		<jsp:include page="body.jsp" />
 	</div>
-	<jsp:include page="footer.jsp" />
 </body>
 
 <script src="${jquery}"></script>
