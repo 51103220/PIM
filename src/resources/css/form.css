@@ -38,6 +38,12 @@
 }
 .hiddenError{
 	display:none;
+	font-family: "Segoe UI Semibold";
+	size: 14pt;
+	color: #D2492A;
+}
+.errorInput{
+	border-color: #D2492A;!important;
 }
 .errorPanel {
 	display:none;

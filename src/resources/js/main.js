@@ -26,14 +26,18 @@ function unsetLinkSelected(link) {
 
 	link.attr("class", newClass);
 };
-function setErrorInput(input,isSet){
+function setErrorInput(input,isSet,code){
 	if (isSet){
 		var newClass= input.attr("class") + " errorInput";
 		input.attr("class",newClass);
+		input.parent().find("p.hiddenError").show();
+		input.parent().find("p.hiddenError").html(code);
 	}
 	else{
-		var class_name = input.attr("class").replace(/errorInput/g, "");
-		input.attr("class").attr(class_name);
+		var className = input.attr("class").replace(/errorInput/g, "");
+		input.attr("class",className);
+		input.parent().find("p.hiddenError").hide();
+		input.parent().find("p.hiddenError").html(code);
 	}
 };
 $(document).ready(function() {
@@ -86,12 +90,11 @@ $(document).ready(function() {
 		var $selects = form.find("select");
 		var values = {};
 		$inputs.each(function() {
-			alert($(this).attr("class"));
-			setErrorInput($(this),false);
+			setErrorInput($(this),false,"");
 			values[$(this).attr("name")] = $(this).val();
 		});
 		$selects.each(function() {
-			setErrorInput($(this),false);
+			setErrorInput($(this),false,"");
 			values[$(this).attr("name")] = $(this).val();
 		});
 		var new_values = {
@@ -113,14 +116,12 @@ $(document).ready(function() {
 						var code = data.result[i].code;
 						$inputs.each(function(){
 							if($(this).attr("name") == field){
-								setErrorInput($(this),true);
-								$(this).parent().find("p.hiddenError").html(code);
+								setErrorInput($(this),true,code);	
 							}
 						});
 						$selects.each(function(){
 							if($(this).attr("name") == field){
-								setErrorInput($(this),true);
-								$(this).parent().find("p.hiddenError").html(code);
+								setErrorInput($(this),true,code);
 							}
 						});
 					}
