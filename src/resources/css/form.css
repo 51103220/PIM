@@ -36,8 +36,11 @@
 	background: transparent;
 	border-radius: 0px;
 }
-
+.hiddenError{
+	display:none;
+}
 .errorPanel {
+	display:none;
 	position: relative;
 	background-color: #F2DEDF;
 	padding: 10px 5px 10px 20px;

@@ -77,4 +77,7 @@
 		<li><a href="#"><img id="logo"
 				src="resources/images/nextpage_icon.png"></a></li>
 	</ul>
+	
 </div>
+<spring:url value="/resources/js/main.js" var="mainJS" />
+<script src="${mainJS}"></script>

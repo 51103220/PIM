@@ -7,6 +7,7 @@
 	<p class="formName">New Supply</p>
 	<div class ="errorPanel">
 		<p class="panelMessage">
+			Please Enter Mandatory Fields (*)
 		</p>
 		<a href="#" class="closePanel">
           <span class="glyphicon glyphicon-remove"></span>
@@ -31,3 +32,5 @@
 	</div>
 
 </div>
+<spring:url value="/resources/js/main.js" var="mainJS" />
+<script src="${mainJS}"></script>

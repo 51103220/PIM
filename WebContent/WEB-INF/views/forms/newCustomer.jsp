@@ -7,6 +7,7 @@
 	<p class="formName">New Customer</p>
 	<div class ="errorPanel">
 		<p class="panelMessage">
+			Please Enter Mandatory Fields (*)
 		</p>
 		<a href="#" class="closePanel">
           <span class="glyphicon glyphicon-remove"></span>
@@ -29,5 +30,6 @@
 			<button type="submit" class="btn btn-default cancelBtn">Cancel</button>
 		</div>
 	</div>
-
+<spring:url value="/resources/js/main.js" var="mainJS" />
+<script src="${mainJS}"></script>
 </div>

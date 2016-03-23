@@ -23,12 +23,21 @@ function setLinkSelected(link) {
 };
 function unsetLinkSelected(link) {
 	var newClass = link.attr("class").replace(/selected/g, "");
-	;
+
 	link.attr("class", newClass);
 };
-
+function setErrorInput(input,isSet){
+	if (isSet){
+		var newClass= input.attr("class") + " errorInput";
+		input.attr("class",newClass);
+	}
+	else{
+		var class_name = input.attr("class").replace(/errorInput/g, "");
+		input.attr("class").attr(class_name);
+	}
+};
 $(document).ready(function() {
-	selectHandler();
+
 	/***************************************************************************
 	 * * Language Options * clicks
 	 **************************************************************************/
@@ -66,10 +75,70 @@ $(document).ready(function() {
 	 **************************************************************************/
 	$('.datePicker').datetimepicker();
 	fixBodyHeight();
-	$(".errorPanel .closePanel").click(function(e){
+
+	/***************************************************************************
+	 * * Form Handling
+	 **************************************************************************/
+	$(".general-content .processBtn").click(function(e) {
 		e.preventDefault();
-		e.stopPropagation();
-		$(".errorPanel").hide();
+		var form = $(this).parent().parent().find(".general-form").first();
+		var $inputs = form.find("input");
+		var $selects = form.find("select");
+		var values = {};
+		$inputs.each(function() {
+			alert($(this).attr("class"));
+			setErrorInput($(this),false);
+			values[$(this).attr("name")] = $(this).val();
+		});
+		$selects.each(function() {
+			setErrorInput($(this),false);
+			values[$(this).attr("name")] = $(this).val();
+		});
+		var new_values = {
+			name : '',
+			id : '1'
+		};
+
+		$.ajax({
+			contentType : 'application/json',
+			type : form.attr("method"),
+			url : form.attr("action"),
+			async : false,
+			dataType : 'json',
+			data : JSON.stringify(new_values),
+			success : function(data) {
+				if (data.status == "FAIL") {
+					for (var i = 0; i < data.result.length; i++) {
+						var field = data.result[i].field;
+						var code = data.result[i].code;
+						$inputs.each(function(){
+							if($(this).attr("name") == field){
+								setErrorInput($(this),true);
+								$(this).parent().find("p.hiddenError").html(code);
+							}
+						});
+						$selects.each(function(){
+							if($(this).attr("name") == field){
+								setErrorInput($(this),true);
+								$(this).parent().find("p.hiddenError").html(code);
+							}
+						});
+					}
+				} else {
+					location.reload(); // Only used for PIM
+				}
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("Status: " + textStatus);
+				alert("Error: " + errorThrown);
+			}
+		})
 	});
-	
+	selectHandler();
+	$(".errorPanel .closePanel").click(function(e) {
+
+		e.preventDefault();
+		$(this).parent().hide();
+	});
+
 });

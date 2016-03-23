@@ -30,6 +30,7 @@ public class PIMConfiguration extends WebMvcConfigurerAdapter {
 		return viewResolver;
 	}
 
+
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/resources/**").addResourceLocations("classpath:/resources/");
