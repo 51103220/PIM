@@ -26,16 +26,15 @@ function unsetLinkSelected(link) {
 
 	link.attr("class", newClass);
 };
-function setErrorInput(input,isSet,code){
-	if (isSet){
-		var newClass= input.attr("class") + " errorInput";
-		input.attr("class",newClass);
+function setErrorInput(input, isSet, code) {
+	if (isSet) {
+		var newClass = input.attr("class") + " errorInput";
+		input.attr("class", newClass);
 		input.parent().find("p.hiddenError").show();
 		input.parent().find("p.hiddenError").html(code);
-	}
-	else{
+	} else {
 		var className = input.attr("class").replace(/errorInput/g, "");
-		input.attr("class",className);
+		input.attr("class", className);
 		input.parent().find("p.hiddenError").hide();
 		input.parent().find("p.hiddenError").html(code);
 	}
@@ -81,7 +80,7 @@ $(document).ready(function() {
 	fixBodyHeight();
 
 	/***************************************************************************
-	 * * Form Handling
+	 * * General Form Handling
 	 **************************************************************************/
 	$(".general-content .processBtn").click(function(e) {
 		e.preventDefault();
@@ -90,54 +89,161 @@ $(document).ready(function() {
 		var $selects = form.find("select");
 		var values = {};
 		$inputs.each(function() {
-			setErrorInput($(this),false,"");
-			values[$(this).attr("name")] = $(this).val();
+			setErrorInput($(this), false, "");
+			var id = $(this);
+			if(id.attr("name") == "id"){
+				var val = id.val();
+				if(val){
+					values[id.attr("name")] = val;
+				}
+			}
+			else{
+				values[$(this).attr("name")] = $(this).val();
+			}
+			if($(this).attr("name") == "members"){
+					values[$(this).attr("name")] =  $(this).val().replace(/ /g,'').split(",");
+			}
+			if($(this).attr("name") == "startDate" || $(this).attr("name") == "endDate" ){
+				var date = new Date($(this).val());
+				if (date == "Invalid Date"){
+					values[$(this).attr("name")] = null;
+				}
+				else{
+					values[$(this).attr("name")] =  date.getFullYear() + "-" + (date.getMonth()+1) +"-" + date.getDate(); 
+				}
+			}
 		});
+	
 		$selects.each(function() {
-			setErrorInput($(this),false,"");
+			setErrorInput($(this), false, "");
 			values[$(this).attr("name")] = $(this).val();
 		});
-		var new_values = {
-			name : '',
-			id : '1'
-		};
-
 		$.ajax({
 			contentType : 'application/json',
 			type : form.attr("method"),
 			url : form.attr("action"),
 			async : false,
 			dataType : 'json',
-			data : JSON.stringify(new_values),
+			data : JSON.stringify(values),
 			success : function(data) {
 				if (data.status == "FAIL") {
 					for (var i = 0; i < data.result.length; i++) {
 						var field = data.result[i].field;
 						var code = data.result[i].code;
-						$inputs.each(function(){
-							if($(this).attr("name") == field){
-								setErrorInput($(this),true,code);	
+						var message = data.result[i].defaultMessage;
+						if (code == "NotEmpty") {
+							$(".errorPanel").show();
+						}
+
+						$inputs.each(function() {
+							if ($(this).attr("name") == field) {
+								setErrorInput($(this), true, message);
 							}
 						});
-						$selects.each(function(){
-							if($(this).attr("name") == field){
-								setErrorInput($(this),true,code);
+						$selects.each(function() {
+							if ($(this).attr("name") == field) {
+								setErrorInput($(this), true, message);
 							}
 						});
 					}
 				} else {
-					location.reload(); // Only used for PIM
+					window.location.href = $(".header #projectName").attr("href");
 				}
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("Status: " + textStatus);
-				alert("Error: " + errorThrown);
+				window.location.href = $(".header #projectName").attr("href") + "errorsunexpected=" + textStatus;
 			}
 		})
 	});
+	/***************************************************************************
+	 * * Get Project detail Handling
+	 **************************************************************************/
+	$("#projectList #searchDatas .projectDetail").click(function(e){
+		e.preventDefault();
+		var url = $(this).attr("href");
+		$.ajax({
+			method : "GET",
+			url : url
+		}).done(function(data) {
+			$("#main #contentBody").html(data);
+		}).fail(function() {
+			alert("error");
+		});
+	});
+	/***************************************************************************
+	 * * Search Form Handling
+	 **************************************************************************/
+	//Check Box
+	$("#projectList #searchDatas [type=checkbox]").click(function(){
+		var boxes = $("#projectList #searchDatas input:checked");
+		if(boxes.length>0){
+			$("#projectList .resultRow").show();
+			$("#projectList .resultRow .totalItems").html(boxes.length+" item(s) selected");
+		}else{
+			$("#projectList .resultRow").hide();
+		}
+	});
+	//Single Delete
+	$("#projectList #searchDatas .deleteIcon").click(function(e){
+		e.preventDefault();
+		var link = $(this);
+		$.ajax({
+			method : "POST",
+			url : link.attr("href")
+		}).done(function(data) {
+			link.parent().parent().hide();
+		}).fail(function() {
+			alert("error");
+		});
+	});
+	//Multiple Deletes
+	$("#projectList .resultRow .deleteMultiple").click(function(e){
+		var link = $(this);
+		e.preventDefault();
+		var ids = [];
+		var boxes = $("#projectList #searchDatas input:checked");
+		boxes.each(function(){
+			ids.push($(this).attr("id"));
+		});
+		$.ajax({
+			method : "POST",
+			url : link.attr("href"),
+			data: {
+				ids: ids
+			}
+		}).done(function(data) {
+			boxes.each(function(){
+				$(this).parent().parent().hide();
+			});
+		}).fail(function() {
+			alert("error");
+		});
+	});
+	//Search 
+	/***************************************************************************
+	 * * SELECT HANDLING AND CLOSE PANEL HANDLING
+	 **************************************************************************/
+	$("#projectList #searchInputs #search_btn").click(function(e){
+		e.preventDefault();
+		var form = $("#projectList #searchInputs");
+		var keywords =  $("#projectList #searchInputs #keywords").val();
+		var statusKey = $("#projectList #searchInputs #statusKey").val();
+		$.ajax({
+			method : "POST",
+			url : form.attr("action"),
+			data: {
+				keywords: keywords,
+				statusKey: statusKey
+			}
+		}).done(function(data) {
+			alert(data.length);
+		}).fail(function() {
+			alert("error");
+		});
+	});
 	selectHandler();
 	$(".errorPanel .closePanel").click(function(e) {
-
+		
 		e.preventDefault();
 		$(this).parent().hide();
 	});

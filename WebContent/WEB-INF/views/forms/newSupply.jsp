@@ -27,7 +27,7 @@
 		<div class="form-group btnGroup">
 			<button type="submit" class="btn btn-primary processBtn">Create
 				Supply</button>
-			<button type="submit" class="btn btn-default cancelBtn">Cancel</button>
+			<a href="<c:url value='/'/>"><button type="submit" class="btn btn-default cancelBtn">Cancel</button></a>
 		</div>
 	</div>
 

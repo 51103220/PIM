@@ -6,15 +6,15 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <div id="projectList">
 	<p class="formName">Project List</p>
-	
+
 	<div class="formContent">
-		<form class="form-inline" role="form" id="searchInputs">
+		<form class="form-inline" action="filterProject"role="form" id="searchInputs">
 			<div class="form-group">
-				<input type="text" class="form-control"
-					placeholder="project number, name, customer name">
+				<input type="text" id ="keywords" class="form-control"
+					placeholder="project number, name, customer name" required>
 			</div>
 			<div class="form-group">
-				<select class="form-control empty">
+				<select class="form-control empty" id ="statusKey">
 					<option value="" selected disabled>Project status</option>
 					<option>New</option>
 					<option>Finished</option>
@@ -46,16 +46,19 @@
 			<tbody>
 				<c:forEach items="${projects}" var="project">
 					<tr>
-						<td align="center"><input type="checkbox" class="checkIcon"
+						<td align="center"><input id="${project.getId()}" type="checkbox" class="checkIcon"
 							value=""></td>
-						<td align="right">${project.getProjectNumber()}</td>
+						<td align="right"><a href="project/${project.getId()}/detail"
+							class="projectDetail">${project.getProjectNumber()}</a></td>
 						<td>${project.getName()}</td>
 						<td>${project.getStatus().getValue()}</td>
 						<td>${project.getCustomer()}</td>
 						<fmt:formatDate value="${project.getStartDate()}" var="dateString"
 							pattern="dd.MM.yyyy" />
 						<td>${dateString}</td>
-						<td align="center"><a href="#" class="deleteIcon"> <c:choose>
+						<td align="center"><a
+							href="project/${project.getId()}/delete" class="deleteIcon">
+								<c:choose>
 									<c:when test="${project.isNew()}">
 										<span class="glyphicon glyphicon-trash"></span>
 									</c:when>
@@ -67,6 +70,11 @@
 				</c:forEach>
 			</tbody>
 		</table>
+		<div class="resultRow">
+			<p class="totalItems">2 items selected</p>
+			<a href="<c:url value='/deleteMultiple'/>" class="deleteMultiple">delete selected items <span
+				class="glyphicon glyphicon-trash"></span></a>
+		</div>
 	</div>
 	<ul class="pagination">
 		<li><a href="#"><img id="logo"
@@ -77,7 +85,7 @@
 		<li><a href="#"><img id="logo"
 				src="resources/images/nextpage_icon.png"></a></li>
 	</ul>
-	
+
 </div>
 <spring:url value="/resources/js/main.js" var="mainJS" />
 <script src="${mainJS}"></script>

@@ -6,10 +6,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
-
-
 
 @Entity
 public class Project {
@@ -20,7 +19,8 @@ public class Project {
 		STATUS(String name) {
 			m_name = name;
 		}
-		public String getValue(){
+
+		public String getValue() {
 			return m_name;
 		}
 	}
@@ -28,42 +28,47 @@ public class Project {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@NotEmpty
+	@NotNull
 	@Column(nullable = false)
-	private Long group_id;
-	@NotEmpty
+	private Long groupId;
+	@NotNull
 	@Column(nullable = false)
-	private Integer project_number;
+	private Integer projectNumber;
 	@NotEmpty
 	@Column(nullable = false)
 	private String name;
 	@NotEmpty
 	@Column(nullable = false)
 	private String customer;
-	@NotEmpty
+	@NotNull
 	@Column(nullable = false)
 	private STATUS status;
-	@NotEmpty
+	@NotNull
 	@Column(nullable = false)
-	private Date start_date;
-	@NotEmpty
+	private Date startDate;
+	@NotNull
 	@Column
-	private Date end_date;
-	@NotEmpty
+	private Date endDate;
 	@Column(nullable = false)
 	private Integer version;
+	private String[] members;
 
-	public Project(Long id, Long group_id, Integer project_number, String name, String customer,
-			STATUS status, Date start_date, Date end_date, Integer version) {
+	public Project() {
+
+	}
+
+	public Project(Long id, Long groupId, Integer project_number, String name,
+			String customer, STATUS status, Date start_date, Date end_date,
+			Integer version) {
 		this.id = id;
-		this.group_id = group_id;
-		this.project_number = project_number;
+		this.groupId = groupId;
+		this.projectNumber = project_number;
 		this.name = name;
 		this.customer = customer;
 		this.version = version;
 		this.status = status;
-		this.start_date = start_date;
-		this.end_date = end_date;
+		this.startDate = start_date;
+		this.endDate = end_date;
 	}
 
 	public Long getId() {
@@ -71,11 +76,11 @@ public class Project {
 	}
 
 	public Long getGroupId() {
-		return group_id;
+		return groupId;
 	}
 
 	public Integer getProjectNumber() {
-		return project_number;
+		return projectNumber;
 	}
 
 	public String getName() {
@@ -95,23 +100,27 @@ public class Project {
 	}
 
 	public Date getStartDate() {
-		return start_date;
+		return startDate;
 	}
 
 	public Date getEndDate() {
-		return end_date;
+		return endDate;
+	}
+
+	public String[] getMembers() {
+		return members;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public void setGroupId(Long group_id) {
-		this.group_id = group_id;
+	public void setGroupId(Long groupId) {
+		this.groupId = groupId;
 	}
 
 	public void setProjectNumber(Integer project_number) {
-		this.project_number = project_number;
+		this.projectNumber = project_number;
 	}
 
 	public void setVersion(Integer version) {
@@ -131,16 +140,49 @@ public class Project {
 	}
 
 	public void setStartDate(Date date) {
-		this.start_date = date;
+		this.startDate = date;
 	}
 
 	public void setEndDate(Date date) {
-		this.end_date = date;
+		this.endDate = date;
 	}
-	public Boolean isNew(){
-		if(this.status == STATUS.NEW){
+
+	public void setMembers(String[] members) {
+		this.members = members;
+	}
+
+	public Boolean isNew() {
+		if (this.status == STATUS.NEW) {
 			return true;
 		}
 		return false;
+	}
+
+	public String membersToString() {
+		StringBuilder builder = new StringBuilder("");
+		if (this.members != null) {
+			Boolean first = true;
+			for (String s : this.members) {
+				if (first) {
+					builder.append(s);
+					first = false;
+				} else {
+					builder.append("," + s);
+				}
+			}
+		}
+		return builder.toString();
+	}
+
+	public void editData(Project project) {
+		this.groupId = project.getGroupId();
+		this.customer = project.customer;
+		this.members = project.getMembers();
+		this.endDate = project.getEndDate();
+		this.startDate = project.getStartDate();
+		this.name = project.getName();
+		this.projectNumber = project.getProjectNumber();
+		this.version = project.getVersion();
+		this.status = project.getStatus();
 	}
 }
