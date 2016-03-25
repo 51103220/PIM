@@ -4,17 +4,20 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <div id="projectList">
 	<p class="formName">Project List</p>
 
 	<div class="formContent">
-		<form class="form-inline" action="filterProject"role="form" id="searchInputs">
+		<form class="form-inline" action="filterProject" role="form"
+			id="searchInputs">
 			<div class="form-group">
-				<input type="text" id ="keywords" class="form-control"
-					placeholder="project number, name, customer name" value="${searchValue}">
+				<input type="text" id="keywords" class="form-control"
+					placeholder="project number, name, customer name"
+					value="${searchValue}">
 			</div>
 			<div class="form-group">
-				<select class="form-control empty" id ="statusKey">
+				<select class="form-control empty" id="statusKey">
 					<option value="" selected disabled>Project status</option>
 					<option value="NEW">New</option>
 					<option value="FIN">Finished</option>
@@ -46,8 +49,8 @@
 			<tbody>
 				<c:forEach items="${projects}" var="project">
 					<tr>
-						<td align="center"><input id="${project.getId()}" type="checkbox" class="checkIcon"
-							value="${project.isNew()}"></td>
+						<td align="center"><input id="${project.getId()}"
+							type="checkbox" class="checkIcon" value="${project.isNew()}"></td>
 						<td align="right"><a href="project/${project.getId()}/detail"
 							class="projectDetail">${project.getProjectNumber()}</a></td>
 						<td>${project.getName()}</td>
@@ -70,18 +73,21 @@
 				</c:forEach>
 			</tbody>
 		</table>
+
 		<div class="resultRow">
 			<p class="totalItems">2 items selected</p>
-			<a href="<c:url value='/deleteMultiple'/>" class="deleteMultiple">delete selected items <span
-				class="glyphicon glyphicon-trash"></span></a>
+			<a href="<c:url value='/deleteMultiple'/>" class="deleteMultiple">delete
+				selected items <span class="glyphicon glyphicon-trash"></span>
+			</a>
 		</div>
 	</div>
+	
 	<ul class="pagination">
 		<li><a href="#"><img id="logo"
 				src="resources/images/previous_page.png"></a></li>
-		<li><a href="#">2</a></li>
-		<li><a href="#">3</a></li>
-		<li><a href="#">4</a></li>
+		<c:forEach begin="1" end="4" varStatus="loop">
+   			<li><a href="projects/page/${loop.index}">${loop.index}</a></li>
+		</c:forEach>
 		<li><a href="#"><img id="logo"
 				src="resources/images/nextpage_icon.png"></a></li>
 	</ul>

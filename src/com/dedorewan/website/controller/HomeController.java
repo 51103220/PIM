@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import org.springframework.web.servlet.ModelAndView;
 
 import com.dedorewan.website.service.IProjectService;
@@ -23,7 +23,8 @@ public class HomeController {
 	private ProjectValidator projectValidator;
 	@Autowired
 	private IProjectService projectService;
-
+	@Value("${projects.maxProjectPerPage}")
+	Integer projectsPerPage;
 	
 
 	@RequestMapping(method = RequestMethod.GET, value = "/")
@@ -37,6 +38,10 @@ public class HomeController {
 		ModelAndView model = new ModelAndView("errors");
 		model.addObject("message", message);
 		return model;
+	}
+	@ModelAttribute("maxProjects")
+	public Integer maxProjects(){
+		return projectsPerPage;
 	}
 
 }

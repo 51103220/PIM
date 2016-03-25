@@ -5,11 +5,13 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,17 +28,22 @@ import com.dedorewan.website.validator.ProjectValidator;
 
 @Controller
 public class ProjectController {
-
+	@Value("${projects.maxProjectPerPage}")
+	Integer projectsPerPage;
 	@Autowired
 	private ProjectValidator projectValidator;
 	@Autowired
 	private IProjectService projectService;
 	@Autowired
 	JsonResponse jsonResponse;
-
+	
 	@InitBinder
 	public void dataBinding(WebDataBinder binder) {
 		binder.addValidators(projectValidator);
+	}
+	@ModelAttribute("maxProjects")
+	public Integer maxProjects(){
+		return projectsPerPage;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/listProject")
