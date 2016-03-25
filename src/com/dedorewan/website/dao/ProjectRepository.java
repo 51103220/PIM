@@ -104,7 +104,7 @@ public class ProjectRepository implements IProjectRepository {
 
 	public void deleteProject(Long id) {
 		for (Project p : pList) {
-			if (p.getId() == id) {
+			if (p.getId() == id && p.getStatus() == STATUS.NEW) {
 				pList.remove(p);
 				break;
 			}
@@ -131,20 +131,20 @@ public class ProjectRepository implements IProjectRepository {
 	}
 
 	private Boolean matchedByKeywords(Project project, String keywords) {
-		if(!keywords.isEmpty()){
-			if(keywords.matches("^[0-9]+")){
+		if (!keywords.isEmpty()) {
+			if (keywords.matches("^[0-9]+")) {
 				Integer number = -1;
-				try{
-					number= Integer.parseInt(keywords);
-				}catch(NumberFormatException e){
-					
+				try {
+					number = Integer.parseInt(keywords);
+				} catch (NumberFormatException e) {
+
 				}
-				if (project.getProjectNumber() == number){
+				if (project.getProjectNumber() == number) {
 					return true;
 				}
-			}
-			else{
-				if (project.getName().contains(keywords) || project.getCustomer().contains(keywords)){
+			} else {
+				if (project.getName().contains(keywords)
+						|| project.getCustomer().contains(keywords)) {
 					return true;
 				}
 			}

@@ -191,7 +191,7 @@ $(document).ready(function() {
 			method : "POST",
 			url : link.attr("href")
 		}).done(function(data) {
-			link.parent().parent().hide();
+			link.parent().parent().remove();
 		}).fail(function(jqXHR, textStatus) {
 			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
 		});
@@ -202,8 +202,12 @@ $(document).ready(function() {
 		e.preventDefault();
 		var ids = [];
 		var boxes = $("#projectList #searchDatas input:checked");
+	
 		boxes.each(function(){
-			ids.push($(this).attr("id"));
+			var box = $(this);
+			if(box.val() == "true"){
+				ids.push(box.attr("id"));
+			}
 		});
 		$.ajax({
 			method : "POST",
@@ -213,8 +217,12 @@ $(document).ready(function() {
 			}
 		}).done(function(data) {
 			boxes.each(function(){
-				$(this).parent().parent().hide();
+				var box = $(this);
+				if(box.val() == "true"){
+					box.parent().parent().remove();
+				}
 			});
+			$("#projectList .resultRow").hide();
 		}).fail(function(jqXHR, textStatus) {
 			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
 		});

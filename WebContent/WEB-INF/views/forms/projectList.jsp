@@ -47,7 +47,7 @@
 				<c:forEach items="${projects}" var="project">
 					<tr>
 						<td align="center"><input id="${project.getId()}" type="checkbox" class="checkIcon"
-							value=""></td>
+							value="${project.isNew()}"></td>
 						<td align="right"><a href="project/${project.getId()}/detail"
 							class="projectDetail">${project.getProjectNumber()}</a></td>
 						<td>${project.getName()}</td>
