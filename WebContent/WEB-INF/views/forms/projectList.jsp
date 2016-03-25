@@ -11,15 +11,15 @@
 		<form class="form-inline" action="filterProject"role="form" id="searchInputs">
 			<div class="form-group">
 				<input type="text" id ="keywords" class="form-control"
-					placeholder="project number, name, customer name" required>
+					placeholder="project number, name, customer name" value="${searchValue}">
 			</div>
 			<div class="form-group">
 				<select class="form-control empty" id ="statusKey">
 					<option value="" selected disabled>Project status</option>
-					<option>New</option>
-					<option>Finished</option>
-					<option>Planned</option>
-					<option>In progress</option>
+					<option value="NEW">New</option>
+					<option value="FIN">Finished</option>
+					<option value="PLA">Planned</option>
+					<option value="INP">In progress</option>
 				</select>
 
 			</div>

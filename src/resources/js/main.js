@@ -68,8 +68,8 @@ $(document).ready(function() {
 			url : url
 		}).done(function(data) {
 			$("#main #contentBody").html(data);
-		}).fail(function() {
-			alert("error");
+		}).fail(function(jqXHR, textStatus) {
+			window.location.href = $(".header #projectName").attr("href") + "errorsunexpected=" + textStatus;
 		});
 	});
 
@@ -166,8 +166,8 @@ $(document).ready(function() {
 			url : url
 		}).done(function(data) {
 			$("#main #contentBody").html(data);
-		}).fail(function() {
-			alert("error");
+		}).fail(function(jqXHR, textStatus) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
 		});
 	});
 	/***************************************************************************
@@ -192,8 +192,8 @@ $(document).ready(function() {
 			url : link.attr("href")
 		}).done(function(data) {
 			link.parent().parent().hide();
-		}).fail(function() {
-			alert("error");
+		}).fail(function(jqXHR, textStatus) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
 		});
 	});
 	//Multiple Deletes
@@ -215,14 +215,11 @@ $(document).ready(function() {
 			boxes.each(function(){
 				$(this).parent().parent().hide();
 			});
-		}).fail(function() {
-			alert("error");
+		}).fail(function(jqXHR, textStatus) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
 		});
 	});
 	//Search 
-	/***************************************************************************
-	 * * SELECT HANDLING AND CLOSE PANEL HANDLING
-	 **************************************************************************/
 	$("#projectList #searchInputs #search_btn").click(function(e){
 		e.preventDefault();
 		var form = $("#projectList #searchInputs");
@@ -236,16 +233,41 @@ $(document).ready(function() {
 				statusKey: statusKey
 			}
 		}).done(function(data) {
-			alert(data.length);
-		}).fail(function() {
-			alert("error");
+			$("#main #contentBody").html(data);
+		}).fail(function(jqXHR, textStatus) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
 		});
 	});
+	//Reset Search
+	$("#projectList #searchInputs #reset_btn").click(function(e){
+		e.preventDefault();
+		$.ajax({
+			method : "GET",
+			url : "resetCriteria"
+		}).done(function(data) {
+			$("#main #contentBody").html(data);
+		}).fail(function(jqXHR, textStatus) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		});
+	});
+	/***************************************************************************
+	 * * SELECT HANDLING AND CLOSE PANEL HANDLING
+	 **************************************************************************/
+	
 	selectHandler();
 	$(".errorPanel .closePanel").click(function(e) {
 		
 		e.preventDefault();
 		$(this).parent().hide();
 	});
+	/***************************************************************************
+	 * * PREVENT ENTER SUBMIT FORM
+	 **************************************************************************/
+	 $(window).keydown(function(event){
+	    if(event.keyCode == 13) {
+	      event.preventDefault();
+	      return false;
+	    }
+	  });
 
 });

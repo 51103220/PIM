@@ -1,6 +1,7 @@
 package com.dedorewan.website.service;
 
 import java.util.List;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,7 @@ public class ProjectService implements IProjectService {
 	public void deleteProjects(Long[] ids){
 		projectRepository.deleteProjects(ids);
 	}
-	public List<Project> filterProjects(String keywords, STATUS statusKey){
+	public TreeSet<Project> filterProjects(String keywords, STATUS statusKey){
 		return projectRepository.filterProjects(keywords, statusKey);
 	}
 }

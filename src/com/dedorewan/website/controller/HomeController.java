@@ -8,12 +8,14 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import org.springframework.web.servlet.ModelAndView;
 
 import com.dedorewan.website.service.IProjectService;
 import com.dedorewan.website.validator.ProjectValidator;
 
 @Controller
+
 public class HomeController {
 	@Value("${application.errors.default}")
 	private String default_errors;

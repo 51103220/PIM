@@ -1,6 +1,8 @@
 package com.dedorewan.website.controller;
 
-import java.util.List;
+import java.util.TreeSet;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -78,14 +80,28 @@ public class ProjectController {
 		model.addObject("project", project);
 		return model;
 	}
+	@RequestMapping(method = RequestMethod.GET, value = "/resetCriteria")
+	@ResponseBody
+	public ModelAndView resetCriteria(HttpServletRequest request) {
+		ModelAndView model = new ModelAndView("forms/projectList");
+		model.addObject("projects", projectService.findAll());
+		request.getSession().setAttribute("searchValue", "");
+		return model;
+	}
+
 
 	@RequestMapping(method = RequestMethod.POST, value = "/filterProject")
 	@ResponseBody
-	public List<Project> filterProjects(
+	public ModelAndView filterProjects(
 			@RequestParam(value = "keywords") String keywords,
-			@RequestParam(value = "statusKey") STATUS statusKey) {
-		List<Project> filterResult = projectService.filterProjects(keywords, statusKey);
-		return filterResult;
+			@RequestParam(value = "statusKey") STATUS statusKey,
+			HttpServletRequest request) {
+		TreeSet<Project> filterResult = projectService.filterProjects(keywords,
+				statusKey);
+		ModelAndView model = new ModelAndView("forms/projectList");
+		model.addObject("projects", filterResult);
+		request.getSession().setAttribute("searchValue", keywords);
+		return model;
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/project/{id}/delete")
