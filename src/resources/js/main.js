@@ -356,6 +356,9 @@ $(document).ready(function() {
 	      return false;
 	    }
 	  });
+	 /***************************************************************************
+		 * * TABLE HEADER SORTING
+	 **************************************************************************/
 	 $("#projectList #searchDatas").tablesorter({ 
 	       
 	        headers: { 
@@ -366,6 +369,46 @@ $(document).ready(function() {
 	                sorter: false 
 	            } 
 	        } 
-	    }); 
-
+	    });
+	 /***************************************************************************
+		 * * TABLE HEADER FILTER
+	 **************************************************************************/
+	 $("#projectList #filterInputs input").keyup(function(){
+		 var value = $(this).val().split(" ");
+		 var name = $(this).attr("name");
+		 var tds;
+		 if (name =="pNumber"){
+			tds = $("#projectList #searchDatas tbody").find("td.col1");
+		 }
+		 if (name =="pName"){
+			 tds = $("#projectList #searchDatas tbody").find("td.col2");
+		 }
+		 if (name =="pStatus"){
+			 tds = $("#projectList #searchDatas tbody").find("td.col3");
+		 }
+		 if (name =="pCustomer"){
+			 tds = $("#projectList #searchDatas tbody").find("td.col4");
+		 }
+		 if (name =="pDate"){
+			 tds = $("#projectList #searchDatas tbody").find("td.col5");
+		 }
+		 var rows = $("#projectList #searchDatas tbody").find("tr");
+		 if($(this).val() ==""){
+			 rows.show();
+			 return
+		 }
+		 rows.hide();
+		 tds.filter(function (i, v) {
+	        var t = $(this);
+	        for (var d = 0; d < value.length; ++d) {
+	            if (t.is(":contains('" + value[d] + "')")) {
+	                return true;
+	            }
+	        }
+	        return false;	
+		 }).parent().show();
+	 }).focus(function () {
+	    $(this).val("");
+	    $(this).unbind('focus');
+	 });
 });
