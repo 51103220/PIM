@@ -81,14 +81,49 @@
 			</a>
 		</div>
 	</div>
-	
+	<input type="hidden" id="paginationMax" value="${pages}">
+	<c:choose>
+		<c:when test="${selected%2 ==0}">
+			<input type="hidden" id="paginationStart" value="${selected -1}">
+			<input type="hidden" id="paginationEnd" value="${selected}">
+		</c:when>
+		<c:otherwise>
+			<input type="hidden" id="paginationStart" value="${selected}">
+			<input type="hidden" id="paginationEnd" value="${selected +1}">
+		</c:otherwise>
+	</c:choose>
+	<c:choose>
+		<c:when test="${isSearchResult==true}">
+			<c:set var="directiveClass" value="search/page/" />
+		</c:when>
+		<c:otherwise>
+			<c:set var="directiveClass" value="projects/page/" />
+		</c:otherwise>
+	</c:choose>
 	<ul class="pagination">
-		<li><a href="#"><img id="logo"
-				src="resources/images/previous_page.png"></a></li>
-		<c:forEach begin="1" end="4" varStatus="loop">
-   			<li><a href="projects/page/${loop.index}">${loop.index}</a></li>
+		<li><a href="${directiveClass}" class="directives"
+				id="previous"><img id="logo"   src="resources/images/previous_page.png"></a></li>
+		<c:forEach begin="1" end="${pages}" varStatus="loop">
+			<c:choose>
+				<c:when test="${selected==loop.index}">
+					<c:set var="className" value="paging selected" />
+				</c:when>
+				<c:otherwise>
+					<c:set var="className" value="paging" />
+				</c:otherwise>
+			</c:choose>
+			<c:choose>
+				<c:when test="${isSearchResult==true}">
+					<li><a class="${className}" id="${loop.index}"
+						href="search/page/${loop.index}">${loop.index}</a></li>
+				</c:when>
+				<c:otherwise>
+					<li><a class="${className}" id="${loop.index}"
+						href="projects/page/${loop.index}">${loop.index}</a></li>
+				</c:otherwise>
+			</c:choose>
 		</c:forEach>
-		<li><a href="#"><img id="logo"
+		<li><a  href="${directiveClass}" class="directives" id="next"><img id="logo" 
 				src="resources/images/nextpage_icon.png"></a></li>
 	</ul>
 

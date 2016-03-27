@@ -1,18 +1,15 @@
 package com.dedorewan.website.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.dedorewan.website.service.IProjectService;
-
 
 @Controller
 
@@ -24,12 +21,15 @@ public class HomeController {
 	private IProjectService projectService;
 	@Value("${projects.maxProjectPerPage}")
 	Integer projectsPerPage;
-	
 
 	@RequestMapping(method = RequestMethod.GET, value = "/")
-	public String index(ModelMap model) {
-		model.addAttribute("projects", projectService.findAll());
-		return "index";
+	public ModelAndView index() {
+		ModelAndView model = new ModelAndView("index");
+		model.addObject("projects", projectService.projectsInPage(projectService.findAll(), 1));
+		model.addObject("pages", projectService.numberPages(projectService.findAll(), projectsPerPage));
+		model.addObject("isSearchResult", false);
+		model.addObject("selected",1);
+		return model;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/errorsunexpected={message}")
@@ -37,10 +37,6 @@ public class HomeController {
 		ModelAndView model = new ModelAndView("errors");
 		model.addObject("message", message);
 		return model;
-	}
-	@ModelAttribute("maxProjects")
-	public Integer maxProjects(){
-		return projectsPerPage;
 	}
 
 }

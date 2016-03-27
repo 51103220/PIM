@@ -1,6 +1,5 @@
 package com.dedorewan.website.controller;
 
-import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,7 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,21 +34,42 @@ public class ProjectController {
 	private IProjectService projectService;
 	@Autowired
 	JsonResponse jsonResponse;
-	
+
 	@InitBinder
 	public void dataBinding(WebDataBinder binder) {
 		binder.addValidators(projectValidator);
-	}
-	@ModelAttribute("maxProjects")
-	public Integer maxProjects(){
-		return projectsPerPage;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/listProject")
 	@ResponseBody
 	ModelAndView listProjectPage() {
 		ModelAndView model = new ModelAndView("forms/projectList");
-		model.addObject("projects", projectService.findAll());
+		model.addObject("projects", projectService.projectsInPage(projectService.findAll(), 1));
+		model.addObject("pages", projectService.numberPages(projectService.findAll(), projectsPerPage));
+		model.addObject("isSearchResult", false);
+		model.addObject("selected",1);
+		return model;
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "projects/page/{page}")
+	@ResponseBody
+	ModelAndView projectsPage(@PathVariable Integer page) {
+		ModelAndView model = new ModelAndView("forms/projectList");
+		model.addObject("projects", projectService.projectsInPage(projectService.findAll(), page));
+		model.addObject("pages", projectService.numberPages(projectService.findAll(), projectsPerPage));
+		model.addObject("isSearchResult", false);
+		model.addObject("selected",page);
+		return model;
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "search/page/{page}")
+	@ResponseBody
+	ModelAndView searchResultPage(@PathVariable Integer page) {
+		ModelAndView model = new ModelAndView("forms/projectList");
+		model.addObject("projects", projectService.projectsInPage(projectService.findAllSearchResults(), page));
+		model.addObject("pages", projectService.numberPages(projectService.findAllSearchResults(), projectsPerPage));
+		model.addObject("isSearchResult", true);
+		model.addObject("selected",page);
 		return model;
 	}
 
@@ -65,8 +84,7 @@ public class ProjectController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/NewProject")
 	@ResponseBody
-	public JsonResponse newProject(@Validated @RequestBody Project project,
-			BindingResult result) {
+	public JsonResponse newProject(@Validated @RequestBody Project project, BindingResult result) {
 
 		if (result.hasErrors()) {
 			jsonResponse.setStatus("FAIL");
@@ -87,6 +105,7 @@ public class ProjectController {
 		model.addObject("project", project);
 		return model;
 	}
+
 	@RequestMapping(method = RequestMethod.GET, value = "/resetCriteria")
 	@ResponseBody
 	public ModelAndView resetCriteria(HttpServletRequest request) {
@@ -96,17 +115,16 @@ public class ProjectController {
 		return model;
 	}
 
-
 	@RequestMapping(method = RequestMethod.POST, value = "/filterProject")
 	@ResponseBody
-	public ModelAndView filterProjects(
-			@RequestParam(value = "keywords") String keywords,
-			@RequestParam(value = "statusKey") STATUS statusKey,
-			HttpServletRequest request) {
-		TreeSet<Project> filterResult = projectService.filterProjects(keywords,
-				statusKey);
+	public ModelAndView filterProjects(@RequestParam(value = "keywords") String keywords,
+			@RequestParam(value = "statusKey") STATUS statusKey, HttpServletRequest request) {
+		projectService.filterProjects(keywords, statusKey);
 		ModelAndView model = new ModelAndView("forms/projectList");
-		model.addObject("projects", filterResult);
+		model.addObject("projects", projectService.projectsInPage(projectService.findAllSearchResults(), 1));
+		model.addObject("pages", projectService.numberPages(projectService.findAllSearchResults(), projectsPerPage));
+		model.addObject("isSearchResult", true);
+		model.addObject("selected",1);
 		request.getSession().setAttribute("searchValue", keywords);
 		return model;
 	}
@@ -127,8 +145,7 @@ public class ProjectController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/EditProject")
 	@ResponseBody
-	public JsonResponse editProject(@Validated @RequestBody Project project,
-			BindingResult result) {
+	public JsonResponse editProject(@Validated @RequestBody Project project, BindingResult result) {
 
 		if (result.hasErrors()) {
 			jsonResponse.setStatus("FAIL");

@@ -1,6 +1,6 @@
-/*******************************************************************************
+/**********************************
  * *SELECT ON CHANGE
- ******************************************************************************/
+ **********************************/
 function selectHandler() {
 	$("select").change(function() {
 		var class_name = $(this).attr('class').replace(/empty/g, "");
@@ -14,9 +14,9 @@ function fixBodyHeight() {
 	$("#main").css("height", body_height + "px");
 };
 
-/*******************************************************************************
+/*********************************
  * * SET AND UNSET SELECTED LINKS
- ******************************************************************************/
+ *********************************/
 function setLinkSelected(link) {
 	var newClass = link.attr("class") + " selected";
 	link.attr("class", newClass);
@@ -26,6 +26,9 @@ function unsetLinkSelected(link) {
 
 	link.attr("class", newClass);
 };
+/**********************************
+ * * SET AND UNSET ERROR INPUTS
+ **********************************/
 function setErrorInput(input, isSet, code) {
 	if (isSet) {
 		var newClass = input.attr("class") + " errorInput";
@@ -38,6 +41,34 @@ function setErrorInput(input, isSet, code) {
 		input.parent().find("p.hiddenError").hide();
 		input.parent().find("p.hiddenError").html(code);
 	}
+};
+/**********************************
+ * * PAGINATION: SET LINK VISIBLE
+ * * OR INVISBLE
+ **********************************/
+function handlePagination(id){
+	var links = $("#projectList .pagination .paging");
+	id =  parseInt(id);
+	var i =1;
+	var start,end =0;
+	if(id%2 ==0){
+		start = id -1;
+		end = id;
+	}
+	else{
+		start = id;
+		end = id+1;
+	}
+	links.each(function(){
+		var link =$(this);
+		if (i>=start && i <=end){
+			link.show();
+		}else{
+			link.hide();
+		}
+			
+		i=i+1;
+	});
 };
 $(document).ready(function() {
 
@@ -254,6 +285,53 @@ $(document).ready(function() {
 			url : "resetCriteria"
 		}).done(function(data) {
 			$("#main #contentBody").html(data);
+		}).fail(function(jqXHR, textStatus) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		});
+	});
+	/***************************************************************************
+	 * * PAGINATION
+	 **************************************************************************/
+	handlePagination("2");
+	$("#projectList .pagination .paging").click(function(e){
+		e.preventDefault();
+		var link = $(this);
+		var id = link.attr("id");
+		$.ajax({
+			method : "GET",
+			url : link.attr("href")
+		}).done(function(data) {
+			$("#main #contentBody").html(data);
+			handlePagination(id);
+		}).fail(function(jqXHR, textStatus) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		});
+	});
+	$("#projectList .pagination .directives").click(function(e){
+		e.preventDefault();
+		var directive = $(this);
+		var max = parseInt($("#projectList #paginationMax").val());
+		var start = parseInt($("#projectList #paginationStart").val());
+		var end = parseInt($("#projectList #paginationEnd").val());
+		var id =0;
+		if (directive.attr("id") == "previous"){
+			id =start;
+			if(start>2)
+				id=id-2;
+		}else{
+			id =end+1; 
+			if (id > max){
+				id = id -1;
+			}
+		}
+		var url = directive.parent().attr("href") + id;
+		
+		$.ajax({
+			method : "GET",
+			url : directive.attr("href") + id 
+		}).done(function(data) {
+			$("#main #contentBody").html(data);
+			handlePagination(id);
 		}).fail(function(jqXHR, textStatus) {
 			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
 		});

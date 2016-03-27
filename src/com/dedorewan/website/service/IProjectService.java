@@ -8,6 +8,8 @@ import com.dedorewan.website.dom.Project.STATUS;
 
 public interface IProjectService {
 	List<Project> findAll();
+	List<Project> findAllSearchResults();
+	TreeSet<Project> projectsInPage(List<Project> projects,Integer page);
 	Project getProject(Long id);
 	void addProject(Project project);
 	void addDummyProjects();
@@ -16,5 +18,6 @@ public interface IProjectService {
 	void updateProject(Project project);
 	void deleteProject(Long id);
 	void deleteProjects(Long[] ids);
+	Integer numberPages(List<Project> projects, Integer maxProjects);
 	TreeSet<Project> filterProjects(String keywords, STATUS statusKey);
 }

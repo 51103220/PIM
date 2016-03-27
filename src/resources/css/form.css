@@ -144,6 +144,10 @@ select.empty {
 	margin-right: 40px;
 	float:right;
 }
+.pagination .selected{
+	color: #000 !important;
+	background-color: #ddd;
+}
 /****************************
 	OTHER FORMS
 *****************************/
