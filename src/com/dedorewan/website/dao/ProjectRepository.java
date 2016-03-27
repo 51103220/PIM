@@ -56,13 +56,15 @@ public class ProjectRepository implements IProjectRepository {
 	private List<Project> pList = fakeList();
 	private List<String> visas = fakeVisas();
 	private List<Project> searchResults = new ArrayList<Project>();
+
 	public List<Project> findAll() {
 		return pList;
 	}
-	public List<Project> findAllSearchResults(){
+
+	public List<Project> findAllSearchResults() {
 		return searchResults;
 	}
- 
+
 	public Project getProject(Long id) {
 		for (Project p : pList) {
 			if (id == p.getId()) {
@@ -158,7 +160,7 @@ public class ProjectRepository implements IProjectRepository {
 		return false;
 	}
 
-	public TreeSet<Project> projectsInPage(List<Project> pList,Integer page) {
+	public TreeSet<Project> projectsInPage(List<Project> pList, Integer page) {
 		TreeSet<Project> projects = new TreeSet<Project>(new SortedFilterProjects());
 		Integer start_index = (page - 1) * 5;
 		Integer end_index = page * projectsPerPage;
@@ -171,7 +173,12 @@ public class ProjectRepository implements IProjectRepository {
 	}
 
 	public Integer numberPages(List<Project> projects, Integer maxProjects) {
-		Integer pages = (int) Math.ceil(projects.size() / maxProjects);
+		Integer pages = 0;
+		if (projects.size() % maxProjects == 0) {
+			pages = projects.size() / maxProjects;
+		} else {
+			pages = projects.size() / maxProjects + 1;
+		}
 		return pages;
 	}
 }

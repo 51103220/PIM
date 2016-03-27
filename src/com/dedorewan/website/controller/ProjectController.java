@@ -110,7 +110,10 @@ public class ProjectController {
 	@ResponseBody
 	public ModelAndView resetCriteria(HttpServletRequest request) {
 		ModelAndView model = new ModelAndView("forms/projectList");
-		model.addObject("projects", projectService.findAll());
+		model.addObject("projects", projectService.projectsInPage(projectService.findAll(), 1));
+		model.addObject("pages", projectService.numberPages(projectService.findAll(), projectsPerPage));
+		model.addObject("isSearchResult", false);
+		model.addObject("selected",1);
 		request.getSession().setAttribute("searchValue", "");
 		return model;
 	}

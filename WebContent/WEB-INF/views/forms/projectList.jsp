@@ -4,7 +4,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<c:set var="links">
+    <spring:message code="pagination.maxLinksPerPage" />
+</c:set>
 <div id="projectList">
 	<p class="formName">Project List</p>
 
@@ -83,13 +85,20 @@
 	</div>
 	<input type="hidden" id="paginationMax" value="${pages}">
 	<c:choose>
-		<c:when test="${selected%2 ==0}">
-			<input type="hidden" id="paginationStart" value="${selected -1}">
+		<c:when test="${selected%links ==0}">
+			<input type="hidden" id="paginationStart" value="${selected -(links-1)}">
 			<input type="hidden" id="paginationEnd" value="${selected}">
 		</c:when>
 		<c:otherwise>
 			<input type="hidden" id="paginationStart" value="${selected}">
-			<input type="hidden" id="paginationEnd" value="${selected +1}">
+			<c:choose>
+				<c:when test="${pages<links}">
+				<input type="hidden" id="paginationEnd" value="${pages}">
+				</c:when>
+				<c:otherwise>
+				<input type="hidden" id="paginationEnd" value="${selected + (links-1)}">
+				</c:otherwise>
+			</c:choose>
 		</c:otherwise>
 	</c:choose>
 	<c:choose>

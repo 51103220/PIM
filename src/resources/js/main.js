@@ -1,3 +1,4 @@
+var maxPaginationLinks = 2;
 /**********************************
  * *SELECT ON CHANGE
  **********************************/
@@ -51,13 +52,13 @@ function handlePagination(id){
 	id =  parseInt(id);
 	var i =1;
 	var start,end =0;
-	if(id%2 ==0){
-		start = id -1;
+	if(id%maxPaginationLinks ==0){
+		start = id -maxPaginationLinks+1;
 		end = id;
 	}
 	else{
 		start = id;
-		end = id+1;
+		end = id+maxPaginationLinks-1;
 	}
 	links.each(function(){
 		var link =$(this);
@@ -316,8 +317,8 @@ $(document).ready(function() {
 		var id =0;
 		if (directive.attr("id") == "previous"){
 			id =start;
-			if(start>2)
-				id=id-2;
+			if(start>maxPaginationLinks)
+				id=id-maxPaginationLinks;
 		}else{
 			id =end+1; 
 			if (id > max){
