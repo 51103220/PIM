@@ -356,6 +356,16 @@ $(document).ready(function() {
 	      return false;
 	    }
 	  });
-	 $("#projectList #searchDatas").tablesorter(); 
+	 $("#projectList #searchDatas").tablesorter({ 
+	       
+	        headers: { 
+	            0: { 
+	                sorter: false 
+	            }, 
+	            6: { 
+	                sorter: false 
+	            } 
+	        } 
+	    }); 
 
 });
