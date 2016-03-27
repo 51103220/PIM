@@ -1,11 +1,25 @@
 /************
 **MENU LIST
 *************/
-@media(min-width:768px){
-	#main #menuList {
-	width: 15% !important;	
-	padding-top:20px;
+
+#main{
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;   
+
 }
+#main .row{
+
+	height:100%;
+}
+@media ( min-width :768px) {
+	#main #menuList {
+		width: 15% !important;
+		padding-top: 20px;
+	}
+	#main #contentBody{
+		width: 85% !important;
+	}
 }
 
 
@@ -38,11 +52,31 @@
 	padding-top: 12px;
 	padding-bottom: 12px;
 }
+#main #menuList  .navbar li a.navbar-brand{
+	font-family: "Segoe UI Semibold";
+	size: 18pt;
+	color: #2F85FA;
+}
+#main #menuList  .navbar li a.navbar-brand.selected{
+	font-family: "Segoe UI Semibold";
+	size: 18pt;
+	color: #333333;
+}
+#main #menuList  .navbar li a.selected {
+	font-family: "Segoe UI Semibold";
+	size: 14pt;
+	color: #333333;
+}
+#main #menuList  .navbar li a{
+	font-family: "Segoe UI regular";
+	color: #666666;
+}
 /*************
 **BODY CONTENT
 **************/
-#main #contentBody{
-	border-left : 1px solid #e7e7e7;
-	height:100%;
-	padding-top:20px;
+#main #contentBody {
+	border-left: 1px solid #e7e7e7;
+	height: 100%;
+	padding-top: 20px;
+	padding-left: 40px;
 }

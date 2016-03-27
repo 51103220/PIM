@@ -18,17 +18,18 @@
 					 
 				</div>
 				<div class="navbar-collapse collapse sidebar-navbar-collapse">
-					<ul class="nav navbar-nav">
-						<li><a class="navbar-brand" href="#">Project List</a></li>
-						<li><a class="navbar-brand" href="#">New</a></li>
-						<li><a href="#">Project</a></li>
-						<li><a href="#">Customer</a></li>
-						<li><a href="#">Supply</a></li>
+					<ul class="nav navbar-nav" id="selectList">
+						<li><a class="navbar-brand selected" href="listProject" >Project List</a></li>
+						<li><a class="navbar-brand notAffected" href="newProject">New</a></li>
+						<li><a href="newProject" >Project</a></li>
+						<li><a href="newCustomer">Customer</a></li>
+						<li><a href="newSupply">Supply</a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
 		<div class="col-md-9" id="contentBody">
+			<jsp:include page="forms/projectList.jsp" />
 		</div>
 	</div>
 </div>
