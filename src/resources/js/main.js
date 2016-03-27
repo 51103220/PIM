@@ -356,5 +356,6 @@ $(document).ready(function() {
 	      return false;
 	    }
 	  });
+	 $("#projectList #searchDatas").tablesorter(); 
 
 });

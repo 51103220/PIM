@@ -22,6 +22,7 @@
 <spring:url value="/resources/js/boostrap.js" var="bootJS" />
 <spring:url value="/resources/js/datepicker.js" var="datePickerJS" />
 <spring:url value="/resources/js/moment.js" var="momentJS" />
+<spring:url value="/resources/js/tablesorter.js" var="tablesorterJS" />
 <link href="${bootCSS}" rel="stylesheet" />
 <link href="${mainCSS}" rel="stylesheet" />
 <link href="${headerCSS}" rel="stylesheet" />
@@ -43,6 +44,7 @@
 <script src="${bootJS}"></script>
 <script src="${momentJS}"></script>
 <script src="${datePickerJS}"></script>
+<script src="${tablesorterJS}"></script>
 <script src="${mainJS}"></script>
 
 
