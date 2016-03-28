@@ -7,17 +7,17 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class ProjectEmployee {
+public class Group {
 
 	@Id
 	@GeneratedValue
 	private Long id;
 	@NotNull
 	@Column(nullable = false)
-	private Long projectId;
+	private Long groupLeaderId;
 	@NotNull
 	@Column(nullable = false)
-	private Long employeeId;
+	Long version;
 
 	public Long getId() {
 		return id;
@@ -27,29 +27,29 @@ public class ProjectEmployee {
 		this.id = id;
 	}
 
-	public Long getProjectId() {
-		return projectId;
+	public Long getGroupLeaderId() {
+		return groupLeaderId;
 	}
 
-	public void setProjectId(Long id) {
-		this.projectId = id;
+	public void setGroupLeaderId(Long id) {
+		this.groupLeaderId = id;
 	}
 
-	public Long getEmployeeId() {
-		return employeeId;
+	public Long getVersion() {
+		return version;
 	}
 
-	public void setEmployeeId(Long id) {
-		this.employeeId = id;
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 
-	public ProjectEmployee() {
+	public Group() {
 
 	}
 
-	public ProjectEmployee(Long id, Long employeeId, Long projectId) {
+	public Group(Long id, Long groupLeaderId, Long version) {
 		this.id = id;
-		this.employeeId = employeeId;
-		this.projectId = projectId;
+		this.groupLeaderId = groupLeaderId;
+		this.version = version;
 	}
 }
