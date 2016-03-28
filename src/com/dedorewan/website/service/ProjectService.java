@@ -18,6 +18,9 @@ public class ProjectService implements IProjectService {
 	public List<Project> findAll() {
 		return projectRepository.findAll();
 	}
+	public List<Project> findAllSearchResults(){
+		return projectRepository.findAllSearchResults();
+	}
 
 	public Project getProject(Long id) {
 		return projectRepository.getProject(id);
@@ -38,16 +41,28 @@ public class ProjectService implements IProjectService {
 	public boolean visaExsisted(String visa) {
 		return projectRepository.visaExsisted(visa);
 	}
-	public void updateProject(Project project){
+
+	public void updateProject(Project project) {
 		projectRepository.updateProject(project);
 	}
-	public void deleteProject(Long id){
+
+	public void deleteProject(Long id) {
 		projectRepository.deleteProject(id);
 	}
-	public void deleteProjects(Long[] ids){
+
+	public void deleteProjects(Long[] ids) {
 		projectRepository.deleteProjects(ids);
 	}
-	public TreeSet<Project> filterProjects(String keywords, STATUS statusKey){
+
+	public TreeSet<Project> filterProjects(String keywords, STATUS statusKey) {
 		return projectRepository.filterProjects(keywords, statusKey);
+	}
+
+	public TreeSet<Project> projectsInPage(List<Project> projects, Integer page) {
+		return projectRepository.projectsInPage(projects, page);
+	}
+
+	public Integer numberPages(List<Project> projects, Integer maxProjects) {
+		return projectRepository.numberPages(projects, maxProjects);
 	}
 }

@@ -1,6 +1,7 @@
-/*******************************************************************************
+var maxPaginationLinks = 2;
+/**********************************
  * *SELECT ON CHANGE
- ******************************************************************************/
+ **********************************/
 function selectHandler() {
 	$("select").change(function() {
 		var class_name = $(this).attr('class').replace(/empty/g, "");
@@ -14,9 +15,9 @@ function fixBodyHeight() {
 	$("#main").css("height", body_height + "px");
 };
 
-/*******************************************************************************
+/*********************************
  * * SET AND UNSET SELECTED LINKS
- ******************************************************************************/
+ *********************************/
 function setLinkSelected(link) {
 	var newClass = link.attr("class") + " selected";
 	link.attr("class", newClass);
@@ -26,6 +27,9 @@ function unsetLinkSelected(link) {
 
 	link.attr("class", newClass);
 };
+/**********************************
+ * * SET AND UNSET ERROR INPUTS
+ **********************************/
 function setErrorInput(input, isSet, code) {
 	if (isSet) {
 		var newClass = input.attr("class") + " errorInput";
@@ -38,6 +42,34 @@ function setErrorInput(input, isSet, code) {
 		input.parent().find("p.hiddenError").hide();
 		input.parent().find("p.hiddenError").html(code);
 	}
+};
+/**********************************
+ * * PAGINATION: SET LINK VISIBLE
+ * * OR INVISBLE
+ **********************************/
+function handlePagination(id){
+	var links = $("#projectList .pagination .paging");
+	id =  parseInt(id);
+	var i =1;
+	var start,end =0;
+	if(id%maxPaginationLinks ==0){
+		start = id -maxPaginationLinks+1;
+		end = id;
+	}
+	else{
+		start = id;
+		end = id+maxPaginationLinks-1;
+	}
+	links.each(function(){
+		var link =$(this);
+		if (i>=start && i <=end){
+			link.show();
+		}else{
+			link.hide();
+		}
+			
+		i=i+1;
+	});
 };
 $(document).ready(function() {
 
@@ -259,6 +291,53 @@ $(document).ready(function() {
 		});
 	});
 	/***************************************************************************
+	 * * PAGINATION
+	 **************************************************************************/
+	handlePagination("2");
+	$("#projectList .pagination .paging").click(function(e){
+		e.preventDefault();
+		var link = $(this);
+		var id = link.attr("id");
+		$.ajax({
+			method : "GET",
+			url : link.attr("href")
+		}).done(function(data) {
+			$("#main #contentBody").html(data);
+			handlePagination(id);
+		}).fail(function(jqXHR, textStatus) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		});
+	});
+	$("#projectList .pagination .directives").click(function(e){
+		e.preventDefault();
+		var directive = $(this);
+		var max = parseInt($("#projectList #paginationMax").val());
+		var start = parseInt($("#projectList #paginationStart").val());
+		var end = parseInt($("#projectList #paginationEnd").val());
+		var id =0;
+		if (directive.attr("id") == "previous"){
+			id =start;
+			if(start>maxPaginationLinks)
+				id=id-maxPaginationLinks;
+		}else{
+			id =end+1; 
+			if (id > max){
+				id = id -1;
+			}
+		}
+		var url = directive.parent().attr("href") + id;
+		
+		$.ajax({
+			method : "GET",
+			url : directive.attr("href") + id 
+		}).done(function(data) {
+			$("#main #contentBody").html(data);
+			handlePagination(id);
+		}).fail(function(jqXHR, textStatus) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		});
+	});
+	/***************************************************************************
 	 * * SELECT HANDLING AND CLOSE PANEL HANDLING
 	 **************************************************************************/
 	
@@ -277,5 +356,59 @@ $(document).ready(function() {
 	      return false;
 	    }
 	  });
-
+	 /***************************************************************************
+		 * * TABLE HEADER SORTING
+	 **************************************************************************/
+	 $("#projectList #searchDatas").tablesorter({ 
+	       
+	        headers: { 
+	            0: { 
+	                sorter: false 
+	            }, 
+	            6: { 
+	                sorter: false 
+	            } 
+	        } 
+	    });
+	 /***************************************************************************
+		 * * TABLE HEADER FILTER
+	 **************************************************************************/
+	 $("#projectList #filterInputs input").keyup(function(){
+		 var value = $(this).val().split(" ");
+		 var name = $(this).attr("name");
+		 var tds;
+		 if (name =="pNumber"){
+			tds = $("#projectList #searchDatas tbody").find("td.col1");
+		 }
+		 if (name =="pName"){
+			 tds = $("#projectList #searchDatas tbody").find("td.col2");
+		 }
+		 if (name =="pStatus"){
+			 tds = $("#projectList #searchDatas tbody").find("td.col3");
+		 }
+		 if (name =="pCustomer"){
+			 tds = $("#projectList #searchDatas tbody").find("td.col4");
+		 }
+		 if (name =="pDate"){
+			 tds = $("#projectList #searchDatas tbody").find("td.col5");
+		 }
+		 var rows = $("#projectList #searchDatas tbody").find("tr");
+		 if($(this).val() ==""){
+			 rows.show();
+			 return
+		 }
+		 rows.hide();
+		 tds.filter(function (i, v) {
+	        var t = $(this);
+	        for (var d = 0; d < value.length; ++d) {
+	            if (t.is(":contains('" + value[d] + "')")) {
+	                return true;
+	            }
+	        }
+	        return false;	
+		 }).parent().show();
+	 }).focus(function () {
+	    $(this).val("");
+	    $(this).unbind('focus');
+	 });
 });

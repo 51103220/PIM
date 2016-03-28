@@ -1,4 +1,4 @@
-.header {
+.navbar.header {
 	padding-top: 10px;
 	font-weight: bold;
 	padding-bottom: 10px;
@@ -6,7 +6,7 @@
 	background-color: #F5F5F5 !important;
 }
 
-.header #projectName {
+.navbar.header #projectName {
 	margin-left: 20px;
 	margin-top: 10px;
 	font-family: "Segoe UI Semibold";
@@ -14,24 +14,26 @@
 	color: #777;
 }
 
-.header #funcOption {
+.navbar.header #funcOption {
 	margin-top: 10px;
 }
 
-.header #langOption {
+.navbar.header #langOption {
 	margin-right: 20px;
 	margin-top: 10px;
 }
 
-.header #langOption>li>a {
+.navbar.header #langOption>li>a {
 	padding-left: 0px !important;
 	padding-right: 0px !important;
 }
-.header li>a{
+
+.navbar.header li>a {
 	color: #2F85FA !important;
 	font-family: "Segoe UI Semibold";
-	size:14pt;
+	size: 14pt;
 }
-.header li>a.selected{
-	color: #666666 !important ;
+
+.navbar.header li>a.selected {
+	color: #666666 !important;
 }

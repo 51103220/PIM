@@ -4,7 +4,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<c:set var="links">
+	<spring:message code="pagination.maxLinksPerPage" />
+</c:set>
 <div id="projectList">
 	<p class="formName">Project List</p>
 
@@ -34,6 +36,37 @@
 				<a href="#" id="reset_btn"> Reset Search</a>
 			</div>
 		</form>
+		<table id="filterInputs">
+			<thead>
+				<tr>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td></td>
+					<td><input type="text" name="pNumber" class="form-control"
+						placeholder="Filter project number"></td>
+					<td><input type="text" name="pName" class="form-control"
+						placeholder="Filter project name"></td>
+					<td><input type="text" name="pStatus" class="form-control"
+						placeholder="Filter project status"></td>
+					<td><input type="text" name="pCustomer" class="form-control"
+						placeholder="Filter customer"></td>
+					<td><input type="text" name="pDate" class="form-control"
+						placeholder="Filter start date"></td>
+					<td></td>
+				</tr>
+			</tbody>
+
+
+		</table>
 		<table class="table" id="searchDatas">
 			<thead>
 				<tr>
@@ -51,14 +84,14 @@
 					<tr>
 						<td align="center"><input id="${project.getId()}"
 							type="checkbox" class="checkIcon" value="${project.isNew()}"></td>
-						<td align="right"><a href="project/${project.getId()}/detail"
+						<td class="col1" align="right"><a href="project/${project.getId()}/detail"
 							class="projectDetail">${project.getProjectNumber()}</a></td>
-						<td>${project.getName()}</td>
-						<td>${project.getStatus().getValue()}</td>
-						<td>${project.getCustomer()}</td>
+						<td class="col2" >${project.getName()}</td>
+						<td class="col3">${project.getStatus().getValue()}</td>
+						<td class="col4">${project.getCustomer()}</td>
 						<fmt:formatDate value="${project.getStartDate()}" var="dateString"
 							pattern="dd.MM.yyyy" />
-						<td>${dateString}</td>
+						<td class="col5">${dateString}</td>
 						<td align="center"><a
 							href="project/${project.getId()}/delete" class="deleteIcon">
 								<c:choose>
@@ -81,15 +114,59 @@
 			</a>
 		</div>
 	</div>
-	
+	<input type="hidden" id="paginationMax" value="${pages}">
+	<c:choose>
+		<c:when test="${selected%links ==0}">
+			<input type="hidden" id="paginationStart"
+				value="${selected -(links-1)}">
+			<input type="hidden" id="paginationEnd" value="${selected}">
+		</c:when>
+		<c:otherwise>
+			<input type="hidden" id="paginationStart" value="${selected}">
+			<c:choose>
+				<c:when test="${pages<links}">
+					<input type="hidden" id="paginationEnd" value="${pages}">
+				</c:when>
+				<c:otherwise>
+					<input type="hidden" id="paginationEnd"
+						value="${selected + (links-1)}">
+				</c:otherwise>
+			</c:choose>
+		</c:otherwise>
+	</c:choose>
+	<c:choose>
+		<c:when test="${isSearchResult==true}">
+			<c:set var="directiveClass" value="search/page/" />
+		</c:when>
+		<c:otherwise>
+			<c:set var="directiveClass" value="projects/page/" />
+		</c:otherwise>
+	</c:choose>
 	<ul class="pagination">
-		<li><a href="#"><img id="logo"
-				src="resources/images/previous_page.png"></a></li>
-		<c:forEach begin="1" end="4" varStatus="loop">
-   			<li><a href="projects/page/${loop.index}">${loop.index}</a></li>
+		<li><a href="${directiveClass}" class="directives" id="previous"><img
+				id="logo" src="resources/images/previous_page.png"></a></li>
+		<c:forEach begin="1" end="${pages}" varStatus="loop">
+			<c:choose>
+				<c:when test="${selected==loop.index}">
+					<c:set var="className" value="paging selected" />
+				</c:when>
+				<c:otherwise>
+					<c:set var="className" value="paging" />
+				</c:otherwise>
+			</c:choose>
+			<c:choose>
+				<c:when test="${isSearchResult==true}">
+					<li><a class="${className}" id="${loop.index}"
+						href="search/page/${loop.index}">${loop.index}</a></li>
+				</c:when>
+				<c:otherwise>
+					<li><a class="${className}" id="${loop.index}"
+						href="projects/page/${loop.index}">${loop.index}</a></li>
+				</c:otherwise>
+			</c:choose>
 		</c:forEach>
-		<li><a href="#"><img id="logo"
-				src="resources/images/nextpage_icon.png"></a></li>
+		<li><a href="${directiveClass}" class="directives" id="next"><img
+				id="logo" src="resources/images/nextpage_icon.png"></a></li>
 	</ul>
 
 </div>
