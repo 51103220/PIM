@@ -322,7 +322,7 @@ $(document).ready(function() {
 		}else{
 			id =end+1; 
 			if (id > max){
-				id = id -1;
+				id = max;
 			}
 		}
 		var url = directive.parent().attr("href") + id;

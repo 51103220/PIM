@@ -36,16 +36,17 @@ public class ProjectValidator implements Validator {
 		if (project.getName().length() < 5) {
 			errors.rejectValue("name", "", "Username length is less than 5");
 		}
-		if (projectService.projectNumberExisted(project.getProjectNumber())) {
+		if (projectService.getProject(project.getId()) == null
+				&& projectService.projectNumberExisted(project
+						.getProjectNumber())) {
 			errors.rejectValue("projectNumber", "projectNumberExisted",
 					"The project number already existed. Please select a different project number");
 		}
-		if(!visas.toString().equals("")){
+		if (!visas.toString().equals("")) {
 			errors.rejectValue("members", "InvalidVisa",
-					"The following visas do not exist:{"+ visas.toString() +"}");
+					"The following visas do not exist:{" + visas.toString()
+							+ "}");
 		}
-		
-		
 
 	}
 }

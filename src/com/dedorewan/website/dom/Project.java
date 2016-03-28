@@ -46,7 +46,6 @@ public class Project {
 	@NotNull
 	@Column(nullable = false)
 	private Date startDate;
-	@NotNull
 	@Column
 	private Date endDate;
 	@Column(nullable = false)
