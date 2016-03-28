@@ -65,4 +65,7 @@ public class ProjectService implements IProjectService {
 	public Integer numberPages(List<Project> projects, Integer maxProjects) {
 		return projectRepository.numberPages(projects, maxProjects);
 	}
+	public String groupLeaderVisa(Project project){
+		return projectRepository.groupLeaderVisa(project);
+	}
 }

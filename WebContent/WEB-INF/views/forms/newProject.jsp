@@ -53,34 +53,17 @@
 					<select class="form-control shortWidth empty" id="group"
 						name="groupId">
 						<c:choose>
-							<c:when test="${project.getGroupId()== 1}">
-								<option value="1" selected disabled>New</option>
-							</c:when>
-							<c:when test="${project.getGroupId()==2}">
-								<option value="2" selected disabled>Finished</option>
-							</c:when>
-							<c:when test="${project.getGroupId()== 3}">
-								<option value="3" selected disabled>Planned</option>
-							</c:when>
-							<c:when test="${project.getGroupId()== 4}">
-								<option value="4" selected disabled>In Progress</option>
-							</c:when>
-
-							<c:otherwise>
-								<option value="1" selected>New</option>
-							</c:otherwise>
-						</c:choose>
-						<c:choose>
 							<c:when test="${formName=='New'}">
+								<option value="" selected disabled>GROUPS</option>
 								<c:forEach items="${groups}" var="group">
 									<option value="${group.key}">${group.value}</option>
 								</c:forEach>
 							</c:when>
 							<c:otherwise>
-								<option value="1">New</option>
-								<option value="2">Finished</option>
-								<option value="3">Planned</option>
-								<option value="4">In progress</option>
+								<option value="${project.getGroupId()}" selected disabled>${leaderVisa}</option>
+								<c:forEach items="${groups}" var="group">
+									<option value="${group.key}">${group.value}</option>
+								</c:forEach>
 							</c:otherwise>
 						</c:choose>
 

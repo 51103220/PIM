@@ -35,4 +35,16 @@ public class GroupRepository implements IGroupRepository {
 		}
 		return map;
 	}
+	public String groupLeaderVisa(Long id){
+		return employeeRepository.getEmployeeVisa(id);
+	}
+	public Long getGroupId(Long groupLeaderId){
+		Long id = Long.valueOf(-1);
+		for(Group g : gList){
+			if(g.getGroupLeaderId() == groupLeaderId){
+				id = g.getId();
+			}
+		}
+		return id;
+	}
 }

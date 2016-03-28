@@ -104,8 +104,11 @@ public class ProjectController {
 	public ModelAndView getProject(@PathVariable Long id) {
 		Project project = projectService.getProject(id);
 		ModelAndView model = new ModelAndView("forms/newProject");
+		String leaderVisa = projectService.groupLeaderVisa(project);
 		model.addObject("formName", "Edit");
 		model.addObject("project", project);
+		model.addObject("leaderVisa", leaderVisa);
+		model.addObject("groups", groupService.groupLeaders());
 		return model;
 	}
 

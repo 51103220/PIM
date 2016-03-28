@@ -35,6 +35,8 @@ public class ProjectRepository implements IProjectRepository {
 	private IEmployeeRepository employeeRepository;
 	@Autowired
 	private IProjectEmployeeRepository projectEmployeeRepository;
+	@Autowired
+	private IGroupRepository groupRepository;
 
 	public List<Project> fakeList() {
 		List<Project> pList = new ArrayList<Project>();
@@ -188,5 +190,8 @@ public class ProjectRepository implements IProjectRepository {
 			pages = projects.size() / maxProjects + 1;
 		}
 		return pages;
+	}
+	public String groupLeaderVisa(Project project){
+		return groupRepository.groupLeaderVisa(project.getGroupId());
 	}
 }
