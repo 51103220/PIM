@@ -37,4 +37,29 @@ public class EmployeeRepository implements IEmployeeRepository {
 	public List<Employee> findAll() {
 		return eList;
 	}
+	public boolean visaExsisted(String visa){
+		for(Employee e:eList){
+			if(e.getVisa().equals(visa)){
+				return true;
+			}
+		}
+		return false;
+	}
+	public Long getEmployeeId(String visa){
+		Long id = Long.valueOf(-1);
+		for(Employee e: eList){
+			if(e.getVisa().equals(visa)){
+				id = e.getId();
+			}
+		}
+		return id;
+	}
+	public String getEmployeeVisa(Long id){
+		for(Employee e: eList){
+			if(e.getId() == id){
+				return e.getVisa();
+			}
+		}
+		return null;
+	}
 }

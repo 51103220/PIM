@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TreeSet;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -30,31 +31,28 @@ class SortedFilterProjects implements Comparator<Project> {
 public class ProjectRepository implements IProjectRepository {
 	@Value("${projects.maxProjectPerPage}")
 	Integer projectsPerPage;
+	@Autowired
+	private IEmployeeRepository employeeRepository;
+	@Autowired
+	private IProjectEmployeeRepository projectEmployeeRepository;
 
 	public List<Project> fakeList() {
 		List<Project> pList = new ArrayList<Project>();
 		for (int i = 0; i < 10; i++) {
-			Project p = new Project(Long.valueOf(i), Long.valueOf(1 + i), 30 + i, "PTQ", "Dedo", STATUS.NEW, new Date(),
-					new Date(), 323232);
-			Project p1 = new Project(Long.valueOf(i + 10), Long.valueOf(22), 60 + i, "PTQ Never Winter Night Yeah",
-					"Dedo", STATUS.FIN, new Date(), new Date(), 32323222);
+			Project p = new Project(Long.valueOf(i), Long.valueOf(1 + i),
+					30 + i, "PTQ", "Dedo", STATUS.NEW, new Date(), new Date(),
+					323232);
+			Project p1 = new Project(Long.valueOf(i + 10), Long.valueOf(22),
+					60 + i, "PTQ Never Winter Night Yeah", "Dedo", STATUS.FIN,
+					new Date(), new Date(), 32323222);
 			pList.add(p);
 			pList.add(p1);
 		}
 		return pList;
 	}
 
-	public List<String> fakeVisas() {
-		List<String> visas = new ArrayList<String>();
-		visas.add("THY");
-		visas.add("NQN");
-		visas.add("VQB");
-		return visas;
-
-	}
-
 	private List<Project> pList = fakeList();
-	private List<String> visas = fakeVisas();
+
 	private List<Project> searchResults = new ArrayList<Project>();
 
 	public List<Project> findAll() {
@@ -75,7 +73,19 @@ public class ProjectRepository implements IProjectRepository {
 	}
 
 	public void addProject(Project project) {
+		project.setId(pList.get(pList.size() - 1).getId() + 1);
+		project.setVersion(205512);
 		pList.add(project);
+		String[] visas = project.getMembers();
+		if (visas.length > 0) {
+			for (String visa : visas) {
+				projectEmployeeRepository.addProjectEmployee(project.getId(),
+						employeeRepository.getEmployeeId(visa));
+			}
+		} else {
+			projectEmployeeRepository.addProjectEmployee(project.getId(),
+					Long.valueOf(-1));
+		}
 	}
 
 	public void addDummyProjects() {
@@ -92,12 +102,7 @@ public class ProjectRepository implements IProjectRepository {
 	}
 
 	public boolean visaExsisted(String visa) {
-		for (String v : visas) {
-			if (visa.equals(v)) {
-				return true;
-			}
-		}
-		return false;
+		return employeeRepository.visaExsisted(visa);
 	}
 
 	public void updateProject(Project project) {
@@ -125,7 +130,8 @@ public class ProjectRepository implements IProjectRepository {
 	}
 
 	public TreeSet<Project> filterProjects(String keywords, STATUS statusKey) {
-		TreeSet<Project> filterResult = new TreeSet<Project>(new SortedFilterProjects());
+		TreeSet<Project> filterResult = new TreeSet<Project>(
+				new SortedFilterProjects());
 		searchResults.clear();
 		for (Project p : pList) {
 			if (p.getStatus() == statusKey) {
@@ -152,7 +158,8 @@ public class ProjectRepository implements IProjectRepository {
 					return true;
 				}
 			} else {
-				if (project.getName().contains(keywords) || project.getCustomer().contains(keywords)) {
+				if (project.getName().contains(keywords)
+						|| project.getCustomer().contains(keywords)) {
 					return true;
 				}
 			}
@@ -161,7 +168,8 @@ public class ProjectRepository implements IProjectRepository {
 	}
 
 	public TreeSet<Project> projectsInPage(List<Project> pList, Integer page) {
-		TreeSet<Project> projects = new TreeSet<Project>(new SortedFilterProjects());
+		TreeSet<Project> projects = new TreeSet<Project>(
+				new SortedFilterProjects());
 		Integer start_index = (page - 1) * 5;
 		Integer end_index = page * projectsPerPage;
 		for (Integer i = 0; i < pList.size(); i++) {

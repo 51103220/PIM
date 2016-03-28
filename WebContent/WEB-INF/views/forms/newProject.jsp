@@ -72,6 +72,9 @@
 						</c:choose>
 						<c:choose>
 							<c:when test="${formName=='New'}">
+								<c:forEach items="${groups}" var="group">
+									<option value="${group.key}">${group.value}</option>
+								</c:forEach>
 							</c:when>
 							<c:otherwise>
 								<option value="1">New</option>

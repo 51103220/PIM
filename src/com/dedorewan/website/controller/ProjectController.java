@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.dedorewan.website.dom.Project;
 import com.dedorewan.website.dom.Project.STATUS;
 import com.dedorewan.website.domain.JsonResponse;
+import com.dedorewan.website.service.IGroupService;
 import com.dedorewan.website.service.IProjectService;
 import com.dedorewan.website.validator.ProjectValidator;
 
@@ -32,6 +33,8 @@ public class ProjectController {
 	private ProjectValidator projectValidator;
 	@Autowired
 	private IProjectService projectService;
+	@Autowired
+	private IGroupService groupService;
 	@Autowired
 	JsonResponse jsonResponse;
 
@@ -78,7 +81,7 @@ public class ProjectController {
 	ModelAndView newProjectPage() {
 		ModelAndView model = new ModelAndView("forms/newProject");
 		model.addObject("formName", "New");
-
+		model.addObject("groups", groupService.groupLeaders());
 		return model;
 	}
 
