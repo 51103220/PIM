@@ -22,7 +22,7 @@ public class ProjectEmployeeRepository implements IProjectEmployeeRepository {
 	}
 	public void addProjectEmployee(Long projectId, Long employeId){
 		ProjectEmployee pe = new ProjectEmployee();
-		pe.setEmployeeId(peList.get(peList.size()-1).getId()+1);
+		pe.setId(peList.get(peList.size()-1).getId()+1);
 		pe.setEmployeeId(employeId);
 		pe.setProjectId(projectId);
 		peList.add(pe);
