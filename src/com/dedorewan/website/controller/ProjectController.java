@@ -1,5 +1,6 @@
 package com.dedorewan.website.controller;
 
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.dedorewan.website.dom.Employee;
 import com.dedorewan.website.dom.Project;
 import com.dedorewan.website.dom.Project.STATUS;
 import com.dedorewan.website.domain.JsonResponse;
+import com.dedorewan.website.service.IEmployeeService;
 import com.dedorewan.website.service.IGroupService;
 import com.dedorewan.website.service.IProjectService;
 import com.dedorewan.website.validator.ProjectValidator;
@@ -36,6 +39,8 @@ public class ProjectController {
 	@Autowired
 	private IGroupService groupService;
 	@Autowired
+	private IEmployeeService employeeService;
+	@Autowired
 	JsonResponse jsonResponse;
 
 	@InitBinder
@@ -47,10 +52,12 @@ public class ProjectController {
 	@ResponseBody
 	ModelAndView listProjectPage() {
 		ModelAndView model = new ModelAndView("forms/projectList");
-		model.addObject("projects", projectService.projectsInPage(projectService.findAll(), 1));
-		model.addObject("pages", projectService.numberPages(projectService.findAll(), projectsPerPage));
+		model.addObject("projects",
+				projectService.projectsInPage(projectService.findAll(), 1));
+		model.addObject("pages", projectService.numberPages(
+				projectService.findAll(), projectsPerPage));
 		model.addObject("isSearchResult", false);
-		model.addObject("selected",1);
+		model.addObject("selected", 1);
 		return model;
 	}
 
@@ -58,10 +65,12 @@ public class ProjectController {
 	@ResponseBody
 	ModelAndView projectsPage(@PathVariable Integer page) {
 		ModelAndView model = new ModelAndView("forms/projectList");
-		model.addObject("projects", projectService.projectsInPage(projectService.findAll(), page));
-		model.addObject("pages", projectService.numberPages(projectService.findAll(), projectsPerPage));
+		model.addObject("projects",
+				projectService.projectsInPage(projectService.findAll(), page));
+		model.addObject("pages", projectService.numberPages(
+				projectService.findAll(), projectsPerPage));
 		model.addObject("isSearchResult", false);
-		model.addObject("selected",page);
+		model.addObject("selected", page);
 		return model;
 	}
 
@@ -69,10 +78,16 @@ public class ProjectController {
 	@ResponseBody
 	ModelAndView searchResultPage(@PathVariable Integer page) {
 		ModelAndView model = new ModelAndView("forms/projectList");
-		model.addObject("projects", projectService.projectsInPage(projectService.findAllSearchResults(), page));
-		model.addObject("pages", projectService.numberPages(projectService.findAllSearchResults(), projectsPerPage));
+		model.addObject(
+				"projects",
+				projectService.projectsInPage(
+						projectService.findAllSearchResults(), page));
+		model.addObject(
+				"pages",
+				projectService.numberPages(
+						projectService.findAllSearchResults(), projectsPerPage));
 		model.addObject("isSearchResult", true);
-		model.addObject("selected",page);
+		model.addObject("selected", page);
 		return model;
 	}
 
@@ -87,7 +102,8 @@ public class ProjectController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/NewProject")
 	@ResponseBody
-	public JsonResponse newProject(@Validated @RequestBody Project project, BindingResult result) {
+	public JsonResponse newProject(@Validated @RequestBody Project project,
+			BindingResult result) {
 
 		if (result.hasErrors()) {
 			jsonResponse.setStatus("FAIL");
@@ -116,24 +132,34 @@ public class ProjectController {
 	@ResponseBody
 	public ModelAndView resetCriteria(HttpServletRequest request) {
 		ModelAndView model = new ModelAndView("forms/projectList");
-		model.addObject("projects", projectService.projectsInPage(projectService.findAll(), 1));
-		model.addObject("pages", projectService.numberPages(projectService.findAll(), projectsPerPage));
+		model.addObject("projects",
+				projectService.projectsInPage(projectService.findAll(), 1));
+		model.addObject("pages", projectService.numberPages(
+				projectService.findAll(), projectsPerPage));
 		model.addObject("isSearchResult", false);
-		model.addObject("selected",1);
+		model.addObject("selected", 1);
 		request.getSession().setAttribute("searchValue", "");
 		return model;
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/filterProject")
 	@ResponseBody
-	public ModelAndView filterProjects(@RequestParam(value = "keywords") String keywords,
-			@RequestParam(value = "statusKey") STATUS statusKey, HttpServletRequest request) {
+	public ModelAndView filterProjects(
+			@RequestParam(value = "keywords") String keywords,
+			@RequestParam(value = "statusKey") STATUS statusKey,
+			HttpServletRequest request) {
 		projectService.filterProjects(keywords, statusKey);
 		ModelAndView model = new ModelAndView("forms/projectList");
-		model.addObject("projects", projectService.projectsInPage(projectService.findAllSearchResults(), 1));
-		model.addObject("pages", projectService.numberPages(projectService.findAllSearchResults(), projectsPerPage));
+		model.addObject(
+				"projects",
+				projectService.projectsInPage(
+						projectService.findAllSearchResults(), 1));
+		model.addObject(
+				"pages",
+				projectService.numberPages(
+						projectService.findAllSearchResults(), projectsPerPage));
 		model.addObject("isSearchResult", true);
-		model.addObject("selected",1);
+		model.addObject("selected", 1);
 		request.getSession().setAttribute("searchValue", keywords);
 		return model;
 	}
@@ -152,9 +178,16 @@ public class ProjectController {
 		return "success";
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/getVisas")
+	@ResponseBody
+	public List<Employee> getVisas() {
+		return employeeService.availableEmployee();
+	}
+
 	@RequestMapping(method = RequestMethod.POST, value = "/EditProject")
 	@ResponseBody
-	public JsonResponse editProject(@Validated @RequestBody Project project, BindingResult result) {
+	public JsonResponse editProject(@Validated @RequestBody Project project,
+			BindingResult result) {
 
 		if (result.hasErrors()) {
 			jsonResponse.setStatus("FAIL");

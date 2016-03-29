@@ -31,6 +31,7 @@ public class Employee {
 	@NotNull
 	@Column(nullable = false)
 	Long version;
+	private String fullName;
 
 	public Long getId() {
 		return id;
@@ -92,6 +93,11 @@ public class Employee {
 		this.lastName = lastName;
 		this.birthDate = birthDate;
 		this.version = version;
+		this.fullName = firstName + " " + lastName;
 
+	}
+
+	public String getFullName() {
+		return this.fullName;
 	}
 }

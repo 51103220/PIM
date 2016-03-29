@@ -6,12 +6,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.dedorewan.website.dom.Employee;
 
 @Repository
 public class EmployeeRepository implements IEmployeeRepository {
+	@Autowired
+	private IGroupRepository groupRepository;
 	public List<Employee> generateList() {
 		List<Employee> eList = new ArrayList<Employee>();
 		String[] visas = { "THY", "NQN", "DED", "REW", "AKG", "THP", "YQN",
@@ -24,7 +27,7 @@ public class EmployeeRepository implements IEmployeeRepository {
 			e.printStackTrace();
 		}
 		for (int i = 0; i < 5; i++) {
-			eList.add(new Employee(Long.valueOf(i), visas[i], "Nguyen", "Tien",
+			eList.add(new Employee(Long.valueOf(i), visas[i], "Nguyen Tien", "Thanh",
 					date, Long.valueOf(1212 + i)));
 			eList.add(new Employee(Long.valueOf(i+10), visas[i+5], "Thanh", "Nguyen",
 					date, Long.valueOf(1212 + i)));
@@ -61,5 +64,14 @@ public class EmployeeRepository implements IEmployeeRepository {
 			}
 		}
 		return null;
+	}
+	public List<Employee> availableEmployee(){
+		List<Employee> availableList = new ArrayList<Employee>();
+		for(Employee e: eList){
+			if (groupRepository.getGroupId(e.getId()) == -1){
+				availableList.add(e);
+			}
+		}
+		return availableList;
 	}
 }

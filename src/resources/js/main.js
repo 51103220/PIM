@@ -133,7 +133,15 @@ $(document).ready(function() {
 				values[$(this).attr("name")] = $(this).val();
 			}
 			if($(this).attr("name") == "members"){
-					values[$(this).attr("name")] =  $(this).val().replace(/ /g,'').split(",");
+					var val = $(this).val().replace(/ /g,'').split(",");
+					
+					var placeholder = $(this).attr("placeholder");
+					if(placeholder){
+						val = placeholder.replace(/ /g,'').split(",");
+						val.pop();
+						
+					}
+					values[$(this).attr("name")] = val ;
 			}
 			if($(this).attr("name") == "startDate" || $(this).attr("name") == "endDate" ){
 				var date = new Date($(this).val());
@@ -407,8 +415,56 @@ $(document).ready(function() {
 	        }
 	        return false;	
 		 }).parent().show();
-	 }).focus(function () {
-	    $(this).val("");
-	    $(this).unbind('focus');
+		 }).focus(function () {
+		    $(this).val("");
+		    $(this).unbind('focus');
+		 });
+	 /***************************************************************************
+		 * * VISA DROPDOWN
+	 **************************************************************************/
+	 $(".tagsDiv .tags .tagInput input").focus(function(e){
+		$.ajax({
+			method : "GET",
+			url : "getVisas"
+		}).done(function(data) {
+			var content = "";
+			var i,len= 0;
+			for(i=0,len = data.length;i<len; i++){
+				content = content + "<li><a id ='" + data[i].visa +"' href='#' class='visaLink'>" +data[i].visa+": "+data[i].fullName + "</a></li>"
+			}
+			 $(".visaList").html(content);
+			 $(".visaList").show();
+		}).fail(function(jqXHR, textStatus) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		});
+		
+	 }).on('blur',function(){
+		  $(".visaList").hide();
+	 });
+	
+	 $(".visaList").on("mousedown",function(e){
+		 e.preventDefault();
+	 }).on("click",".visaLink",function(e){
+		e.preventDefault();
+		var link = $(this);
+		var oldContent = $(".tagsDiv .tags").html();
+		var newContent = "<li class='tag' id='"+link.attr("id")+"'>" +link.html() +"<a class='tagClose' href='#'><span class='glyphicon glyphicon-remove'></span></a></li>";
+		$(".tagsDiv .tags").html(newContent+oldContent);
+		link.remove();
+		var placeholder = $(".tagsDiv .tags .tagInput input").attr("placeholder");
+		$(".tagsDiv .tags .tagInput input").attr("placeholder", placeholder + link.attr("id") + ",");
+		
+	 });
+	 $(".tagsDiv").on("click", ".tagClose", function(e){
+		 e.preventDefault();
+		 var text = $(this).parent().text();
+		 var id = $(this).parent().attr("id");
+		 var content = "<li><a href='#' id='" +id+"' class='visaLink'>" +text + "</a></li>";
+		 var old_content = $(".visaList").html();
+		 
+		 $(".visaList").html(old_content + content);
+		 $(this).parent().remove();
+		 var placeholder = $(".tagsDiv .tags .tagInput input").attr("placeholder");
+		$(".tagsDiv .tags .tagInput input").attr("placeholder", placeholder.replace(id+",",""));
 	 });
 });

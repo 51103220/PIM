@@ -10,4 +10,5 @@ public interface IEmployeeRepository {
 	boolean visaExsisted(String visa);
 	Long getEmployeeId(String visa);
 	String getEmployeeVisa(Long id);
+	List<Employee> availableEmployee();
 }

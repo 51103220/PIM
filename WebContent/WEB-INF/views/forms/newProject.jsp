@@ -76,11 +76,20 @@
 
 				</label>
 				<div class="col-sm-9">
+					<div class=tagsDiv>
+						<ul class="tags list-inline">
+							<li class="tagInput"><input type="text" name="members" class=""
+								id="members" value="${project.membersToString()}" placeholder="">
+								<p class="hiddenError"></p></li>
+						</ul>
+					</div>
+					<div >
+						<ul class="visaList ">
+							
+						</ul>
+					</div>
 
 
-					<input type="text" class="form-control longWidth" name="members"
-						id="members" value="${project.membersToString()}">
-					<p class="hiddenError"></p>
 				</div>
 			</div>
 			<div class="form-group">
