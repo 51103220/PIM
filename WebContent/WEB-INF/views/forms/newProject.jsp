@@ -20,7 +20,7 @@
 				</label>
 				<div class="col-sm-9">
 					<input type="hidden" name="id" class="form-control shortWidth"
-						value="${project.getId()}"> <input type="text"
+						value="${project.getId()}"> <input type="number"
 						class="form-control shortWidth" name="projectNumber" id="pNumber"
 						value="${project.getProjectNumber()}">
 					<p class="hiddenError"></p>
@@ -142,8 +142,10 @@
 							class="input-group-addon"> <span
 							class="glyphicon glyphicon-calendar"></span>
 						</span>
+						<p class="hiddenError"></p>
+						
 					</div>
-					<p class="hiddenError"></p>
+					
 				</div>
 				<label class="control-label col-sm-2" for="endDate">End Date
 				</label>
@@ -154,8 +156,9 @@
 							class="input-group-addon"> <span
 							class="glyphicon glyphicon-calendar"></span>
 						</span>
+						<p class="hiddenError"></p>
 					</div>
-					<p class="hiddenError"></p>
+					
 				</div>
 			</div>
 		</form>

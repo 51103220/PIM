@@ -34,7 +34,7 @@ function setErrorInput(input, isSet, code) {
 	if (isSet) {
 		var newClass = input.attr("class") + " errorInput";
 		input.attr("class", newClass);
-		input.parent().find("p.hiddenError").show();
+		input.parent().find("p.hiddenError").css("display","table-row");
 		input.parent().find("p.hiddenError").html(code);
 	} else {
 		var className = input.attr("class").replace(/errorInput/g, "");
