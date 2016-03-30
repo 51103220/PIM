@@ -21,6 +21,7 @@
 			<div class="form-group">
 				<select class="form-control empty" id="statusKey">
 					<option value="" selected disabled>Project status</option>
+					<option></option>
 					<option value="NEW">New</option>
 					<option value="FIN">Finished</option>
 					<option value="PLA">Planned</option>
