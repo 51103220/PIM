@@ -136,13 +136,10 @@ public class ProjectRepository implements IProjectRepository {
 				new SortedFilterProjects());
 		searchResults.clear();
 		for (Project p : pList) {
-			if (p.getStatus() == statusKey) {
+			if (p.getStatus() == statusKey && matchedByKeywords(p, keywords)) {
 				searchResults.add(p);
 				filterResult.add(p);
-			} else if (matchedByKeywords(p, keywords)) {
-				searchResults.add(p);
-				filterResult.add(p);
-			}
+			} 
 		}
 		return filterResult;
 	}

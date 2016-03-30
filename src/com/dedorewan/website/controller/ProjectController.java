@@ -42,58 +42,55 @@ public class ProjectController {
 	private IEmployeeService employeeService;
 	@Autowired
 	JsonResponse jsonResponse;
+	private static final int FIRST_PAGE = 1;
+	private static final int DEFAULT_SELECTED = 1;
 
 	@InitBinder
 	public void dataBinding(WebDataBinder binder) {
 		binder.addValidators(projectValidator);
 	}
 
+	public ModelAndView makeProjectModel(String view,
+			List<Project> projectList, Integer page, Integer selectedPage,
+			Boolean isSearchResult) {
+		ModelAndView model = new ModelAndView(view);
+		model.addObject("projects",
+				projectService.projectsInPage(projectList, page));
+		model.addObject("pages",
+				projectService.numberPages(projectList, projectsPerPage));
+		model.addObject("isSearchResult", isSearchResult);
+		model.addObject("selected", selectedPage);
+		return model;
+	}
+
 	@RequestMapping(method = RequestMethod.GET, value = "/listProject")
 	@ResponseBody
-	ModelAndView listProjectPage() {
-		ModelAndView model = new ModelAndView("forms/projectList");
-		model.addObject("projects",
-				projectService.projectsInPage(projectService.findAll(), 1));
-		model.addObject("pages", projectService.numberPages(
-				projectService.findAll(), projectsPerPage));
-		model.addObject("isSearchResult", false);
-		model.addObject("selected", 1);
+	public ModelAndView listProjectPage() {
+		ModelAndView model = makeProjectModel("forms/projectList",
+				projectService.findAll(), FIRST_PAGE, DEFAULT_SELECTED, false);
 		return model;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "projects/page/{page}")
 	@ResponseBody
-	ModelAndView projectsPage(@PathVariable Integer page) {
-		ModelAndView model = new ModelAndView("forms/projectList");
-		model.addObject("projects",
-				projectService.projectsInPage(projectService.findAll(), page));
-		model.addObject("pages", projectService.numberPages(
-				projectService.findAll(), projectsPerPage));
-		model.addObject("isSearchResult", false);
-		model.addObject("selected", page);
+	public ModelAndView projectsPage(@PathVariable Integer page) {
+		ModelAndView model = makeProjectModel("forms/projectList",
+				projectService.findAll(), page, page, false);
 		return model;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "search/page/{page}")
 	@ResponseBody
-	ModelAndView searchResultPage(@PathVariable Integer page) {
-		ModelAndView model = new ModelAndView("forms/projectList");
-		model.addObject(
-				"projects",
-				projectService.projectsInPage(
-						projectService.findAllSearchResults(), page));
-		model.addObject(
-				"pages",
-				projectService.numberPages(
-						projectService.findAllSearchResults(), projectsPerPage));
-		model.addObject("isSearchResult", true);
-		model.addObject("selected", page);
+	public ModelAndView searchResultPage(@PathVariable Integer page) {
+
+		ModelAndView model = makeProjectModel("forms/projectList",
+				projectService.findAllSearchResults(), page, page, true);
 		return model;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/newProject")
 	@ResponseBody
-	ModelAndView newProjectPage() {
+	public ModelAndView newProjectPage() {
 		ModelAndView model = new ModelAndView("forms/newProject");
 		model.addObject("formName", "New");
 		model.addObject("groups", groupService.groupLeaders());
@@ -131,13 +128,8 @@ public class ProjectController {
 	@RequestMapping(method = RequestMethod.GET, value = "/resetCriteria")
 	@ResponseBody
 	public ModelAndView resetCriteria(HttpServletRequest request) {
-		ModelAndView model = new ModelAndView("forms/projectList");
-		model.addObject("projects",
-				projectService.projectsInPage(projectService.findAll(), 1));
-		model.addObject("pages", projectService.numberPages(
-				projectService.findAll(), projectsPerPage));
-		model.addObject("isSearchResult", false);
-		model.addObject("selected", 1);
+		ModelAndView model = makeProjectModel("forms/projectList",
+				projectService.findAll(), FIRST_PAGE, DEFAULT_SELECTED, false);
 		request.getSession().setAttribute("searchValue", "");
 		return model;
 	}
@@ -148,19 +140,19 @@ public class ProjectController {
 			@RequestParam(value = "keywords") String keywords,
 			@RequestParam(value = "statusKey") STATUS statusKey,
 			HttpServletRequest request) {
-		projectService.filterProjects(keywords, statusKey);
-		ModelAndView model = new ModelAndView("forms/projectList");
-		model.addObject(
-				"projects",
-				projectService.projectsInPage(
-						projectService.findAllSearchResults(), 1));
-		model.addObject(
-				"pages",
-				projectService.numberPages(
-						projectService.findAllSearchResults(), projectsPerPage));
-		model.addObject("isSearchResult", true);
-		model.addObject("selected", 1);
-		request.getSession().setAttribute("searchValue", keywords);
+		ModelAndView model;
+		if (statusKey == null && keywords == "") {
+			model = makeProjectModel("forms/projectList",
+					projectService.findAll(), FIRST_PAGE, DEFAULT_SELECTED,
+					false);
+			request.getSession().setAttribute("searchValue", "");
+		} else {
+			projectService.filterProjects(keywords, statusKey);
+			model = makeProjectModel("forms/projectList",
+					projectService.findAllSearchResults(), FIRST_PAGE,
+					DEFAULT_SELECTED, true);
+			request.getSession().setAttribute("searchValue", keywords);
+		}
 		return model;
 	}
 
