@@ -33,8 +33,29 @@ public class ProjectValidator implements Validator {
 				}
 			}
 		}
-		if (project.getName().length() < 5) {
-			errors.rejectValue("name", "", "Username length is less than 5");
+		if (project.getProjectNumber() == null) {
+			errors.rejectValue("projectNumber", "",
+					"Project Number must not be left empty");
+		} else if (project.getProjectNumber() <= 0) {
+			errors.rejectValue("projectNumber", "",
+					"Project Number must be greater than 0");
+		} else if (project.getProjectNumber() >= 10000) {
+			errors.rejectValue("projectNumber", "",
+					"Project Number must be 4 digits");
+		}
+		if (project.getName().length() == 0) {
+			errors.rejectValue("name", "",
+					"Project Name must not be left empty");
+		}
+		if (project.getCustomer().length() == 0) {
+			errors.rejectValue("customer", "",
+					"Customer Name must not be left empty");
+		}
+		if (project.getGroupId() == null) {
+			errors.rejectValue("groupId", "", "Must choose a group");
+		}
+		if (project.getStartDate() == null) {
+			errors.rejectValue("startDate", "", "Must choose a startingDate");
 		}
 		if (projectService.getProject(project.getId()) == null
 				&& projectService.projectNumberExisted(project
