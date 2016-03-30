@@ -127,6 +127,9 @@
 /****************************
 	PROJECT LIST FORM
 *****************************/
+.col30px{
+	max-width: 30px;
+}
 #filterInputs{
 	margin-top: 	20px;
 }

@@ -36,57 +36,37 @@
 				<a href="#" id="reset_btn"> Reset Search</a>
 			</div>
 		</form>
-		<table id="filterInputs">
-			<thead>
-				<tr>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td></td>
-					<td><input type="text" name="pNumber" class="form-control"
-						placeholder="Filter project number"></td>
-					<td><input type="text" name="pName" class="form-control"
-						placeholder="Filter project name"></td>
-					<td><input type="text" name="pStatus" class="form-control"
-						placeholder="Filter project status"></td>
-					<td><input type="text" name="pCustomer" class="form-control"
-						placeholder="Filter customer"></td>
-					<td><input type="text" name="pDate" class="form-control"
-						placeholder="Filter start date"></td>
-					<td></td>
-				</tr>
-			</tbody>
-
-
-		</table>
 		<table class="table" id="searchDatas">
 			<thead>
 				<tr>
 					<th></th>
-					<th>Number</th>
-					<th>Name</th>
-					<th>Status</th>
-					<th>Customer</th>
-					<th>Start Date</th>
+					<th class="sorter-true">Number</th>
+					<th class="sorter-true">Name</th>
+					<th class="sorter-true">Status</th>
+					<th class="sorter-true">Customer</th>
+					<th class="sorter-true">Start Date</th>
 					<th>Delete</th>
 				</tr>
+				<tr id="filterInputs">
+					<th></th>
+					<th class="col30px"><input type="text" name="pNumber"
+						class="form-control"></th>
+					<th><input type="text" name="pName" class="form-control"></th>
+					<th class="col30px"><input type="text" name="pStatus" class="form-control"></th>
+					<th class="col30px"><input type="text" name="pCustomer" class="form-control"></th>
+					<th class="col30px"><input type="text" name="pDate" class="form-control"></th>
+					<th></th>
+				</tr>
+
 			</thead>
 			<tbody>
 				<c:forEach items="${projects}" var="project">
 					<tr>
 						<td align="center"><input id="${project.getId()}"
 							type="checkbox" class="checkIcon" value="${project.isNew()}"></td>
-						<td class="col1" align="right"><a href="project/${project.getId()}/detail"
-							class="projectDetail">${project.getProjectNumber()}</a></td>
-						<td class="col2" >${project.getName()}</td>
+						<td class="col1" align="right"><a
+							href="project/${project.getId()}/detail" class="projectDetail">${project.getProjectNumber()}</a></td>
+						<td class="col2">${project.getName()}</td>
 						<td class="col3">${project.getStatus().getValue()}</td>
 						<td class="col4">${project.getCustomer()}</td>
 						<fmt:formatDate value="${project.getStartDate()}" var="dateString"

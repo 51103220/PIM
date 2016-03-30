@@ -368,15 +368,8 @@ $(document).ready(function() {
 		 * * TABLE HEADER SORTING
 	 **************************************************************************/
 	 $("#projectList #searchDatas").tablesorter({ 
+		 selectorHeaders: '.sorter-true'
 	       
-	        headers: { 
-	            0: { 
-	                sorter: false 
-	            }, 
-	            6: { 
-	                sorter: false 
-	            } 
-	        } 
 	    });
 	 /***************************************************************************
 		 * * TABLE HEADER FILTER
@@ -403,7 +396,7 @@ $(document).ready(function() {
 		 var rows = $("#projectList #searchDatas tbody").find("tr");
 		 if($(this).val() ==""){
 			 rows.show();
-			 return
+			 return;
 		 }
 		 rows.hide();
 		 tds.filter(function (i, v) {
