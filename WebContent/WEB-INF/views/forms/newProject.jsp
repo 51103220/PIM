@@ -21,7 +21,7 @@
 				<div class="col-sm-9">
 					<input type="hidden" name="id" class="form-control shortWidth"
 						value="${project.getId()}"> <input type="number"
-						class="form-control shortWidth" name="projectNumber" id="pNumber"
+						class="form-control shortWidth firstInput" name="projectNumber" id="pNumber"
 						value="${project.getProjectNumber()}">
 					<p class="hiddenError"></p>
 				</div>
@@ -31,7 +31,7 @@
 					Name <span class="isRequired">*</span>
 				</label>
 				<div class="col-sm-9">
-					<input type="text" class="form-control longWidth" name="name"
+					<input type="text" class="form-control longWidth " name="name"
 						id="pName" value="${project.getName()}">
 					<p class="hiddenError"></p>
 				</div>

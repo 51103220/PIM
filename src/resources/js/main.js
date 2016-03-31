@@ -356,14 +356,16 @@ $(document).ready(function() {
 		$(this).parent().hide();
 	});
 	/***************************************************************************
-	 * * PREVENT ENTER SUBMIT FORM
+	 * * ENTER SUBMIT FORM AND FIRST INPUT FOCUS
 	 **************************************************************************/
 	 $(window).keydown(function(event){
 	    if(event.keyCode == 13) {
 	      event.preventDefault();
-	      return false;
+	      $(".processBtn").click();
 	    }
 	  });
+	 $("#projectList .firstInput").focus();
+	 $("#newProject .firstInput").focus();
 	 /***************************************************************************
 		 * * TABLE HEADER SORTING
 	 **************************************************************************/

@@ -14,7 +14,7 @@
 		<form class="form-inline" action="filterProject" role="form"
 			id="searchInputs">
 			<div class="form-group">
-				<input type="text" id="keywords" class="form-control"
+				<input type="text" id="keywords" class="form-control firstInput"
 					placeholder="project number, name, customer name"
 					value="${searchValue}">
 			</div>
@@ -29,7 +29,7 @@
 
 			</div>
 			<div class="form-group">
-				<button type="button" id="search_btn" class="btn btn-primary">Search
+				<button type="button" id="search_btn" class="btn btn-primary processBtn">Search
 					Project</button>
 			</div>
 			<div class="form-group">
