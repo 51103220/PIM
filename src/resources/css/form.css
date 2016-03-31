@@ -36,18 +36,22 @@
 	background: transparent;
 	border-radius: 0px;
 }
-.hiddenError{
-	display:none;
+
+.hiddenError {
+	display: none;
 	font-family: "Segoe UI Semibold";
 	size: 14pt;
 	color: #D2492A;
 }
 
-.errorInput{
-	border-color: #D2492A;!important;
+.errorInput {
+	border-color: #D2492A;
+	!
+	important;
 }
+
 .errorPanel {
-	display:none;
+	display: none;
 	position: relative;
 	background-color: #F2DEDF;
 	padding: 10px 5px 10px 20px;
@@ -63,76 +67,78 @@
 
 .errorPanel .closePanel {
 	position: absolute;
-	right:20px;
+	right: 20px;
 	color: #000;
 	top: 15px;
 	font-size: 10px;
-	
 }
 /****************************
 	MEMBERS DROPDOWN VISAS
 *****************************/
-
-.tagsDiv .tags{
+.tagsDiv .tags {
 	width: 100%;
 	padding-left: 15px;
 	margin-bottom: 0px;
-	min-height:30px;
-	background-color : #fff;
+	min-height: 30px;
+	background-color: #fff;
 	border-radius: 5px;
 	border: 1px solid #ddd;
-
 }
 
-.tagsDiv  .tags:hover{
-
+.tagsDiv  .tags:hover {
 	border: 1px solid rgba(81, 203, 238, 1);
 }
 
-.tagsDiv  .tags li.tag{
+.tagsDiv  .tags li.tag {
 	margin-top: 5px;
 	padding: 5px 5px 5px 5px;
 	border-radius: 5px;
-	background-color : #fff;
+	background-color: #fff;
 	border: 1px solid #ddd;
 	margin-top: 5px;
 }
-.tagsDiv .tags li.tagInput{
+
+.tagsDiv .tags li.tagInput {
 	width: 100%;
-	
 }
-.tagsDiv .tags li.tagInput input{
+
+.tagsDiv .tags li.tagInput input {
 	width: 100%;
 	border: 0px;
-	height:30px;
+	height: 30px;
 }
-.tagsDiv .tags li.tagInput input:focus{
-	
-	outline:none;
-	
+
+.tagsDiv .tags li.tagInput input:focus {
+	outline: none;
 }
-.visaList{
-	display:none;
-	background-color : #fff;
+
+.visaList {
+	display: none;
+	position: absolute;
+	width:95%;
+	z-index: 9999; background-color : #fff;
 	margin-left: -5px;
 	padding: 10px 5px 10px 10px;
 	border: 1px solid rgba(81, 203, 238, 1);
 	overflow-y: scroll;
-	max-height:100px;
-
+	max-height: 100px;
+	background-color: #fff
 }
-.visaLink{
-	color:#000;
+
+.visaLink {
+	color: #000;
 }
 /****************************
 	PROJECT LIST FORM
 *****************************/
-.col30px{
+.col30px {
 	max-width: 30px;
 }
-#filterInputs{
-	margin-top: 	20px;
+
+#filterInputs {
+	margin-top: 20px;
 }
+
 #searchInputs .form-group:first-child, #searchInputs .form-group:last-child
 	{
 	margin-right: 10px;
@@ -185,27 +191,31 @@ select.empty {
 	height: 32px;
 	float: right;
 }
+
 .resultRow {
-	display:none;
+	display: none;
 	margin-top: -20px;
 	padding: 10px 0px 10px 10px;
 	border: 1px solid #ddd;
 }
-.resultRow  .totalItems{
-	color:#2F85FA;
+
+.resultRow  .totalItems {
+	color: #2F85FA;
 	size: 14pt;
 	font-family: "Segoe UI Semibold";
 	display: inline;
 }
-.resultRow  .deleteMultiple{
-	color:red;
+
+.resultRow  .deleteMultiple {
+	color: red;
 	size: 12pt;
 	font-family: "Segoe UI";
 	display: inline;
 	margin-right: 40px;
-	float:right;
+	float: right;
 }
-.pagination .selected{
+
+.pagination .selected {
 	color: #000 !important;
 	background-color: #ddd;
 }

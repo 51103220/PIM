@@ -446,7 +446,7 @@ $(document).ready(function() {
 		link.remove();
 		var placeholder = $(".tagsDiv .tags .tagInput input").attr("placeholder");
 		$(".tagsDiv .tags .tagInput input").attr("placeholder", placeholder + link.attr("id") + ",");
-		
+		$(".tagsDiv .tags .tagInput input").blur();
 	 });
 	 $(".tagsDiv").on("click", ".tagClose", function(e){
 		 e.preventDefault();

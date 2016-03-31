@@ -36,6 +36,7 @@
 				<a href="#" id="reset_btn"> Reset Search</a>
 			</div>
 		</form>
+		<div class="table-responsive">
 		<table class="table" id="searchDatas">
 			<thead>
 				<tr>
@@ -86,7 +87,7 @@
 				</c:forEach>
 			</tbody>
 		</table>
-
+		</div>
 		<div class="resultRow">
 			<p class="totalItems">2 items selected</p>
 			<a href="<c:url value='/deleteMultiple'/>" class="deleteMultiple">delete
