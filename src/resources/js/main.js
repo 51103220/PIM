@@ -429,8 +429,9 @@ $(document).ready(function() {
 			var content = "";
 			var i,len= 0;
 			for(i=0,len = data.length;i<len; i++){
-				content = content + "<li><a id ='" + data[i].visa +"' href='#' class='visaLink'>" +data[i].visa+": "+data[i].fullName + "</a></li>"
+				content = content + "<li><a tabIndex='-1' id ='" + data[i].visa +"' href='#' class='visaLink'>" +data[i].visa+": "+data[i].fullName + "</a></li>"
 			}
+			
 			 $(".visaList").html(content);
 			 $(".visaList").show();
 		}).fail(function(jqXHR, textStatus) {
@@ -440,7 +441,7 @@ $(document).ready(function() {
 	 }).on('blur',function(){
 		  $(".visaList").hide();
 	 });
-	
+	 
 	 $(".visaList").on("mousedown",function(e){
 		 e.preventDefault();
 	 }).on("click",".visaLink",function(e){
@@ -458,7 +459,7 @@ $(document).ready(function() {
 		 e.preventDefault();
 		 var text = $(this).parent().text();
 		 var id = $(this).parent().attr("id");
-		 var content = "<li><a href='#' id='" +id+"' class='visaLink'>" +text + "</a></li>";
+		 var content = "<li><a  tabIndex='-1' href='#' id='" +id+"' class='visaLink'>" +text + "</a></li>";
 		 var old_content = $(".visaList").html();
 		 
 		 $(".visaList").html(old_content + content);

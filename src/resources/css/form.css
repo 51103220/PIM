@@ -75,18 +75,21 @@
 /****************************
 	MEMBERS DROPDOWN VISAS
 *****************************/
+.tagsDiv{
+	background-color: #fff;
+	border-radius: 5px;
+	border: 1px solid #ddd;
+}
 .tagsDiv .tags {
 	width: 100%;
 	padding-left: 15px;
 	margin-bottom: 0px;
 	min-height: 30px;
-	background-color: #fff;
-	border-radius: 5px;
-	border: 1px solid #ddd;
+	
 }
 
-.tagsDiv  .tags:hover {
-	border: 1px solid rgba(81, 203, 238, 1);
+.tagsDiv:hover {
+	border: 1px solid #66AFE9;
 }
 
 .tagsDiv  .tags li.tag {
@@ -270,14 +273,13 @@ select.empty {
 
 .btnGroup {
 	max-width: 780px;
+	float: right;
 }
 
 .btnGroup .btn {
 	margin-top: 30px;
-	float: right;
 	width: 150px;
 	height: 35px;
-	float: right;
 }
 
 .btnGroup .cancelBtn {

@@ -6,6 +6,10 @@
 	background-color: #F5F5F5 !important;
 }
 
+.navbar-right {
+	float: left !important;
+}
+
 .navbar.header #projectName {
 	margin-left: 20px;
 	margin-top: 10px;
@@ -15,12 +19,13 @@
 }
 
 .navbar.header #funcOption {
-	margin-top: 10px;
+	margin-top: 15px;
 }
 
 .navbar.header #langOption {
-	margin-right: 20px;
-	margin-top: 10px;
+	margin-right: 100px;
+	margin-left: 350px;
+	margin-top: 15px;
 }
 
 .navbar.header #langOption>li>a {

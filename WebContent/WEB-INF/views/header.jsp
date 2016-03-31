@@ -17,13 +17,13 @@
 					code="application.prjName" /></a>
 		</div>
 		<div class="collapse navbar-collapse" id="headingNavbar">
-			<ul class="nav navbar-nav navbar-right" id="funcOption">
-				<li><a href="#" id="helpButton" class="selected">HELP</a></li>
-				<li><a href="#" id="logButton">LOGOUT</a></li>
-			</ul>
 			<ul class="nav navbar-nav navbar-right" id="langOption">
 				<li><a href="#" class="selected">EN</a></li>
 				<li><a href="#">&nbsp;|&nbsp;FR</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right" id="funcOption">
+				<li><a href="#" id="helpButton" class="selected">HELP</a></li>
+				<li><a href="#" id="logButton">LOGOUT</a></li>
 			</ul>
 		</div>
 	</div>
