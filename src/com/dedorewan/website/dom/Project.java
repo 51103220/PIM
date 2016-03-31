@@ -6,9 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 public class Project {
@@ -28,22 +25,22 @@ public class Project {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@NotNull
+	
 	@Column(nullable = false)
 	private Long groupId;
-	@NotNull
+	
 	@Column(nullable = false)
 	private Integer projectNumber;
-	@NotEmpty
+	
 	@Column(nullable = false)
 	private String name;
-	@NotEmpty
+	
 	@Column(nullable = false)
 	private String customer;
-	@NotNull
+	
 	@Column(nullable = false)
 	private STATUS status;
-	@NotNull
+	
 	@Column(nullable = false)
 	private Date startDate;
 	@Column

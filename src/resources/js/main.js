@@ -175,10 +175,12 @@ $(document).ready(function() {
 						var field = data.result[i].field;
 						var code = data.result[i].code;
 						var message = data.result[i].defaultMessage;
-						if (code == "NotEmpty") {
+						
+						if (code == "NotEmpty" || code == "NotNull" || code == '') {
 							$(".errorPanel").show();
+							message ='';
 						}
-
+						
 						$inputs.each(function() {
 							if ($(this).attr("name") == field) {
 								setErrorInput($(this), true, message);
@@ -189,6 +191,7 @@ $(document).ready(function() {
 								setErrorInput($(this), true, message);
 							}
 						});
+						
 					}
 				} else {
 					window.location.href = $(".header #projectName").attr("href");
