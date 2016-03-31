@@ -14,16 +14,22 @@
 							class="icon-bar"></span> <span class="icon-bar"></span> <span
 							class="icon-bar"></span>
 					</button>
-					<span class="visible-xs navbar-brand">MENU</span>
-					 
+					<span class="visible-xs navbar-brand"><spring:message
+							code="menu.menu" /></span>
+
 				</div>
 				<div class="navbar-collapse collapse sidebar-navbar-collapse">
 					<ul class="nav navbar-nav" id="selectList">
-						<li><a class="navbar-brand selected" href="listProject" >Project List</a></li>
-						<li><a class="navbar-brand notAffected" href="newProject">New</a></li>
-						<li><a href="newProject" >Project</a></li>
-						<li><a href="newCustomer">Customer</a></li>
-						<li><a href="newSupply">Supply</a></li>
+						<li><a class="navbar-brand selected" href="listProject"><spring:message
+									code="menu.projectsList" /></a></li>
+						<li><a class="navbar-brand notAffected" href="newProject"><spring:message
+									code="menu.new" /></a></li>
+						<li><a href="newProject"><spring:message
+									code="menu.project" /></a></li>
+						<li><a href="newCustomer"><spring:message
+									code="menu.customer" /></a></li>
+						<li><a href="newSupply"><spring:message
+									code="menu.supply" /></a></li>
 					</ul>
 				</div>
 			</div>

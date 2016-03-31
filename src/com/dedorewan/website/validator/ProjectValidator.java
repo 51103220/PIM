@@ -1,6 +1,10 @@
 package com.dedorewan.website.validator;
 
+import java.util.Locale;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -11,6 +15,9 @@ import com.dedorewan.website.service.IProjectService;
 @Component
 public class ProjectValidator implements Validator {
 	@Autowired
+	private MessageSource messageSource;
+
+	@Autowired
 	private IProjectService projectService;
 
 	@Override
@@ -20,6 +27,8 @@ public class ProjectValidator implements Validator {
 
 	@Override
 	public void validate(Object target, Errors errors) {
+		Locale locale = LocaleContextHolder.getLocale();
+		String message = "";
 		Project project = (Project) target;
 		StringBuilder visas = new StringBuilder("");
 		boolean first = true;
@@ -33,19 +42,44 @@ public class ProjectValidator implements Validator {
 				}
 			}
 		}
-		if (project.getName().length() < 5) {
-			errors.rejectValue("name", "", "Username length is less than 5");
+		if (project.getProjectNumber() == null) {
+			errors.rejectValue("projectNumber", "NotNull",
+					"Project Number must not be left empty");
+		} else if (project.getProjectNumber() <= 0) {
+			errors.rejectValue("projectNumber", "NotLessThan",
+					"Project Number must be greater than 0");
+		} else if (project.getProjectNumber() >= 10000) {
+			errors.rejectValue("projectNumber", "GreaterThan",
+					"Project Number must be 4 digits");
 		}
-		if (projectService.projectNumberExisted(project.getProjectNumber())) {
-			errors.rejectValue("projectNumber", "projectNumberExisted",
-					"The project number already existed. Please select a different project number");
+		if (project.getName().length() == 0) {
+			errors.rejectValue("name", "NotEmpty",
+					"Project Name must not be left empty");
 		}
-		if(!visas.toString().equals("")){
+		if (project.getCustomer().length() == 0) {
+			errors.rejectValue("customer", "NotEmpty",
+					"Customer Name must not be left empty");
+		}
+		if (project.getGroupId() == null) {
+			errors.rejectValue("groupId", "NotNull", "Must choose a group");
+		}
+		if (project.getStartDate() == null) {
+			errors.rejectValue("startDate", "NotNull",
+					"Must choose a startingDate");
+		}
+		if (projectService.getProject(project.getId()) == null
+				&& projectService.projectNumberExisted(project
+						.getProjectNumber())) {
+			message = messageSource.getMessage("errors.projectNumberExisted",
+					new Object[] {}, locale);
+			errors.rejectValue("projectNumber", "projectNumberExisted", message);
+		}
+		if (!visas.toString().equals("")) {
+			message = messageSource.getMessage("errors.InvalidVisa",
+					new Object[] {}, locale);
 			errors.rejectValue("members", "InvalidVisa",
-					"The following visas do not exist:{"+ visas.toString() +"}");
+					message + visas.toString() + "}");
 		}
-		
-		
 
 	}
 }

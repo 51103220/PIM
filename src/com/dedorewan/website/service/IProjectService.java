@@ -20,4 +20,5 @@ public interface IProjectService {
 	void deleteProjects(Long[] ids);
 	Integer numberPages(List<Project> projects, Integer maxProjects);
 	TreeSet<Project> filterProjects(String keywords, STATUS statusKey);
+	String groupLeaderVisa(Project project);
 }

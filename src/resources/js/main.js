@@ -34,7 +34,7 @@ function setErrorInput(input, isSet, code) {
 	if (isSet) {
 		var newClass = input.attr("class") + " errorInput";
 		input.attr("class", newClass);
-		input.parent().find("p.hiddenError").show();
+		input.parent().find("p.hiddenError").css("display","table-row");
 		input.parent().find("p.hiddenError").html(code);
 	} else {
 		var className = input.attr("class").replace(/errorInput/g, "");
@@ -76,11 +76,7 @@ $(document).ready(function() {
 	/***************************************************************************
 	 * * Language Options * clicks
 	 **************************************************************************/
-	$(".header #langOption li a").click(function(e) {
-		e.preventDefault();
-		unsetLinkSelected($(this).parent().parent().find("a.selected"));
-		setLinkSelected($(this));
-	});
+	
 	/***************************************************************************
 	 * * Menu item clicks
 	 **************************************************************************/
@@ -108,7 +104,11 @@ $(document).ready(function() {
 	/***************************************************************************
 	 * *Date Picking event
 	 **************************************************************************/
-	$('.datePicker').datetimepicker();
+	$('.datePicker').datepicker();
+	$('.datePickerIcon').click(function(e){
+		e.preventDefault();
+		$(this).parent().find("input").datepicker("show");
+	});
 	fixBodyHeight();
 
 	/***************************************************************************
@@ -133,7 +133,15 @@ $(document).ready(function() {
 				values[$(this).attr("name")] = $(this).val();
 			}
 			if($(this).attr("name") == "members"){
-					values[$(this).attr("name")] =  $(this).val().replace(/ /g,'').split(",");
+					var val = $(this).val().replace(/ /g,'').split(",");
+					
+					var placeholder = $(this).attr("placeholder");
+					if(placeholder){
+						val = placeholder.replace(/ /g,'').split(",");
+						val.pop();
+						
+					}
+					values[$(this).attr("name")] = val ;
 			}
 			if($(this).attr("name") == "startDate" || $(this).attr("name") == "endDate" ){
 				var date = new Date($(this).val());
@@ -163,10 +171,12 @@ $(document).ready(function() {
 						var field = data.result[i].field;
 						var code = data.result[i].code;
 						var message = data.result[i].defaultMessage;
-						if (code == "NotEmpty") {
+						
+						if (code == "NotEmpty" || code == "NotNull" || code == '') {
 							$(".errorPanel").show();
+							message ='';
 						}
-
+						
 						$inputs.each(function() {
 							if ($(this).attr("name") == field) {
 								setErrorInput($(this), true, message);
@@ -177,6 +187,7 @@ $(document).ready(function() {
 								setErrorInput($(this), true, message);
 							}
 						});
+						
 					}
 				} else {
 					window.location.href = $(".header #projectName").attr("href");
@@ -322,7 +333,7 @@ $(document).ready(function() {
 		}else{
 			id =end+1; 
 			if (id > max){
-				id = id -1;
+				id = max;
 			}
 		}
 		var url = directive.parent().attr("href") + id;
@@ -348,27 +359,22 @@ $(document).ready(function() {
 		$(this).parent().hide();
 	});
 	/***************************************************************************
-	 * * PREVENT ENTER SUBMIT FORM
+	 * * ENTER SUBMIT FORM AND FIRST INPUT FOCUS
 	 **************************************************************************/
 	 $(window).keydown(function(event){
 	    if(event.keyCode == 13) {
 	      event.preventDefault();
-	      return false;
+	      $(".processBtn").click();
 	    }
 	  });
+	 $("#projectList .firstInput").focus();
+	 $("#newProject .firstInput").focus();
 	 /***************************************************************************
 		 * * TABLE HEADER SORTING
 	 **************************************************************************/
 	 $("#projectList #searchDatas").tablesorter({ 
+		 selectorHeaders: '.sorter-true'
 	       
-	        headers: { 
-	            0: { 
-	                sorter: false 
-	            }, 
-	            6: { 
-	                sorter: false 
-	            } 
-	        } 
 	    });
 	 /***************************************************************************
 		 * * TABLE HEADER FILTER
@@ -395,7 +401,7 @@ $(document).ready(function() {
 		 var rows = $("#projectList #searchDatas tbody").find("tr");
 		 if($(this).val() ==""){
 			 rows.show();
-			 return
+			 return;
 		 }
 		 rows.hide();
 		 tds.filter(function (i, v) {
@@ -407,8 +413,58 @@ $(document).ready(function() {
 	        }
 	        return false;	
 		 }).parent().show();
-	 }).focus(function () {
-	    $(this).val("");
-	    $(this).unbind('focus');
+		 }).focus(function () {
+		    $(this).val("");
+		    $(this).unbind('focus');
+		 });
+	 /***************************************************************************
+		 * * VISA DROPDOWN
+	 **************************************************************************/
+	 $(".tagsDiv .tags .tagInput input").focus(function(e){
+		$.ajax({
+			method : "GET",
+			url : "getVisas"
+		}).done(function(data) {
+			var content = "";
+			var i,len= 0;
+			for(i=0,len = data.length;i<len; i++){
+				content = content + "<li><a tabIndex='-1' id ='" + data[i].visa +"' href='#' class='visaLink'>" +data[i].visa+": "+data[i].fullName + "</a></li>"
+			}
+			
+			 $(".visaList").html(content);
+			 $(".visaList").show();
+		}).fail(function(jqXHR, textStatus) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		});
+		
+	 }).on('blur',function(){
+		  $(".visaList").hide();
 	 });
+	 
+	 $(".visaList").on("mousedown",function(e){
+		 e.preventDefault();
+	 }).on("click",".visaLink",function(e){
+		e.preventDefault();
+		var link = $(this);
+		var oldContent = $(".tagsDiv .tags").html();
+		var newContent = "<li class='tag' id='"+link.attr("id")+"'>" +link.html() +"<a class='tagClose' href='#'><span class='glyphicon glyphicon-remove'></span></a></li>";
+		$(".tagsDiv .tags").html(newContent+oldContent);
+		link.remove();
+		var placeholder = $(".tagsDiv .tags .tagInput input").attr("placeholder");
+		$(".tagsDiv .tags .tagInput input").attr("placeholder", placeholder + link.attr("id") + ",");
+		$(".tagsDiv .tags .tagInput input").blur();
+	 });
+	 $(".tagsDiv").on("click", ".tagClose", function(e){
+		 e.preventDefault();
+		 var text = $(this).parent().text();
+		 var id = $(this).parent().attr("id");
+		 var content = "<li><a  tabIndex='-1' href='#' id='" +id+"' class='visaLink'>" +text + "</a></li>";
+		 var old_content = $(".visaList").html();
+		 
+		 $(".visaList").html(old_content + content);
+		 $(this).parent().remove();
+		 var placeholder = $(".tagsDiv .tags .tagInput input").attr("placeholder");
+		$(".tagsDiv .tags .tagInput input").attr("placeholder", placeholder.replace(id+",",""));
+	 });
+	 
 });
