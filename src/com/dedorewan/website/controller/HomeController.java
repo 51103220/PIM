@@ -5,12 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.dedorewan.website.dom.Project;
+import com.dedorewan.website.dom.Project.STATUS;
 import com.dedorewan.website.service.IProjectService;
 
 @Controller
@@ -25,7 +27,7 @@ public class HomeController {
 	private static final int FIRST_PAGE = 1;
 	private static final int DEFAULT_SELECTED = 1;
 
-	public ModelAndView makeProjectModel(String view,
+	private ModelAndView makeProjectModel(String view,
 			List<Project> projectList, Integer page, Integer selectedPage,
 			Boolean isSearchResult) {
 		ModelAndView model = new ModelAndView(view);
@@ -50,6 +52,11 @@ public class HomeController {
 		ModelAndView model = new ModelAndView("errors");
 		model.addObject("message", message);
 		return model;
+	}
+	@ModelAttribute("statusValues")
+	private STATUS[] statusList(){
+		STATUS[] status = STATUS.values();
+		return status;
 	}
 
 }

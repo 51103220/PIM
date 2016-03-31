@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +51,7 @@ public class ProjectController {
 		binder.addValidators(projectValidator);
 	}
 
-	public ModelAndView makeProjectModel(String view,
+	private ModelAndView makeProjectModel(String view,
 			List<Project> projectList, Integer page, Integer selectedPage,
 			Boolean isSearchResult) {
 		ModelAndView model = new ModelAndView(view);
@@ -189,5 +190,11 @@ public class ProjectController {
 			jsonResponse.setStatus("SUCCESS");
 		}
 		return jsonResponse;
+	}
+
+	@ModelAttribute("statusValues")
+	private STATUS[] statusList() {
+		STATUS[] status = STATUS.values();
+		return status;
 	}
 }

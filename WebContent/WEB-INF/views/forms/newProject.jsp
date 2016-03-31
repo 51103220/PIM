@@ -54,15 +54,18 @@
 						name="groupId">
 						<c:choose>
 							<c:when test="${formName=='New'}">
-								<option value="" selected disabled>GROUPS</option>
 								<c:forEach items="${groups}" var="group">
 									<option value="${group.key}">${group.value}</option>
 								</c:forEach>
 							</c:when>
 							<c:otherwise>
-								<option value="${project.getGroupId()}" selected disabled>${leaderVisa}</option>
+								<option value="${project.getGroupId()}" selected>${leaderVisa}</option>
 								<c:forEach items="${groups}" var="group">
-									<option value="${group.key}">${group.value}</option>
+									<c:choose>
+										<c:when test="${group.key != project.getGroupId()}">
+											<option value="${group.key}">${group.value}</option>
+										</c:when>
+									</c:choose>
 								</c:forEach>
 							</c:otherwise>
 						</c:choose>
@@ -72,25 +75,20 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="control-label col-sm-3" for="members">Members
-
-				</label>
+				<label class="control-label col-sm-3" for="members">Members</label>
 				<div class="col-sm-9">
 					<div class=tagsDiv>
 						<ul class="tags list-inline">
-							<li class="tagInput"><input type="text" name="members" class=""
-								id="members" value="${project.membersToString()}" placeholder="">
+							<li class="tagInput"><input type="text" name="members"
+								class="" id="members" value="${project.membersToString()}"
+								placeholder="">
 								<p class="hiddenError"></p></li>
 						</ul>
-					</div>
-					<div >
-						<ul class="visaList ">
-							
+						<ul class="visaList">
 						</ul>
 					</div>
-
-
 				</div>
+
 			</div>
 			<div class="form-group">
 				<label class="control-label col-sm-3" for="status">Status<span
@@ -99,31 +97,20 @@
 					<select class="form-control shortWidth empty" id="status"
 						name="status">
 						<c:choose>
-							<c:when test="${project.getStatus()=='NEW'}">
-								<option value="NEW" selected disabled>New</option>
-							</c:when>
-							<c:when test="${project.getStatus()=='FIN'}">
-								<option value="FIN" selected disabled>Finished</option>
-							</c:when>
-							<c:when test="${project.getStatus()=='PLA'}">
-								<option value="PLA" selected disabled>Planned</option>
-							</c:when>
-							<c:when test="${project.getStatus()=='INP'}">
-								<option value="INP" selected disabled>In Progress</option>
-							</c:when>
-
-							<c:otherwise>
-								<option value="NEW" selected>New</option>
-							</c:otherwise>
-						</c:choose>
-						<c:choose>
 							<c:when test="${formName=='New'}">
+								<c:forEach items="${statusValues}" var="status">
+									<option value="${status}">${status.getValue()}</option>
+								</c:forEach>
 							</c:when>
 							<c:otherwise>
-								<option value="NEW">New</option>
-								<option value="FIN">Finished</option>
-								<option value="PLA">Planned</option>
-								<option value="INP">In progress</option>
+								<option value="${project.getStatus()}" selected>${project.getStatus().getValue()}</option>
+								<c:forEach items="${statusValues}" var="status">
+									<c:choose>
+										<c:when test="${status != project.getStatus()}">
+											<option value="${status}">${status.getValue()}</option>
+										</c:when>
+									</c:choose>
+								</c:forEach>
 							</c:otherwise>
 						</c:choose>
 
@@ -143,9 +130,7 @@
 							class="glyphicon glyphicon-calendar"></span>
 						</span>
 						<p class="hiddenError"></p>
-						
 					</div>
-					
 				</div>
 				<label class="control-label col-sm-2" for="endDate">End Date
 				</label>
@@ -158,7 +143,7 @@
 						</span>
 						<p class="hiddenError"></p>
 					</div>
-					
+
 				</div>
 			</div>
 		</form>
