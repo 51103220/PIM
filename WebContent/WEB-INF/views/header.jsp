@@ -17,13 +17,25 @@
 					code="application.prjName" /></a>
 		</div>
 		<div class="collapse navbar-collapse" id="headingNavbar">
+			<c:set var="lang" value="${cookie['localeCookie'].value}" />
 			<ul class="nav navbar-nav navbar-right" id="langOption">
-				<li><a href="#" class="selected">EN</a></li>
-				<li><a href="#">&nbsp;|&nbsp;FR</a></li>
+				<c:choose>
+					<c:when test="${lang == 'fr'}">
+						<li><a href="<c:url value='/?lang=en'/>" class="selected">EN</a></li>
+						<li><a href="<c:url value='/?lang=fr'/>">&nbsp;|&nbsp;FR</a></li>
+					</c:when>
+					<c:otherwise>
+						<li><a href="<c:url value='/?lang=en'/>">EN</a></li>
+						<li><a href="<c:url value='/?lang=fr'/>" class="selected">&nbsp;|&nbsp;FR</a></li>
+					</c:otherwise>
+				</c:choose>
+
 			</ul>
 			<ul class="nav navbar-nav navbar-right" id="funcOption">
-				<li><a href="#" id="helpButton" class="selected">HELP</a></li>
-				<li><a href="#" id="logButton">LOGOUT</a></li>
+				<li><a href="#" id="helpButton" class="selected"><spring:message
+							code="link.help" /></a></li>
+				<li><a href="#" id="logButton"><spring:message
+							code="link.logout" /></a></li>
 			</ul>
 		</div>
 	</div>

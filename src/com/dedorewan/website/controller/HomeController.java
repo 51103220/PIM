@@ -1,6 +1,7 @@
 package com.dedorewan.website.controller;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,7 +42,7 @@ public class HomeController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/")
-	public ModelAndView index() {
+	public ModelAndView index(Locale locale) {
 		ModelAndView model = makeProjectModel("index",
 				projectService.findAll(), FIRST_PAGE, DEFAULT_SELECTED, false);
 		return model;

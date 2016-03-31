@@ -6,8 +6,9 @@
 	background-color: #F5F5F5 !important;
 }
 
-.navbar-right {
-	float: left !important;
+
+#headingNavbar{
+	float:right;
 }
 
 .navbar.header #projectName {
@@ -17,14 +18,15 @@
 	font-size: 18pt !important;
 	color: #777;
 }
-
+.navbar-right {
+	float: left !important;
+}
 .navbar.header #funcOption {
 	margin-top: 15px;
 }
 
 .navbar.header #langOption {
-	margin-right: 100px;
-	margin-left: 350px;
+	margin-right: 150px;
 	margin-top: 15px;
 }
 

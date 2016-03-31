@@ -8,85 +8,94 @@
 	<spring:message code="pagination.maxLinksPerPage" />
 </c:set>
 <div id="projectList">
-	<p class="formName">Project List</p>
-
+	<p class="formName">
+		<spring:message code="menu.projectsList" />
+	</p>
+	<spring:message code="placeholder.search" var="searchPlaceholder" />
+	<spring:message code="placeholder.status" var="searchStatus" />
 	<div class="formContent">
 		<form class="form-inline" action="filterProject" role="form"
 			id="searchInputs">
 			<div class="form-group">
 				<input type="text" id="keywords" class="form-control firstInput"
-					placeholder="project number, name, customer name"
-					value="${searchValue}">
+					placeholder="${searchPlaceholder}" value="${searchValue}">
 			</div>
 			<div class="form-group">
 				<select class="form-control empty" id="statusKey">
-					<option value="" selected disabled>Project status</option>
+					<option value="" selected disabled>${searchStatus}</option>
 					<option></option>
 					<c:forEach items="${statusValues}" var="status">
- 						<option value="${status}">${status.getValue()}</option>
+						<option value="${status}"><spring:message
+								code="status.${status}" /></option>
 					</c:forEach>
 				</select>
 
 			</div>
 			<div class="form-group">
-				<button type="button" id="search_btn" class="btn btn-primary processBtn">Search
-					Project</button>
+				<button type="button" id="search_btn"
+					class="btn btn-primary processBtn">
+					<spring:message code="button.search" />
+				</button>
 			</div>
 			<div class="form-group">
-				<a href="#" id="reset_btn"> Reset Search</a>
+				<a href="#" id="reset_btn"> <spring:message
+						code="link.resetSearch" /></a>
 			</div>
 		</form>
 		<div class="table-responsive">
-		<table class="table" id="searchDatas">
-			<thead>
-				<tr>
-					<th></th>
-					<th class="sorter-true">Number</th>
-					<th class="sorter-true">Name</th>
-					<th class="sorter-true">Status</th>
-					<th class="sorter-true">Customer</th>
-					<th class="sorter-true">Start Date</th>
-					<th>Delete</th>
-				</tr>
-				<tr id="filterInputs">
-					<th></th>
-					<th class="col30px"><input type="text" name="pNumber"
-						class="form-control"></th>
-					<th><input type="text" name="pName" class="form-control"></th>
-					<th class="col30px"><input type="text" name="pStatus" class="form-control"></th>
-					<th class="col30px"><input type="text" name="pCustomer" class="form-control"></th>
-					<th class="col30px"><input type="text" name="pDate" class="form-control"></th>
-					<th></th>
-				</tr>
-
-			</thead>
-			<tbody>
-				<c:forEach items="${projects}" var="project">
+			<table class="table" id="searchDatas">
+				<thead>
 					<tr>
-						<td align="center"><input id="${project.getId()}"
-							type="checkbox" class="checkIcon" value="${project.isNew()}"></td>
-						<td class="col1" align="right"><a
-							href="project/${project.getId()}/detail" class="projectDetail">${project.getProjectNumber()}</a></td>
-						<td class="col2">${project.getName()}</td>
-						<td class="col3">${project.getStatus().getValue()}</td>
-						<td class="col4">${project.getCustomer()}</td>
-						<fmt:formatDate value="${project.getStartDate()}" var="dateString"
-							pattern="dd.MM.yyyy" />
-						<td class="col5">${dateString}</td>
-						<td align="center"><a
-							href="project/${project.getId()}/delete" class="deleteIcon">
-								<c:choose>
-									<c:when test="${project.isNew()}">
-										<span class="glyphicon glyphicon-trash"></span>
-									</c:when>
-									<c:otherwise>
-									</c:otherwise>
-								</c:choose>
-						</a></td>
+						<th></th>
+						<th class="sorter-true"><spring:message code="table.number" /></th>
+						<th class="sorter-true"><spring:message code="table.name" /></th>
+						<th class="sorter-true"><spring:message code="table.status" /></th>
+						<th class="sorter-true"><spring:message code="table.customer" /></th>
+						<th class="sorter-true"><spring:message code="table.date" /></th>
+						<th><spring:message code="table.delete" /></th>
 					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
+					<tr id="filterInputs">
+						<th></th>
+						<th class="col30px"><input type="text" name="pNumber"
+							class="form-control"></th>
+						<th><input type="text" name="pName" class="form-control"></th>
+						<th class="col30px"><input type="text" name="pStatus"
+							class="form-control"></th>
+						<th class="col30px"><input type="text" name="pCustomer"
+							class="form-control"></th>
+						<th class="col30px"><input type="text" name="pDate"
+							class="form-control"></th>
+						<th></th>
+					</tr>
+
+				</thead>
+				<tbody>
+					<c:forEach items="${projects}" var="project">
+						<tr>
+							<td align="center"><input id="${project.getId()}"
+								type="checkbox" class="checkIcon" value="${project.isNew()}"></td>
+							<td class="col1" align="right"><a
+								href="project/${project.getId()}/detail" class="projectDetail">${project.getProjectNumber()}</a></td>
+							<td class="col2">${project.getName()}</td>
+							<td class="col3">${project.getStatus().getValue()}</td>
+							<td class="col4">${project.getCustomer()}</td>
+							<fmt:formatDate value="${project.getStartDate()}"
+								var="dateString" pattern="dd.MM.yyyy" />
+							<td class="col5">${dateString}</td>
+							<td align="center"><a
+								href="project/${project.getId()}/delete" class="deleteIcon">
+									<c:choose>
+										<c:when test="${project.isNew()}">
+											<span class="glyphicon glyphicon-trash"></span>
+										</c:when>
+										<c:otherwise>
+										</c:otherwise>
+									</c:choose>
+							</a></td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
 		</div>
 		<div class="resultRow">
 			<p class="totalItems">2 items selected</p>

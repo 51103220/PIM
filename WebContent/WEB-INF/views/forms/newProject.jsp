@@ -5,9 +5,13 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <div id="newProject">
-	<p class="formName">${formName}&nbsp;Project</p>
+	<p class="formName">
+		<spring:message code="menu.${formName}Project" />
+	</p>
 	<div class="errorPanel">
-		<p class="panelMessage">Please Enter Mandatory Fields (*)</p>
+		<p class="panelMessage">
+			<spring:message code="errors.mandatory" />
+		</p>
 		<a href="#" class="closePanel"> <span
 			class="glyphicon glyphicon-remove"></span>
 		</a>
@@ -16,9 +20,8 @@
 		<form class="form-horizontal general-form" role="form"
 			action="${formName}Project" method="POST">
 			<div class="form-group">
-				<label class="control-label col-sm-3" for="pNumber">Project
-					Number <span class="isRequired">*</span>
-				</label>
+				<label class="control-label col-sm-3" for="pNumber"><spring:message
+						code="form.number" /><span class="isRequired">*</span> </label>
 				<div class="col-sm-9">
 					<input type="hidden" name="id" class="form-control shortWidth"
 						value="${project.getId()}"> <input type="number"
@@ -28,9 +31,8 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="control-label col-sm-3" for="pName">Project
-					Name <span class="isRequired">*</span>
-				</label>
+				<label class="control-label col-sm-3" for="pName"><spring:message
+						code="form.name" /><span class="isRequired">*</span> </label>
 				<div class="col-sm-9">
 					<input type="text" class="form-control longWidth " name="name"
 						id="pName" value="${project.getName()}">
@@ -38,9 +40,8 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="control-label col-sm-3" for="customer">Customer
-					<span class="isRequired">*</span>
-				</label>
+				<label class="control-label col-sm-3" for="customer"><spring:message
+						code="form.customer" /> <span class="isRequired">*</span> </label>
 				<div class="col-sm-9">
 					<input type="text" class="form-control longWidth" name="customer"
 						id="customer" value="${project.getCustomer()}">
@@ -48,8 +49,8 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="control-label col-sm-3" for="group">Group <span
-					class="isRequired">*</span></label>
+				<label class="control-label col-sm-3" for="group"><spring:message
+						code="form.group" /><span class="isRequired">*</span></label>
 				<div class="col-sm-9">
 					<select class="form-control shortWidth empty" id="group"
 						name="groupId">
@@ -76,7 +77,8 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="control-label col-sm-3" for="members">Members</label>
+				<label class="control-label col-sm-3" for="members"><spring:message
+						code="form.members" /></label>
 				<div class="col-sm-9">
 					<div class=tagsDiv>
 						<ul class="tags list-inline">
@@ -92,23 +94,26 @@
 
 			</div>
 			<div class="form-group">
-				<label class="control-label col-sm-3" for="status">Status<span
-					class="isRequired">*</span></label>
+				<label class="control-label col-sm-3" for="status"><spring:message
+						code="form.status" /><span class="isRequired">*</span></label>
 				<div class="col-sm-9">
 					<select class="form-control shortWidth empty" id="status"
 						name="status">
 						<c:choose>
 							<c:when test="${formName=='New'}">
 								<c:forEach items="${statusValues}" var="status">
-									<option value="${status}">${status.getValue()}</option>
+									<option value="${status}"><spring:message
+											code="status.${status}" /></option>
 								</c:forEach>
 							</c:when>
 							<c:otherwise>
-								<option value="${project.getStatus()}" selected>${project.getStatus().getValue()}</option>
+								<option value="${project.getStatus()}" selected><spring:message
+										code="status.${project.getStatus()}" /></option>
 								<c:forEach items="${statusValues}" var="status">
 									<c:choose>
 										<c:when test="${status != project.getStatus()}">
-											<option value="${status}">${status.getValue()}</option>
+											<option value="${status}"><spring:message
+													code="status.${status}" /></option>
 										</c:when>
 									</c:choose>
 								</c:forEach>
@@ -120,9 +125,8 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="control-label col-sm-3" for="startDate">Start
-					Date<span class="isRequired">*</span>
-				</label>
+				<label class="control-label col-sm-3" for="startDate"><spring:message
+						code="form.startdate" /><span class="isRequired">*</span> </label>
 				<fmt:formatDate value="${project.getStartDate()}"
 					var="startDateString" pattern="dd/MM/yyyy" />
 				<div class="col-sm-4">
@@ -135,8 +139,8 @@
 						<p class="hiddenError"></p>
 					</div>
 				</div>
-				<label class="control-label col-sm-2" for="endDate">End Date
-				</label>
+				<label class="control-label col-sm-2" for="endDate"><spring:message
+						code="form.enddate" /> </label>
 				<fmt:formatDate value="${project.getEndDate()}" var="endDateString"
 					pattern="dd/MM/yyyy" />
 				<div class="col-sm-3 ">
@@ -154,17 +158,11 @@
 		</form>
 		<div class="form-group btnGroup">
 			<a tabIndex='-1' href="<c:url value='/'/>"><button type="submit"
-					class="btn btn-default cancelBtn">Cancel</button></a>
+					class="btn btn-default cancelBtn">
+					<spring:message code="button.cancel" />
+				</button></a>
 			<button type="submit" class="btn btn-primary processBtn">
-				<c:choose>
-					<c:when test="${formName=='New'}">
-						Create
-					</c:when>
-					<c:otherwise>
-						Edit
-					</c:otherwise>
-				</c:choose>
-				Project
+				<spring:message code="form.${formName}Project" />
 			</button>
 
 		</div>

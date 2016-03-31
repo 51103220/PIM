@@ -76,11 +76,7 @@ $(document).ready(function() {
 	/***************************************************************************
 	 * * Language Options * clicks
 	 **************************************************************************/
-	$(".header #langOption li a").click(function(e) {
-		e.preventDefault();
-		unsetLinkSelected($(this).parent().parent().find("a.selected"));
-		setLinkSelected($(this));
-	});
+	
 	/***************************************************************************
 	 * * Menu item clicks
 	 **************************************************************************/
@@ -470,4 +466,5 @@ $(document).ready(function() {
 		 var placeholder = $(".tagsDiv .tags .tagInput input").attr("placeholder");
 		$(".tagsDiv .tags .tagInput input").attr("placeholder", placeholder.replace(id+",",""));
 	 });
+	 
 });

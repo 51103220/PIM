@@ -1,6 +1,10 @@
 package com.dedorewan.website.validator;
 
+import java.util.Locale;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -11,6 +15,9 @@ import com.dedorewan.website.service.IProjectService;
 @Component
 public class ProjectValidator implements Validator {
 	@Autowired
+	private MessageSource messageSource;
+
+	@Autowired
 	private IProjectService projectService;
 
 	@Override
@@ -20,6 +27,8 @@ public class ProjectValidator implements Validator {
 
 	@Override
 	public void validate(Object target, Errors errors) {
+		Locale locale = LocaleContextHolder.getLocale();
+		String message = "";
 		Project project = (Project) target;
 		StringBuilder visas = new StringBuilder("");
 		boolean first = true;
@@ -55,18 +64,21 @@ public class ProjectValidator implements Validator {
 			errors.rejectValue("groupId", "NotNull", "Must choose a group");
 		}
 		if (project.getStartDate() == null) {
-			errors.rejectValue("startDate", "NotNull", "Must choose a startingDate");
+			errors.rejectValue("startDate", "NotNull",
+					"Must choose a startingDate");
 		}
 		if (projectService.getProject(project.getId()) == null
 				&& projectService.projectNumberExisted(project
 						.getProjectNumber())) {
-			errors.rejectValue("projectNumber", "projectNumberExisted",
-					"The project number already existed. Please select a different project number");
+			message = messageSource.getMessage("errors.projectNumberExisted",
+					new Object[] {}, locale);
+			errors.rejectValue("projectNumber", "projectNumberExisted", message);
 		}
 		if (!visas.toString().equals("")) {
+			message = messageSource.getMessage("errors.InvalidVisa",
+					new Object[] {}, locale);
 			errors.rejectValue("members", "InvalidVisa",
-					"The following visas do not exist:{" + visas.toString()
-							+ "}");
+					message + visas.toString() + "}");
 		}
 
 	}
