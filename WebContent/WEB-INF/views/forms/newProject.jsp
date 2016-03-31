@@ -126,7 +126,7 @@
 					<div class='input-group date shortWidth'>
 						<input type='text' class="form-control datePicker" id="startDate"
 							name="startDate" value="${project.getStartDate()}" /> <span
-							class="input-group-addon"> <span
+							class="input-group-addon datePickerIcon"> <span
 							class="glyphicon glyphicon-calendar"></span>
 						</span>
 						<p class="hiddenError"></p>
@@ -138,7 +138,7 @@
 					<div class='input-group date expand'>
 						<input type='text' class="form-control datePicker" id="endDate"
 							name="endDate" value="${project.getEndDate()}" /> <span
-							class="input-group-addon"> <span
+							class="input-group-addon datePickerIcon"> <span
 							class="glyphicon glyphicon-calendar"></span>
 						</span>
 						<p class="hiddenError"></p>

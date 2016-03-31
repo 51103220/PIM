@@ -108,7 +108,11 @@ $(document).ready(function() {
 	/***************************************************************************
 	 * *Date Picking event
 	 **************************************************************************/
-	$('.datePicker').datetimepicker();
+	$('.datePicker').datepicker();
+	$('.datePickerIcon').click(function(e){
+		e.preventDefault();
+		$(this).parent().find("input").datepicker("show");
+	});
 	fixBodyHeight();
 
 	/***************************************************************************
