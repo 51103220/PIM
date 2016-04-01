@@ -5,9 +5,12 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "PROJECT")
 public class Project {
 	public static enum STATUS {
 		NEW("New"), PLA("Planned"), INP("In progress"), FIN("Finished");
@@ -23,29 +26,23 @@ public class Project {
 	}
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(nullable = false)
+	@Column(name = "GROUP_ID", nullable = false)
 	private Long groupId;
-	
-	@Column(nullable = false)
+	@Column(name = "PROJECT_NUMBER", nullable = false)
 	private Integer projectNumber;
-	
-	@Column(nullable = false)
+	@Column(name = "NAME", nullable = false)
 	private String name;
-	
-	@Column(nullable = false)
+	@Column(name = "CUSTOMER", nullable = false)
 	private String customer;
-	
-	@Column(nullable = false)
+	@Column(name = "STATUS", nullable = false)
 	private STATUS status;
-	
-	@Column(nullable = false)
+	@Column(name = "START_DATE", nullable = false)
 	private Date startDate;
-	@Column
+	@Column(name = "END_DATE", nullable = true)
 	private Date endDate;
-	@Column(nullable = false)
+	@Column(name = "VERSION", nullable = false)
 	private Integer version;
 	private String[] members;
 
