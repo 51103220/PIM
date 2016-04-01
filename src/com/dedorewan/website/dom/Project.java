@@ -24,7 +24,7 @@ import javax.persistence.Version;
 @Table(name = "PROJECT")
 public class Project {
 	public static enum STATUS {
-		NEW("New"), PLA("Planned"), INP("In progress"), FIN("Finished");
+		NEW("New"), PLA("Planned"), INP("In Progress"), FIN("Finished");
 		String m_name;
 
 		STATUS(String name) {
