@@ -160,5 +160,10 @@
 	</ul>
 
 </div>
-<spring:url value="/resources/js/main.js" var="mainJS" />
-<script src="${mainJS}"></script>
+
+<script>
+	$("#projectList #searchDatas").tablesorter({
+		selectorHeaders : '.sorter-true'
+	});
+</script>
+

@@ -33,6 +33,7 @@
 
 <link href="${jqueryUICSS}" rel="stylesheet" />
 <script src="${jquery}"></script>
+<script src="${tablesorterJS}"></script>
 <title><spring:message code="application.tittle" /></title>
 </head>
 <body>
@@ -41,13 +42,9 @@
 		<jsp:include page="body.jsp" />
 	</div>
 </body>
-
-
 <script src="${bootJS}"></script>
 <script src="${momentJS}"></script>
 <script src="${datePickerJS}"></script>
-<script src="${tablesorterJS}"></script>
+
 <script src="${mainJS}"></script>
-
-
 </html>
