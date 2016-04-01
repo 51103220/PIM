@@ -1,13 +1,17 @@
 package com.dedorewan.website.dom;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 @Entity
 @Table(name = "EMPLOYEE")
@@ -16,21 +20,26 @@ public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(name = "VISA", unique = true, nullable = false)
 	private String visa;
-	
-	@Column(name= "FIRST_NAME",nullable = false)
+
+	@Column(name = "FIRST_NAME", nullable = false)
 	private String firstName;
-	
-	@Column(name = "LAST_NAME",nullable = false)
+
+	@Column(name = "LAST_NAME", nullable = false)
 	private String lastName;
-	
-	@Column(name= "BIRTH_DATE",nullable = false)
-	Date birthDate;
-	
-	@Column(name = "VERSION",nullable = false)
-	Long version;
+
+	@Column(name = "BIRTH_DATE", nullable = false)
+	private Date birthDate;
+
+	@Version
+	@Column(name = "VERSION", nullable = false)
+	private Long version;
+
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "employees")
+	private List<Project> projects;
+
 	private String fullName;
 
 	public Long getId() {
@@ -79,6 +88,14 @@ public class Employee {
 
 	public void setVersion(Long version) {
 		this.version = version;
+	}
+
+	public List<Project> getProjects() {
+		return this.projects;
+	}
+
+	public void setProject(List<Project> projects) {
+		this.projects = projects;
 	}
 
 	public Employee() {

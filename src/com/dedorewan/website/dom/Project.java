@@ -1,13 +1,21 @@
 package com.dedorewan.website.dom;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 @Entity
 @Table(name = "PROJECT")
@@ -28,22 +36,38 @@ public class Project {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(name = "GROUP_ID", nullable = false)
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "GROUP_ID", nullable = false)
+	private Group group;
+	
 	private Long groupId;
 	@Column(name = "PROJECT_NUMBER", nullable = false)
 	private Integer projectNumber;
+	
 	@Column(name = "NAME", nullable = false)
 	private String name;
+	
 	@Column(name = "CUSTOMER", nullable = false)
 	private String customer;
+	
 	@Column(name = "STATUS", nullable = false)
 	private STATUS status;
+	
 	@Column(name = "START_DATE", nullable = false)
 	private Date startDate;
+	
 	@Column(name = "END_DATE", nullable = true)
 	private Date endDate;
+	
+	@Version
 	@Column(name = "VERSION", nullable = false)
 	private Integer version;
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "PROJECT_EMPLOYEE", joinColumns = { @JoinColumn(name = "PROJECT_ID", nullable = false, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "EMPLOYEE_ID", nullable = false, updatable = true) })
+	private List<Employee> employees;
+	
 	private String[] members;
 
 	public Project() {
@@ -66,6 +90,14 @@ public class Project {
 
 	public Long getId() {
 		return id;
+	}
+
+	public Group getGroup() {
+		return this.group;
+	}
+
+	public List<Employee> getEmployees() {
+		return this.employees;
 	}
 
 	public Long getGroupId() {
@@ -142,6 +174,14 @@ public class Project {
 
 	public void setMembers(String[] members) {
 		this.members = members;
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
+	}
+
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
 	}
 
 	public Boolean isNew() {

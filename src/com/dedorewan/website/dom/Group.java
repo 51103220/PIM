@@ -1,11 +1,18 @@
 package com.dedorewan.website.dom;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 @Entity
 @Table(name = "GROUPS")
@@ -14,11 +21,19 @@ public class Group {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(name = "GROUP_LEADER_ID", nullable = false)
+	
 	private Long groupLeaderId;
-
+	
+	@Version
 	@Column(name = "VERSION", nullable = false)
 	Long version;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "GROUP_LEADER_ID", nullable = false)
+	private Employee leader;
+	
+	@OneToMany(mappedBy = "group")
+	private List<Project> projects;
 
 	public Long getId() {
 		return id;
@@ -44,8 +59,24 @@ public class Group {
 		this.version = version;
 	}
 
+	public List<Project> getProjects() {
+		return this.projects;
+	}
+
+	public void setProjects(List<Project> projects) {
+		this.projects = projects;
+	}
+
 	public Group() {
 
+	}
+
+	public void setLeader(Employee leader) {
+		this.leader = leader;
+	}
+
+	public Employee getLeader() {
+		return this.leader;
 	}
 
 	public Group(Long id, Long groupLeaderId, Long version) {
