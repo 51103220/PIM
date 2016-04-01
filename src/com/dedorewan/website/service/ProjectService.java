@@ -3,6 +3,8 @@ package com.dedorewan.website.service;
 import java.util.List;
 import java.util.TreeSet;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import com.dedorewan.website.dom.Project;
 import com.dedorewan.website.dom.Project.STATUS;
 
 @Service
+@Transactional
 public class ProjectService implements IProjectService {
 	@Autowired
 	private IProjectRepository projectRepository;

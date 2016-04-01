@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.TreeSet;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -28,7 +30,8 @@ class SortedFilterProjects implements Comparator<Project> {
 }
 
 @Repository
-public class ProjectRepository implements IProjectRepository {
+public class ProjectRepository extends AbstractDao<Integer, Project> implements
+		IProjectRepository {
 	@Value("${projects.maxProjectPerPage}")
 	Integer projectsPerPage;
 	@Autowired
@@ -56,8 +59,10 @@ public class ProjectRepository implements IProjectRepository {
 	private List<Project> pList = fakeList();
 
 	private List<Project> searchResults = new ArrayList<Project>();
-
+	@SuppressWarnings("unchecked")
 	public List<Project> findAll() {
+		Criteria criteria = createEntityCriteria().addOrder(Order.asc("projectNumber"));
+        pList = (List<Project>) criteria.list();
 		return pList;
 	}
 
@@ -139,7 +144,7 @@ public class ProjectRepository implements IProjectRepository {
 			if (p.getStatus() == statusKey && matchedByKeywords(p, keywords)) {
 				searchResults.add(p);
 				filterResult.add(p);
-			} 
+			}
 		}
 		return filterResult;
 	}
@@ -188,7 +193,8 @@ public class ProjectRepository implements IProjectRepository {
 		}
 		return pages;
 	}
-	public String groupLeaderVisa(Project project){
+
+	public String groupLeaderVisa(Project project) {
 		return groupRepository.groupLeaderVisa(project.getGroupId());
 	}
 }

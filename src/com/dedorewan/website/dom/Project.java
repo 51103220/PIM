@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 @Entity
@@ -37,10 +40,10 @@ public class Project {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = {CascadeType.PERSIST})
 	@JoinColumn(name = "GROUP_ID", nullable = false)
 	private Group group;
-	
+	@Transient
 	private Long groupId;
 	@Column(name = "PROJECT_NUMBER", nullable = false)
 	private Integer projectNumber;
@@ -52,6 +55,7 @@ public class Project {
 	private String customer;
 	
 	@Column(name = "STATUS", nullable = false)
+	@Enumerated(EnumType.STRING)
 	private STATUS status;
 	
 	@Column(name = "START_DATE", nullable = false)
@@ -64,10 +68,10 @@ public class Project {
 	@Column(name = "VERSION", nullable = false)
 	private Integer version;
 	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE,CascadeType.PERSIST})
 	@JoinTable(name = "PROJECT_EMPLOYEE", joinColumns = { @JoinColumn(name = "PROJECT_ID", nullable = false, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "EMPLOYEE_ID", nullable = false, updatable = true) })
 	private List<Employee> employees;
-	
+	@Transient
 	private String[] members;
 
 	public Project() {
