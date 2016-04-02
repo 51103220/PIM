@@ -17,7 +17,7 @@
 <spring:url value="/resources/css/footer.css" var="footerCSS" />
 <spring:url value="/resources/css/header.css" var="headerCSS" />
 <spring:url value="/resources/css/body.css" var="bodyCSS" />
-<spring:url value="/resources/css/datepicker.css" var="datePickerCSS" />
+
 <spring:url value="/resources/js/jquery-1.12.0.min.js" var="jquery" />
 <spring:url value="/resources/js/main.js" var="mainJS" />
 <spring:url value="/resources/js/boostrap.js" var="bootJS" />
@@ -30,7 +30,7 @@
 <link href="${footerCSS}" rel="stylesheet" />
 <link href="${bodyCSS}" rel="stylesheet" />
 <link href="${formCSS}" rel="stylesheet" />
-<link href="${datePickerCSS}" rel="stylesheet" />
+
 
 <title><spring:message code="application.tittle" /> - ERROR</title>
 </head>
