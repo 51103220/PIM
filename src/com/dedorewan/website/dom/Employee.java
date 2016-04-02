@@ -41,12 +41,10 @@ public class Employee {
 
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "employees")
 	private List<Project> projects;
-	
 
 	@Transient
 	private String fullName;
 
-	
 	public Long getId() {
 		return id;
 	}
@@ -117,6 +115,10 @@ public class Employee {
 		this.version = version;
 		this.fullName = firstName + " " + lastName;
 
+	}
+
+	public void setFullName(String fullname) {
+		this.fullName = fullname;
 	}
 
 	public String getFullName() {

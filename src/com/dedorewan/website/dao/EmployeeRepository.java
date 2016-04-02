@@ -3,14 +3,11 @@ package com.dedorewan.website.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 import org.hibernate.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.dedorewan.website.dom.Employee;
-
 
 @Repository
 public class EmployeeRepository extends AbstractDao<Integer, Employee>
@@ -60,12 +57,7 @@ public class EmployeeRepository extends AbstractDao<Integer, Employee>
 
 	public List<Employee> availableEmployee() {
 		List<Employee> availableList = new ArrayList<Employee>();
-		eList = findAll();
-		for (Employee e : eList) {
-			
-				availableList.add(e);
-			
-		}
+		
 		return availableList;
 	}
 }
