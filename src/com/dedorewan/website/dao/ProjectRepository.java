@@ -32,7 +32,7 @@ class SortedFilterProjects implements Comparator<Project> {
 }
 
 @Repository
-public class ProjectRepository extends AbstractDao<Integer, Project>implements IProjectRepository {
+public class ProjectRepository extends AbstractDao<Long, Project>implements IProjectRepository {
 	@Value("${projects.maxProjectPerPage}")
 	Integer projectsPerPage;
 	@Autowired
@@ -56,12 +56,18 @@ public class ProjectRepository extends AbstractDao<Integer, Project>implements I
 	}
 
 	public Project getProject(Long id) {
-		for (Project p : pList) {
-			if (id == p.getId()) {
-				return p;
+		Project project = null;
+		if (id != null) {
+			Project result = getByKey(id);
+			if (result != null) {
+				project = new Project(result.getId(), result.getGroupId(), result.getProjectNumber(), result.getName(),
+						result.getCustomer(), result.getStatus(), result.getEndDate(), result.getEndDate(),
+						result.getVersion());
+				project.setEmployees(result.getEmployees());
+				project.setGroup(result.getGroup());
 			}
 		}
-		return null;
+		return project;
 	}
 
 	public void addProject(Project project) {
