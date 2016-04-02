@@ -1,5 +1,6 @@
 package com.dedorewan.website.dom;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
-
 @Entity
 @Table(name = "EMPLOYEE")
 public class Employee {
@@ -40,8 +40,7 @@ public class Employee {
 	private Long version;
 
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "employees")
-	private List<Project> projects;
-	
+	private List<Project> projects = new ArrayList<Project>();
 
 	@Transient
 	private String fullName;

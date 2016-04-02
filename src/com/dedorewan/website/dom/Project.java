@@ -1,5 +1,6 @@
 package com.dedorewan.website.dom;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -72,11 +73,11 @@ public class Project {
 	private Integer version;
 
 	@ManyToMany(fetch = FetchType.LAZY)
-	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.DELETE, CascadeType.PERSIST })
+	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.DELETE, CascadeType.MERGE })
 	@JoinTable(name = "PROJECT_EMPLOYEE", joinColumns = {
 			@JoinColumn(name = "PROJECT_ID", nullable = false, updatable = true) }, inverseJoinColumns = {
 					@JoinColumn(name = "EMPLOYEE_ID", nullable = false, updatable = true) })
-	private List<Employee> employees;
+	private List<Employee> employees = new ArrayList<Employee>();
 	@Transient
 	private String[] members;
 

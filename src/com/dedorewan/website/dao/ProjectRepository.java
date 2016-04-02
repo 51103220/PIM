@@ -65,12 +65,10 @@ public class ProjectRepository extends AbstractDao<Integer, Project>implements I
 	}
 
 	public void addProject(Project project) {
-		getSession().beginTransaction();
 		project.setVersion(2050512000);
 		project.setGroup(groupRepository.getGroup(project.getGroupId()));
-		//project.setEmployees(employeeRepository.getEmployees(project.getMembers()));
-		getSession().persist(project);
-		getSession().getTransaction().commit();
+		project.setEmployees(employeeRepository.getEmployees(project.getMembers()));
+		getSession().merge(project);
 	}
 
 	public void addDummyProjects() {
