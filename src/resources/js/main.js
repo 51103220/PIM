@@ -3,7 +3,7 @@ var maxPaginationLinks = 2;
  * *SELECT ON CHANGE
  **********************************/
 function selectHandler() {
-	$("select").change(function() {
+	$("body").on("change","select",function() {
 		var class_name = $(this).attr('class').replace(/empty/g, "");
 		$(this).attr('class', class_name);
 	});
@@ -104,8 +104,13 @@ $(document).ready(function() {
 	/***************************************************************************
 	 * *Date Picking event
 	 **************************************************************************/
-	$('.datePicker').datepicker();
-	$('.datePickerIcon').click(function(e){
+	$('#main #contentBody').on("click", ".datePicker", function(){
+		$(this).datepicker();
+	});
+	$('#main #contentBody').on("focus", ".datePicker", function(){
+		$(this).datepicker();
+	});
+	$('#main #contentBody').on("click", ".datePickerIcon",function(e){
 		e.preventDefault();
 		$(this).parent().find("input").datepicker("show");
 	});
@@ -114,7 +119,7 @@ $(document).ready(function() {
 	/***************************************************************************
 	 * * General Form Handling
 	 **************************************************************************/
-	$(".general-content .processBtn").click(function(e) {
+	$('#main #contentBody').on("click",".general-content .processBtn",function(e) {
 		e.preventDefault();
 		var form = $(this).parent().parent().find(".general-form").first();
 		var $inputs = form.find("input");
@@ -201,7 +206,7 @@ $(document).ready(function() {
 	/***************************************************************************
 	 * * Get Project detail Handling
 	 **************************************************************************/
-	$("#projectList #searchDatas .projectDetail").click(function(e){
+	$('#main #contentBody').on("click","#projectList #searchDatas .projectDetail",function(e){
 		e.preventDefault();
 		var url = $(this).attr("href");
 		$.ajax({
@@ -217,7 +222,7 @@ $(document).ready(function() {
 	 * * Search Form Handling
 	 **************************************************************************/
 	//Check Box
-	$("#projectList #searchDatas [type=checkbox]").click(function(){
+	$('#main #contentBody').on("click","#projectList #searchDatas [type=checkbox]",function(){
 		var boxes = $("#projectList #searchDatas input:checked");
 		if(boxes.length>0){
 			$("#projectList .resultRow").show();
@@ -227,7 +232,7 @@ $(document).ready(function() {
 		}
 	});
 	//Single Delete
-	$("#projectList #searchDatas .deleteIcon").click(function(e){
+	$('#main #contentBody').on("click","#projectList #searchDatas .deleteIcon",function(e){
 		e.preventDefault();
 		var link = $(this);
 		$.ajax({
@@ -240,7 +245,7 @@ $(document).ready(function() {
 		});
 	});
 	//Multiple Deletes
-	$("#projectList .resultRow .deleteMultiple").click(function(e){
+	$('#main #contentBody').on("click","#projectList .resultRow .deleteMultiple",function(e){
 		var link = $(this);
 		e.preventDefault();
 		var ids = [];
@@ -271,7 +276,7 @@ $(document).ready(function() {
 		});
 	});
 	//Search 
-	$("#projectList #searchInputs #search_btn").click(function(e){
+	$('#main #contentBody').on("click","#projectList #searchInputs #search_btn",function(e){
 		e.preventDefault();
 		var form = $("#projectList #searchInputs");
 		var keywords =  $("#projectList #searchInputs #keywords").val();
@@ -290,7 +295,7 @@ $(document).ready(function() {
 		});
 	});
 	//Reset Search
-	$("#projectList #searchInputs #reset_btn").click(function(e){
+	$('#main #contentBody').on("click","#projectList #searchInputs #reset_btn",function(e){
 		e.preventDefault();
 		$.ajax({
 			method : "GET",
@@ -305,7 +310,7 @@ $(document).ready(function() {
 	 * * PAGINATION
 	 **************************************************************************/
 	handlePagination("2");
-	$("#projectList .pagination .paging").click(function(e){
+	$('#main #contentBody').on("click","#projectList .pagination .paging",function(e){
 		e.preventDefault();
 		var link = $(this);
 		var id = link.attr("id");
@@ -319,7 +324,7 @@ $(document).ready(function() {
 			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
 		});
 	});
-	$("#projectList .pagination .directives").click(function(e){
+	$('#main #contentBody').on("click","#projectList .pagination .directives",function(e){
 		e.preventDefault();
 		var directive = $(this);
 		var max = parseInt($("#projectList #paginationMax").val());
@@ -353,7 +358,7 @@ $(document).ready(function() {
 	 **************************************************************************/
 	
 	selectHandler();
-	$(".errorPanel .closePanel").click(function(e) {
+	$('#main #contentBody').on("click",".errorPanel .closePanel",function(e) {
 		
 		e.preventDefault();
 		$(this).parent().hide();
@@ -372,14 +377,10 @@ $(document).ready(function() {
 	 /***************************************************************************
 		 * * TABLE HEADER SORTING
 	 **************************************************************************/
-	 $("#projectList #searchDatas").tablesorter({ 
-		 selectorHeaders: '.sorter-true'
-	       
-	    });
 	 /***************************************************************************
 		 * * TABLE HEADER FILTER
 	 **************************************************************************/
-	 $("#projectList #filterInputs input").keyup(function(){
+	 $('#main #contentBody').on("keyup","#projectList #filterInputs input",function(){
 		 var value = $(this).val().split(" ");
 		 var name = $(this).attr("name");
 		 var tds;
@@ -420,7 +421,7 @@ $(document).ready(function() {
 	 /***************************************************************************
 		 * * VISA DROPDOWN
 	 **************************************************************************/
-	 $(".tagsDiv .tags .tagInput input").focus(function(e){
+	 $('#main #contentBody').on("focus",".tagsDiv .tags .tagInput input",function(e){
 		$.ajax({
 			method : "GET",
 			url : "getVisas"
@@ -437,34 +438,38 @@ $(document).ready(function() {
 			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
 		});
 		
-	 }).on('blur',function(){
-		  $(".visaList").hide();
+	 });
+	 $('#main #contentBody').on("blur",".tagsDiv .tags .tagInput input",function(e){
+		 $(".visaList").hide();
 	 });
 	 
-	 $(".visaList").on("mousedown",function(e){
+	 $('#main #contentBody').on("mousedown",".visaList",function(e){
 		 e.preventDefault();
 	 }).on("click",".visaLink",function(e){
 		e.preventDefault();
 		var link = $(this);
 		var oldContent = $(".tagsDiv .tags").html();
-		var newContent = "<li class='tag' id='"+link.attr("id")+"'>" +link.html() +"<a class='tagClose' href='#'><span class='glyphicon glyphicon-remove'></span></a></li>";
-		$(".tagsDiv .tags").html(newContent+oldContent);
-		link.remove();
-		var placeholder = $(".tagsDiv .tags .tagInput input").attr("placeholder");
-		$(".tagsDiv .tags .tagInput input").attr("placeholder", placeholder + link.attr("id") + ",");
+		var tagsLi = $(".tagsDiv .tags").find("li");
+		var exists = false;
+		tagsLi.each(function(){
+			if ($(this).attr("id") == link.attr("id")){
+				exists = true;
+			}
+		});
+		if (!exists){
+			var newContent = "<li class='tag' id='"+link.attr("id")+"'>" +link.html() +"<a class='tagClose' href='#'><span class='glyphicon glyphicon-remove'></span></a></li>";
+			$(".tagsDiv .tags").html(newContent+oldContent);
+			var placeholder = $(".tagsDiv .tags .tagInput input").attr("placeholder");
+			$(".tagsDiv .tags .tagInput input").attr("placeholder", placeholder + link.attr("id") + ",");
+		}
 		$(".tagsDiv .tags .tagInput input").blur();
 	 });
-	 $(".tagsDiv").on("click", ".tagClose", function(e){
+	 $('#main #contentBody').on("click", ".tagClose", function(e){
 		 e.preventDefault();
-		 var text = $(this).parent().text();
 		 var id = $(this).parent().attr("id");
-		 var content = "<li><a  tabIndex='-1' href='#' id='" +id+"' class='visaLink'>" +text + "</a></li>";
-		 var old_content = $(".visaList").html();
-		 
-		 $(".visaList").html(old_content + content);
 		 $(this).parent().remove();
 		 var placeholder = $(".tagsDiv .tags .tagInput input").attr("placeholder");
-		$(".tagsDiv .tags .tagInput input").attr("placeholder", placeholder.replace(id+",",""));
+		 $(".tagsDiv .tags .tagInput input").attr("placeholder", placeholder.replace(id+",",""));
 	 });
 	 
 });

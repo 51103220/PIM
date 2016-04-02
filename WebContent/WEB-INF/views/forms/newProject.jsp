@@ -169,5 +169,4 @@
 	</div>
 
 </div>
-<spring:url value="/resources/js/main.js" var="mainJS" />
-<script src="${mainJS}"></script>
+
