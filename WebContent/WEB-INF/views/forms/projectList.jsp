@@ -165,4 +165,5 @@
 	$("#projectList #searchDatas").tablesorter({
 		selectorHeaders : '.sorter-true'
 	});
+	handlePagination("2");
 </script>

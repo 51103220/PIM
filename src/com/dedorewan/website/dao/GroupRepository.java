@@ -10,8 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.dedorewan.website.dom.Group;
 
 @Repository
-public class GroupRepository extends AbstractDao<Long, Group> implements
-		IGroupRepository {
+public class GroupRepository extends AbstractDao<Long, Group>implements IGroupRepository {
 	@Autowired
 	private IEmployeeRepository employeeRepository;
 
@@ -41,5 +40,10 @@ public class GroupRepository extends AbstractDao<Long, Group> implements
 	public Long getGroupId(Long groupLeaderId) {
 		Long id = Long.valueOf(-1);
 		return id;
+	}
+
+	public Group getGroup(Long key) {
+		Group group = (Group) getByKey(key);
+		return group;
 	}
 }

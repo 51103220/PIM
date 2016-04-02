@@ -32,14 +32,11 @@ class SortedFilterProjects implements Comparator<Project> {
 }
 
 @Repository
-public class ProjectRepository extends AbstractDao<Integer, Project> implements
-		IProjectRepository {
+public class ProjectRepository extends AbstractDao<Integer, Project>implements IProjectRepository {
 	@Value("${projects.maxProjectPerPage}")
 	Integer projectsPerPage;
 	@Autowired
 	private IEmployeeRepository employeeRepository;
-	@Autowired
-	private IProjectEmployeeRepository projectEmployeeRepository;
 	@Autowired
 	private IGroupRepository groupRepository;
 
@@ -49,8 +46,7 @@ public class ProjectRepository extends AbstractDao<Integer, Project> implements
 
 	@SuppressWarnings("unchecked")
 	public List<Project> findAll() {
-		Criteria criteria = createEntityCriteria().addOrder(
-				Order.asc("projectNumber"));
+		Criteria criteria = createEntityCriteria().addOrder(Order.asc("projectNumber"));
 		pList = (List<Project>) criteria.list();
 		return pList;
 	}
@@ -69,19 +65,12 @@ public class ProjectRepository extends AbstractDao<Integer, Project> implements
 	}
 
 	public void addProject(Project project) {
-		project.setId(pList.get(pList.size() - 1).getId() + 1);
-		project.setVersion(205512);
-		pList.add(project);
-		String[] visas = project.getMembers();
-		if (visas.length > 0) {
-			for (String visa : visas) {
-				projectEmployeeRepository.addProjectEmployee(project.getId(),
-						employeeRepository.getEmployeeId(visa));
-			}
-		} else {
-			projectEmployeeRepository.addProjectEmployee(project.getId(),
-					Long.valueOf(-1));
-		}
+		getSession().beginTransaction();
+		project.setVersion(2050512000);
+		project.setGroup(groupRepository.getGroup(project.getGroupId()));
+		//project.setEmployees(employeeRepository.getEmployees(project.getMembers()));
+		getSession().persist(project);
+		getSession().getTransaction().commit();
 	}
 
 	public void addDummyProjects() {
@@ -89,10 +78,9 @@ public class ProjectRepository extends AbstractDao<Integer, Project> implements
 	}
 
 	public boolean projectNumberExisted(Integer project_number) {
-		for (Project p : pList) {
-			if (project_number == p.getProjectNumber()) {
-				return true;
-			}
+		Criteria criteria = createEntityCriteria().add(Restrictions.eq("projectNumber", project_number));
+		if (criteria.list().size() > 0) {
+			return true;
 		}
 		return false;
 	}
@@ -127,11 +115,9 @@ public class ProjectRepository extends AbstractDao<Integer, Project> implements
 
 	@SuppressWarnings("unchecked")
 	public TreeSet<Project> filterProjects(String keywords, STATUS statusKey) {
-		TreeSet<Project> filterResult = new TreeSet<Project>(
-				new SortedFilterProjects());
+		TreeSet<Project> filterResult = new TreeSet<Project>(new SortedFilterProjects());
 		searchResults.clear();
-		Criteria criteria = createEntityCriteria().addOrder(
-				Order.asc("projectNumber"));
+		Criteria criteria = createEntityCriteria().addOrder(Order.asc("projectNumber"));
 		Criterion condition;
 
 		if (keywords.matches("^[0-9]+")) {
@@ -139,20 +125,17 @@ public class ProjectRepository extends AbstractDao<Integer, Project> implements
 			projectNumber = Integer.parseInt(keywords);
 			condition = Restrictions.eq("projectNumber", projectNumber);
 		} else {
-			condition = Restrictions.or(Restrictions.ilike("name", "%"
-					+ keywords + "%", MatchMode.END), Restrictions.ilike(
-					"customer", "%" + keywords + "%", MatchMode.END));
+			condition = Restrictions.or(Restrictions.ilike("name", "%" + keywords + "%", MatchMode.END),
+					Restrictions.ilike("customer", "%" + keywords + "%", MatchMode.END));
 		}
 
-		searchResults = (List<Project>) criteria.add(
-				Restrictions.and(condition,
-						Restrictions.eq("status", statusKey))).list();
+		searchResults = (List<Project>) criteria.add(Restrictions.and(condition, Restrictions.eq("status", statusKey)))
+				.list();
 		return filterResult;
 	}
 
 	public TreeSet<Project> projectsInPage(List<Project> pList, Integer page) {
-		TreeSet<Project> projects = new TreeSet<Project>(
-				new SortedFilterProjects());
+		TreeSet<Project> projects = new TreeSet<Project>(new SortedFilterProjects());
 		Integer start_index = (page - 1) * 5;
 		Integer end_index = page * projectsPerPage;
 		for (Integer i = 0; i < pList.size(); i++) {

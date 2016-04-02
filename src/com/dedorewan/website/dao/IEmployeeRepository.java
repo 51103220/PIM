@@ -11,4 +11,6 @@ public interface IEmployeeRepository {
 	Long getEmployeeId(String visa);
 	String getEmployeeVisa(Long id);
 	List<Employee> availableEmployee();
+	Employee getEmployee(String visa);
+	List<Employee> getEmployees(String[] visas);
 }

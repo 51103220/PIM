@@ -3,7 +3,10 @@ package com.dedorewan.website.dao;
 import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.NonUniqueResultException;
 import org.hibernate.SQLQuery;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import com.dedorewan.website.dom.Employee;
 
@@ -19,11 +22,9 @@ public class EmployeeRepository extends AbstractDao<Integer, Employee>implements
 	}
 
 	public boolean visaExsisted(String visa) {
-		eList = findAll();
-		for (Employee e : eList) {
-			if (e.getVisa().equals(visa)) {
-				return true;
-			}
+		Criteria criteria = createEntityCriteria().add(Restrictions.eq("visa", visa));
+		if(criteria.list().size()>0){
+			return true;
 		}
 		return false;
 	}
@@ -61,5 +62,32 @@ public class EmployeeRepository extends AbstractDao<Integer, Employee>implements
 			availableList.add(employee);
 		}
 		return availableList;
+	}
+
+	public Employee getEmployee(String visa) {
+		Criteria criteria = createEntityCriteria().add(Restrictions.eq("visa", visa));
+		Employee employee = null;
+		try {
+			Employee result = (Employee) criteria.uniqueResult();
+			if (result != null) {
+				employee = new Employee(result.getId(), result.getVisa(), result.getFirstName(), result.getLastName(),
+						result.getBirthDate(), result.getVersion());
+				employee.setProject(result.getProjects());
+			}
+		} catch (HibernateException e) {
+			throw new NonUniqueResultException(1);
+		}
+		return employee;
+	}
+
+	public List<Employee> getEmployees(String[] visas) {
+		List<Employee> eList = new ArrayList<Employee>();
+		for (String visa : visas) {
+			Employee e = getEmployee(visa);
+			if (e != null) {
+				eList.add(e);
+			}
+		}
+		return eList;
 	}
 }
