@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -160,10 +161,8 @@
 	</ul>
 
 </div>
-
 <script>
 	$("#projectList #searchDatas").tablesorter({
 		selectorHeaders : '.sorter-true'
 	});
 </script>
-

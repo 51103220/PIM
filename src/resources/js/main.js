@@ -471,5 +471,4 @@ $(document).ready(function() {
 		 var placeholder = $(".tagsDiv .tags .tagInput input").attr("placeholder");
 		 $(".tagsDiv .tags .tagInput input").attr("placeholder", placeholder.replace(id+",",""));
 	 });
-	 
 });

@@ -1,50 +1,47 @@
 package com.dedorewan.website.dao;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.dedorewan.website.dom.Group;
 
 @Repository
-public class GroupRepository implements IGroupRepository {
+public class GroupRepository extends AbstractDao<Long, Group> implements
+		IGroupRepository {
 	@Autowired
 	private IEmployeeRepository employeeRepository;
-	public List<Group> generateList() {
-		List<Group> gList = new ArrayList<Group>();
-		for (int i = 0; i < 5; i++) {
-			gList.add(new Group(Long.valueOf(i), Long.valueOf(i + 10), Long
-					.valueOf(1222 + i)));
-		}
-		return gList;
-	}
 
-	List<Group> gList = generateList();
+	private List<Group> gList;
 
+	@SuppressWarnings("unchecked")
 	public List<Group> findAll() {
+		Criteria criteria = createEntityCriteria();
+		gList = (List<Group>) criteria.list();
 		return gList;
 	}
-	public HashMap<Long,String> groupLeaders(){
+
+	public HashMap<Long, String> groupLeaders() {
 		HashMap<Long, String> map = new HashMap<Long, String>();
-		for(Group g : gList){
-			String visa = employeeRepository.getEmployeeVisa(g.getGroupLeaderId());
+		gList = findAll();
+		for (Group g : gList) {
+			String visa = g.getLeader().getVisa();
 			map.put(g.getId(), visa);
 		}
 		return map;
 	}
-	public String groupLeaderVisa(Long id){
+
+	public String groupLeaderVisa(Long id) {
 		return employeeRepository.getEmployeeVisa(id);
 	}
-	public Long getGroupId(Long groupLeaderId){
+
+	public Long getGroupId(Long groupLeaderId) {
 		Long id = Long.valueOf(-1);
-		for(Group g : gList){
-			if(g.getGroupLeaderId() == groupLeaderId){
-				id = g.getId();
-			}
-		}
+		Criteria criteria = createEntityCriteria().add(Restrictions.eq("leader", groupLeaderId));
 		return id;
 	}
 }

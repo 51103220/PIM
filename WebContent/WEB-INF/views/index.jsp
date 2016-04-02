@@ -17,7 +17,6 @@
 <spring:url value="/resources/css/header.css" var="headerCSS" />
 <spring:url value="/resources/css/body.css" var="bodyCSS" />
 <spring:url value="/resources/css/jquery-ui.css" var="jqueryUICSS" />
-<spring:url value="/resources/css/datepicker.css" var="datePickerCSS" />
 <spring:url value="/resources/js/jquery-1.12.0.min.js" var="jquery" />
 <spring:url value="/resources/js/main.js" var="mainJS" />
 <spring:url value="/resources/js/boostrap.js" var="bootJS" />
@@ -30,7 +29,6 @@
 <link href="${footerCSS}" rel="stylesheet" />
 <link href="${bodyCSS}" rel="stylesheet" />
 <link href="${formCSS}" rel="stylesheet" />
-
 <link href="${jqueryUICSS}" rel="stylesheet" />
 <script src="${jquery}"></script>
 <script src="${tablesorterJS}"></script>
@@ -45,6 +43,5 @@
 <script src="${bootJS}"></script>
 <script src="${momentJS}"></script>
 <script src="${datePickerJS}"></script>
-
 <script src="${mainJS}"></script>
 </html>

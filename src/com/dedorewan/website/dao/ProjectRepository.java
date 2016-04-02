@@ -2,10 +2,14 @@ package com.dedorewan.website.dao;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.TreeSet;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -28,7 +32,8 @@ class SortedFilterProjects implements Comparator<Project> {
 }
 
 @Repository
-public class ProjectRepository implements IProjectRepository {
+public class ProjectRepository extends AbstractDao<Integer, Project> implements
+		IProjectRepository {
 	@Value("${projects.maxProjectPerPage}")
 	Integer projectsPerPage;
 	@Autowired
@@ -38,26 +43,15 @@ public class ProjectRepository implements IProjectRepository {
 	@Autowired
 	private IGroupRepository groupRepository;
 
-	public List<Project> fakeList() {
-		List<Project> pList = new ArrayList<Project>();
-		for (int i = 0; i < 10; i++) {
-			Project p = new Project(Long.valueOf(i), Long.valueOf(1 + i),
-					30 + i, "PTQ", "Dedo", STATUS.NEW, new Date(), new Date(),
-					323232);
-			Project p1 = new Project(Long.valueOf(i + 10), Long.valueOf(22),
-					60 + i, "PTQ Never Winter Night Yeah", "Dedo", STATUS.FIN,
-					new Date(), new Date(), 32323222);
-			pList.add(p);
-			pList.add(p1);
-		}
-		return pList;
-	}
-
-	private List<Project> pList = fakeList();
+	private List<Project> pList = new ArrayList<Project>();
 
 	private List<Project> searchResults = new ArrayList<Project>();
 
+	@SuppressWarnings("unchecked")
 	public List<Project> findAll() {
+		Criteria criteria = createEntityCriteria().addOrder(
+				Order.asc("projectNumber"));
+		pList = (List<Project>) criteria.list();
 		return pList;
 	}
 
@@ -131,39 +125,29 @@ public class ProjectRepository implements IProjectRepository {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public TreeSet<Project> filterProjects(String keywords, STATUS statusKey) {
 		TreeSet<Project> filterResult = new TreeSet<Project>(
 				new SortedFilterProjects());
 		searchResults.clear();
-		for (Project p : pList) {
-			if (p.getStatus() == statusKey && matchedByKeywords(p, keywords)) {
-				searchResults.add(p);
-				filterResult.add(p);
-			} 
+		Criteria criteria = createEntityCriteria().addOrder(
+				Order.asc("projectNumber"));
+		Criterion condition;
+
+		if (keywords.matches("^[0-9]+")) {
+			Integer projectNumber = -1;
+			projectNumber = Integer.parseInt(keywords);
+			condition = Restrictions.eq("projectNumber", projectNumber);
+		} else {
+			condition = Restrictions.or(Restrictions.ilike("name", "%"
+					+ keywords + "%", MatchMode.END), Restrictions.ilike(
+					"customer", "%" + keywords + "%", MatchMode.END));
 		}
+
+		searchResults = (List<Project>) criteria.add(
+				Restrictions.and(condition,
+						Restrictions.eq("status", statusKey))).list();
 		return filterResult;
-	}
-
-	private Boolean matchedByKeywords(Project project, String keywords) {
-		if (!keywords.isEmpty()) {
-			if (keywords.matches("^[0-9]+")) {
-				Integer number = -1;
-				try {
-					number = Integer.parseInt(keywords);
-				} catch (NumberFormatException e) {
-
-				}
-				if (project.getProjectNumber() == number) {
-					return true;
-				}
-			} else {
-				if (project.getName().contains(keywords)
-						|| project.getCustomer().contains(keywords)) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 
 	public TreeSet<Project> projectsInPage(List<Project> pList, Integer page) {
@@ -188,7 +172,8 @@ public class ProjectRepository implements IProjectRepository {
 		}
 		return pages;
 	}
-	public String groupLeaderVisa(Project project){
+
+	public String groupLeaderVisa(Project project) {
 		return groupRepository.groupLeaderVisa(project.getGroupId());
 	}
 }

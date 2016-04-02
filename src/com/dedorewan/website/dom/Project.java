@@ -1,16 +1,30 @@
 package com.dedorewan.website.dom;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.persistence.Version;
 
 @Entity
+@Table(name = "PROJECT")
 public class Project {
 	public static enum STATUS {
-		NEW("New"), PLA("Planned"), INP("In progress"), FIN("Finished");
+		NEW("New"), PLA("Planned"), INP("In Progress"), FIN("Finished");
 		String m_name;
 
 		STATUS(String name) {
@@ -23,30 +37,41 @@ public class Project {
 	}
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable = false)
+	@ManyToOne(cascade = {CascadeType.PERSIST})
+	@JoinColumn(name = "GROUP_ID", nullable = false)
+	private Group group;
+	@Transient
 	private Long groupId;
-	
-	@Column(nullable = false)
+	@Column(name = "PROJECT_NUMBER", nullable = false)
 	private Integer projectNumber;
 	
-	@Column(nullable = false)
+	@Column(name = "NAME", nullable = false)
 	private String name;
 	
-	@Column(nullable = false)
+	@Column(name = "CUSTOMER", nullable = false)
 	private String customer;
 	
-	@Column(nullable = false)
+	@Column(name = "STATUS", nullable = false)
+	@Enumerated(EnumType.STRING)
 	private STATUS status;
 	
-	@Column(nullable = false)
+	@Column(name = "START_DATE", nullable = false)
 	private Date startDate;
-	@Column
+	
+	@Column(name = "END_DATE", nullable = true)
 	private Date endDate;
-	@Column(nullable = false)
+	
+	@Version
+	@Column(name = "VERSION", nullable = false)
 	private Integer version;
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE,CascadeType.PERSIST})
+	@JoinTable(name = "PROJECT_EMPLOYEE", joinColumns = { @JoinColumn(name = "PROJECT_ID", nullable = false, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "EMPLOYEE_ID", nullable = false, updatable = true) })
+	private List<Employee> employees;
+	@Transient
 	private String[] members;
 
 	public Project() {
@@ -69,6 +94,14 @@ public class Project {
 
 	public Long getId() {
 		return id;
+	}
+
+	public Group getGroup() {
+		return this.group;
+	}
+
+	public List<Employee> getEmployees() {
+		return this.employees;
 	}
 
 	public Long getGroupId() {
@@ -145,6 +178,14 @@ public class Project {
 
 	public void setMembers(String[] members) {
 		this.members = members;
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
+	}
+
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
 	}
 
 	public Boolean isNew() {
