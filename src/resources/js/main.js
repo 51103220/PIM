@@ -434,8 +434,8 @@ $(document).ready(function() {
 			
 			 $(".visaList").html(content);
 			 $(".visaList").show();
-		}).fail(function(jqXHR, textStatus) {
-			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
 		});
 		
 	 });

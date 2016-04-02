@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -41,7 +40,6 @@ public class GroupRepository extends AbstractDao<Long, Group> implements
 
 	public Long getGroupId(Long groupLeaderId) {
 		Long id = Long.valueOf(-1);
-		Criteria criteria = createEntityCriteria().add(Restrictions.eq("leader", groupLeaderId));
 		return id;
 	}
 }
