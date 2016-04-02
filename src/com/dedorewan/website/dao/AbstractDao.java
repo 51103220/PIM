@@ -1,8 +1,9 @@
 package com.dedorewan.website.dao;
 
 import java.io.Serializable;
-
 import java.lang.reflect.ParameterizedType;
+
+import javax.persistence.Query;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -43,6 +44,11 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 
 	protected Criteria createEntityCriteria() {
 		return getSession().createCriteria(persistentClass);
+	}
+
+	protected Query createQuery(String query) {
+		Query result = (Query) getSession().createQuery(query);
+		return result;
 	}
 
 }
