@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.dedorewan.website.dom.Employee;
 
 @Repository
-public class EmployeeRepository extends AbstractDao<Integer, Employee>implements IEmployeeRepository {
+public class EmployeeRepository extends AbstractDao<Long, Employee>implements IEmployeeRepository {
 	List<Employee> eList;
 
 	@SuppressWarnings("unchecked")
@@ -41,10 +41,11 @@ public class EmployeeRepository extends AbstractDao<Integer, Employee>implements
 	}
 
 	public String getEmployeeVisa(Long id) {
-		eList = findAll();
-		for (Employee e : eList) {
-			if (e.getId() == id) {
-				return e.getVisa();
+		Employee result;
+		if(id!=null){
+			result = getByKey(id);
+			if(result != null){
+				return result.getVisa();
 			}
 		}
 		return null;

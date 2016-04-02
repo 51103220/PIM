@@ -43,7 +43,7 @@ public class Project {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.DELETE, CascadeType.PERSIST })
 	@JoinColumn(name = "GROUP_ID", nullable = false)
 	private Group group;
@@ -72,7 +72,7 @@ public class Project {
 	@Column(name = "VERSION", nullable = false)
 	private Integer version;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.DELETE, CascadeType.MERGE })
 	@JoinTable(name = "PROJECT_EMPLOYEE", joinColumns = {
 			@JoinColumn(name = "PROJECT_ID", nullable = false, updatable = true) }, inverseJoinColumns = {
@@ -111,7 +111,7 @@ public class Project {
 	}
 
 	public Long getGroupId() {
-		return groupId;
+		return group.getId();
 	}
 
 	public Integer getProjectNumber() {
@@ -203,17 +203,17 @@ public class Project {
 
 	public String membersToString() {
 		StringBuilder builder = new StringBuilder("");
-		if (this.members != null) {
-			Boolean first = true;
-			for (String s : this.members) {
-				if (first) {
-					builder.append(s);
-					first = false;
-				} else {
-					builder.append("," + s);
-				}
+
+		Boolean first = true;
+		for (Employee e : this.employees) {
+			if (first) {
+				builder.append(e.getVisa());
+				first = false;
+			} else {
+				builder.append("," + e.getVisa());
 			}
 		}
+
 		return builder.toString();
 	}
 

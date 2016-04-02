@@ -47,7 +47,7 @@ public class ProjectRepository extends AbstractDao<Long, Project>implements IPro
 	@SuppressWarnings("unchecked")
 	public List<Project> findAll() {
 		Criteria criteria = createEntityCriteria().addOrder(Order.asc("projectNumber"));
-		pList = (List<Project>) criteria.list();
+		pList = (List<Project>) criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 		return pList;
 	}
 
@@ -61,7 +61,7 @@ public class ProjectRepository extends AbstractDao<Long, Project>implements IPro
 			Project result = getByKey(id);
 			if (result != null) {
 				project = new Project(result.getId(), result.getGroupId(), result.getProjectNumber(), result.getName(),
-						result.getCustomer(), result.getStatus(), result.getEndDate(), result.getEndDate(),
+						result.getCustomer(), result.getStatus(), result.getStartDate(), result.getEndDate(),
 						result.getVersion());
 				project.setEmployees(result.getEmployees());
 				project.setGroup(result.getGroup());
@@ -134,7 +134,7 @@ public class ProjectRepository extends AbstractDao<Long, Project>implements IPro
 		}
 
 		searchResults = (List<Project>) criteria.add(Restrictions.and(condition, Restrictions.eq("status", statusKey)))
-				.list();
+				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 		return filterResult;
 	}
 
@@ -161,6 +161,6 @@ public class ProjectRepository extends AbstractDao<Long, Project>implements IPro
 	}
 
 	public String groupLeaderVisa(Project project) {
-		return groupRepository.groupLeaderVisa(project.getGroupId());
+		return project.getGroup().getLeader().getVisa();
 	}
 }

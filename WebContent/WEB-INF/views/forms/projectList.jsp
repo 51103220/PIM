@@ -165,5 +165,30 @@
 	$("#projectList #searchDatas").tablesorter({
 		selectorHeaders : '.sorter-true'
 	});
+	var maxPaginationLinks = 2;
+	function handlePagination(id){
+		var links = $("#projectList .pagination .paging");
+		id =  parseInt(id);
+		var i =1;
+		var start,end =0;
+		if(id%maxPaginationLinks ==0){
+			start = id -maxPaginationLinks+1;
+			end = id;
+		}
+		else{
+			start = id;
+			end = id+maxPaginationLinks-1;
+		}
+		links.each(function(){
+			var link =$(this);
+			if (i>=start && i <=end){
+				link.show();
+			}else{
+				link.hide();
+			}
+				
+			i=i+1;
+		});
+	};
 	handlePagination("2");
 </script>
