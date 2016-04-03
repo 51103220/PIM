@@ -111,7 +111,10 @@ public class Project {
 	}
 
 	public Long getGroupId() {
-		return group.getId();
+		if (group != null)
+			return group.getId();
+		else
+			return this.groupId;
 	}
 
 	public Integer getProjectNumber() {
