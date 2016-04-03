@@ -114,23 +114,33 @@ public class ProjectRepository extends AbstractDao<Long, Project>implements IPro
 		}
 		Project same_project = getByKey(project.getId());
 		if (same_project != null) {
-			if(current_version!= 0 && current_version == same_project.getVersion()){
+			if (current_version != 0 && current_version == same_project.getVersion()) {
 				existing_project.setVersion(project.getVersion());
 				getSession().merge(existing_project);
-			}else{
-				
+			} else {
+				getSession().getTransaction().rollback();
 			}
 		} else {
-
+			getSession().getTransaction().rollback();
 		}
 	}
 
 	public void deleteProject(Long id) {
-		for (Project p : pList) {
-			if (p.getId() == id && p.getStatus() == STATUS.NEW) {
-				pList.remove(p);
-				break;
+		Integer current_version = 0;
+		Project existing_project = getByKey(id);
+		if (existing_project != null) {
+			current_version = existing_project.getVersion();
+		}
+		Project same_project = (Project) getSession().load(Project.class, id);
+		if (same_project != null) {
+			if (current_version != 0 && current_version == same_project.getVersion()) {
+				existing_project.getEmployees().clear();
+				delete(existing_project);
+			}else{
+				getSession().getTransaction().rollback();
 			}
+		} else {
+			getSession().getTransaction().rollback();
 		}
 	}
 

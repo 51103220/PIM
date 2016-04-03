@@ -44,7 +44,7 @@ public class Project {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.DELETE, CascadeType.PERSIST })
+	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.PERSIST })
 	@JoinColumn(name = "GROUP_ID", nullable = false)
 	private Group group;
 	@Transient
