@@ -96,8 +96,8 @@ $(document).ready(function() {
 			url : url
 		}).done(function(data) {
 			$("#main #contentBody").html(data);
-		}).fail(function(jqXHR, textStatus) {
-			window.location.href = $(".header #projectName").attr("href") + "errorsunexpected=" + textStatus;
+		}).fail(function(jqXHR, textStatus,errorThrown) {
+			window.location.href = $(".header #projectName").attr("href") + "errorsunexpected=" + errorThrown;
 		});
 	});
 
@@ -199,7 +199,7 @@ $(document).ready(function() {
 				}
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				window.location.href = $(".header #projectName").attr("href") + "errorsunexpected=" + textStatus;
+				window.location.href = $(".header #projectName").attr("href") + "errorsunexpected=" + errorThrown;
 			}
 		})
 	});
@@ -214,8 +214,8 @@ $(document).ready(function() {
 			url : url
 		}).done(function(data) {
 			$("#main #contentBody").html(data);
-		}).fail(function(jqXHR, textStatus) {
-			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		}).fail(function(jqXHR, textStatus,errorThrown) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
 		});
 	});
 	/***************************************************************************
@@ -240,8 +240,8 @@ $(document).ready(function() {
 			url : link.attr("href")
 		}).done(function(data) {
 			link.parent().parent().remove();
-		}).fail(function(jqXHR, textStatus) {
-			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		}).fail(function(jqXHR, textStatus,errorThrown) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
 		});
 	});
 	//Multiple Deletes
@@ -271,8 +271,8 @@ $(document).ready(function() {
 				}
 			});
 			$("#projectList .resultRow").hide();
-		}).fail(function(jqXHR, textStatus) {
-			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		}).fail(function(jqXHR, textStatus,errorThrown) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
 		});
 	});
 	//Search 
@@ -290,8 +290,8 @@ $(document).ready(function() {
 			}
 		}).done(function(data) {
 			$("#main #contentBody").html(data);
-		}).fail(function(jqXHR, textStatus) {
-			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		}).fail(function(jqXHR, textStatus,errorThrown) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
 		});
 	});
 	//Reset Search
@@ -302,8 +302,8 @@ $(document).ready(function() {
 			url : "resetCriteria"
 		}).done(function(data) {
 			$("#main #contentBody").html(data);
-		}).fail(function(jqXHR, textStatus) {
-			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		}).fail(function(jqXHR, textStatus,errorThrown) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
 		});
 	});
 	/***************************************************************************
@@ -320,8 +320,8 @@ $(document).ready(function() {
 		}).done(function(data) {
 			$("#main #contentBody").html(data);
 			handlePagination(id);
-		}).fail(function(jqXHR, textStatus) {
-			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		}).fail(function(jqXHR, textStatus,errorThrown) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
 		});
 	});
 	$('#main #contentBody').on("click","#projectList .pagination .directives",function(e){
@@ -349,8 +349,8 @@ $(document).ready(function() {
 		}).done(function(data) {
 			$("#main #contentBody").html(data);
 			handlePagination(id);
-		}).fail(function(jqXHR, textStatus) {
-			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		}).fail(function(jqXHR, textStatus,errorThrown) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
 		});
 	});
 	/***************************************************************************
