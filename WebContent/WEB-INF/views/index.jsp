@@ -39,6 +39,8 @@
 		<jsp:include page="header.jsp" />
 		<jsp:include page="body.jsp" />
 	</div>
+	<div id="dialog" title="Confirmation Required"></div>
+
 </body>
 <script src="${bootJS}"></script>
 <script src="${momentJS}"></script>

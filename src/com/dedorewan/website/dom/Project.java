@@ -1,9 +1,9 @@
 package com.dedorewan.website.dom;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,6 +19,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 @Table(name = "PROJECT")
@@ -39,38 +42,42 @@ public class Project {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@ManyToOne(cascade = {CascadeType.PERSIST})
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.PERSIST })
 	@JoinColumn(name = "GROUP_ID", nullable = false)
 	private Group group;
 	@Transient
 	private Long groupId;
 	@Column(name = "PROJECT_NUMBER", nullable = false)
 	private Integer projectNumber;
-	
+
 	@Column(name = "NAME", nullable = false)
 	private String name;
-	
+
 	@Column(name = "CUSTOMER", nullable = false)
 	private String customer;
-	
+
 	@Column(name = "STATUS", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private STATUS status;
-	
+
 	@Column(name = "START_DATE", nullable = false)
 	private Date startDate;
-	
+
 	@Column(name = "END_DATE", nullable = true)
 	private Date endDate;
-	
+
 	@Version
 	@Column(name = "VERSION", nullable = false)
 	private Integer version;
-	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE,CascadeType.PERSIST})
-	@JoinTable(name = "PROJECT_EMPLOYEE", joinColumns = { @JoinColumn(name = "PROJECT_ID", nullable = false, updatable = true) }, inverseJoinColumns = { @JoinColumn(name = "EMPLOYEE_ID", nullable = false, updatable = true) })
-	private List<Employee> employees;
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.DELETE, CascadeType.MERGE })
+	@JoinTable(name = "PROJECT_EMPLOYEE", joinColumns = {
+			@JoinColumn(name = "PROJECT_ID", nullable = false, updatable = true) }, inverseJoinColumns = {
+					@JoinColumn(name = "EMPLOYEE_ID", nullable = false, updatable = true) })
+	private List<Employee> employees = new ArrayList<Employee>();
 	@Transient
 	private String[] members;
 
@@ -78,9 +85,8 @@ public class Project {
 
 	}
 
-	public Project(Long id, Long groupId, Integer project_number, String name,
-			String customer, STATUS status, Date start_date, Date end_date,
-			Integer version) {
+	public Project(Long id, Long groupId, Integer project_number, String name, String customer, STATUS status,
+			Date start_date, Date end_date, Integer version) {
 		this.id = id;
 		this.groupId = groupId;
 		this.projectNumber = project_number;
@@ -105,7 +111,10 @@ public class Project {
 	}
 
 	public Long getGroupId() {
-		return groupId;
+		if (group != null)
+			return group.getId();
+		else
+			return this.groupId;
 	}
 
 	public Integer getProjectNumber() {
@@ -197,17 +206,17 @@ public class Project {
 
 	public String membersToString() {
 		StringBuilder builder = new StringBuilder("");
-		if (this.members != null) {
-			Boolean first = true;
-			for (String s : this.members) {
-				if (first) {
-					builder.append(s);
-					first = false;
-				} else {
-					builder.append("," + s);
-				}
+
+		Boolean first = true;
+		for (Employee e : this.employees) {
+			if (first) {
+				builder.append(e.getVisa());
+				first = false;
+			} else {
+				builder.append("," + e.getVisa());
 			}
 		}
+
 		return builder.toString();
 	}
 

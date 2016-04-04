@@ -1,27 +1,25 @@
 /************
 **MENU LIST
 *************/
-
-#main{
+#main {
 	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-    box-sizing: border-box;   
-
+	-moz-box-sizing: border-box; /* Firefox, other Gecko */
+	box-sizing: border-box;
 }
-#main .row{
 
-	height:100%;
+#main .row {
+	height: 100%;
 }
+
 @media ( min-width :768px) {
 	#main #menuList {
 		width: 15% !important;
 		padding-top: 20px;
 	}
-	#main #contentBody{
+	#main #contentBody {
 		width: 85% !important;
 	}
 }
-
 
 #main #menuList .navbar {
 	background-color: transparent !important;
@@ -52,22 +50,26 @@
 	padding-top: 12px;
 	padding-bottom: 12px;
 }
-#main #menuList  .navbar li a.navbar-brand{
+
+#main #menuList  .navbar li a.navbar-brand {
 	font-family: "Segoe UI Semibold";
 	size: 18pt;
 	color: #2F85FA;
 }
-#main #menuList  .navbar li a.navbar-brand.selected{
+
+#main #menuList  .navbar li a.navbar-brand.selected {
 	font-family: "Segoe UI Semibold";
 	size: 18pt;
 	color: #333333;
 }
+
 #main #menuList  .navbar li a.selected {
 	font-family: "Segoe UI Semibold";
 	size: 14pt;
 	color: #333333;
 }
-#main #menuList  .navbar li a{
+
+#main #menuList  .navbar li a {
 	font-family: "Segoe UI regular";
 	color: #666666;
 }
@@ -79,4 +81,19 @@
 	height: 100%;
 	padding-top: 20px;
 	padding-left: 40px;
+}
+/*************
+**DIALOG
+**************/
+.ui-dialog-titlebar-close {
+	visibility: hidden;
+}
+.ui-widget-content {
+	border:0px !important;
+	background-color: rgba(0, 0, 0, 0.5) !important;
+	color: #fff !important;
+}
+.ui-widget-header {
+	background-color: rgba(255, 0, 0, 0.0) !important;
+	color: #fff !important;
 }

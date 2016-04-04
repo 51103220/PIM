@@ -11,4 +11,5 @@ public interface IGroupRepository {
 	HashMap<Long,String> groupLeaders();
 	String groupLeaderVisa(Long id);
 	Long getGroupId(Long groupLeaderId);
+	Group getGroup(Long key);
 }

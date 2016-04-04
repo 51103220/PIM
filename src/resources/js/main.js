@@ -74,9 +74,13 @@ function handlePagination(id){
 $(document).ready(function() {
 
 	/***************************************************************************
-	 * * Language Options * clicks
+	 * * Dialog Delete Confirmation
 	 **************************************************************************/
-	
+	 $("#dialog").dialog({
+	      autoOpen: false,
+	      modal: true,
+	      dialogClass:"customDialog"
+	 });
 	/***************************************************************************
 	 * * Menu item clicks
 	 **************************************************************************/
@@ -96,8 +100,8 @@ $(document).ready(function() {
 			url : url
 		}).done(function(data) {
 			$("#main #contentBody").html(data);
-		}).fail(function(jqXHR, textStatus) {
-			window.location.href = $(".header #projectName").attr("href") + "errorsunexpected=" + textStatus;
+		}).fail(function(jqXHR, textStatus,errorThrown) {
+			window.location.href = $(".header #projectName").attr("href") + "errorsunexpected=" + errorThrown;
 		});
 	});
 
@@ -199,7 +203,7 @@ $(document).ready(function() {
 				}
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				window.location.href = $(".header #projectName").attr("href") + "errorsunexpected=" + textStatus;
+				window.location.href = $(".header #projectName").attr("href") + "errorsunexpected=" + errorThrown;
 			}
 		})
 	});
@@ -214,8 +218,8 @@ $(document).ready(function() {
 			url : url
 		}).done(function(data) {
 			$("#main #contentBody").html(data);
-		}).fail(function(jqXHR, textStatus) {
-			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		}).fail(function(jqXHR, textStatus,errorThrown) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
 		});
 	});
 	/***************************************************************************
@@ -235,14 +239,27 @@ $(document).ready(function() {
 	$('#main #contentBody').on("click","#projectList #searchDatas .deleteIcon",function(e){
 		e.preventDefault();
 		var link = $(this);
-		$.ajax({
-			method : "POST",
-			url : link.attr("href")
-		}).done(function(data) {
-			link.parent().parent().remove();
-		}).fail(function(jqXHR, textStatus) {
-			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		$("#dialog").dialog({
+	      buttons : {
+	        "Delete" : function() {
+	        	$.ajax({
+	    			method : "POST",
+	    			url : link.attr("href")
+	    		}).done(function(data) {
+	    			link.parent().parent().remove();
+	    		}).fail(function(jqXHR, textStatus,errorThrown) {
+	    			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
+	    		});
+	        	$(this).dialog("close");
+	        },
+	        "Cancel" : function() {
+	          $(this).dialog("close");
+	        }
+	      }
 		});
+		$("#dialog").html("Are you sure to delete this item ?");
+		$("#dialog").dialog("open");
+		
 	});
 	//Multiple Deletes
 	$('#main #contentBody').on("click","#projectList .resultRow .deleteMultiple",function(e){
@@ -257,23 +274,35 @@ $(document).ready(function() {
 				ids.push(box.attr("id"));
 			}
 		});
-		$.ajax({
-			method : "POST",
-			url : link.attr("href"),
-			data: {
-				ids: ids
-			}
-		}).done(function(data) {
-			boxes.each(function(){
-				var box = $(this);
-				if(box.val() == "true"){
-					box.parent().parent().remove();
-				}
+		$("#dialog").dialog({
+		      buttons : {
+		        "Delete" : function() {
+		        	$.ajax({
+		    			method : "POST",
+		    			url : link.attr("href"),
+		    			data: {
+		    				ids: ids
+		    			}
+		    		}).done(function(data) {
+		    			boxes.each(function(){
+		    				var box = $(this);
+		    				if(box.val() == "true"){
+		    					box.parent().parent().remove();
+		    				}
+		    			});
+		    			$("#projectList .resultRow").hide();
+		    		}).fail(function(jqXHR, textStatus,errorThrown) {
+		    			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
+		    		});
+		        	$(this).dialog("close");
+		        },
+		        "Cancel" : function() {
+		          $(this).dialog("close");
+		        }
+		      }
 			});
-			$("#projectList .resultRow").hide();
-		}).fail(function(jqXHR, textStatus) {
-			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
-		});
+			$("#dialog").html("Are you sure to delete these items ?");
+			$("#dialog").dialog("open");
 	});
 	//Search 
 	$('#main #contentBody').on("click","#projectList #searchInputs #search_btn",function(e){
@@ -290,8 +319,8 @@ $(document).ready(function() {
 			}
 		}).done(function(data) {
 			$("#main #contentBody").html(data);
-		}).fail(function(jqXHR, textStatus) {
-			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		}).fail(function(jqXHR, textStatus,errorThrown) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
 		});
 	});
 	//Reset Search
@@ -302,8 +331,8 @@ $(document).ready(function() {
 			url : "resetCriteria"
 		}).done(function(data) {
 			$("#main #contentBody").html(data);
-		}).fail(function(jqXHR, textStatus) {
-			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		}).fail(function(jqXHR, textStatus,errorThrown) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
 		});
 	});
 	/***************************************************************************
@@ -320,8 +349,8 @@ $(document).ready(function() {
 		}).done(function(data) {
 			$("#main #contentBody").html(data);
 			handlePagination(id);
-		}).fail(function(jqXHR, textStatus) {
-			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		}).fail(function(jqXHR, textStatus,errorThrown) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
 		});
 	});
 	$('#main #contentBody').on("click","#projectList .pagination .directives",function(e){
@@ -349,8 +378,8 @@ $(document).ready(function() {
 		}).done(function(data) {
 			$("#main #contentBody").html(data);
 			handlePagination(id);
-		}).fail(function(jqXHR, textStatus) {
-			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		}).fail(function(jqXHR, textStatus,errorThrown) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
 		});
 	});
 	/***************************************************************************
@@ -434,8 +463,8 @@ $(document).ready(function() {
 			
 			 $(".visaList").html(content);
 			 $(".visaList").show();
-		}).fail(function(jqXHR, textStatus) {
-			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + textStatus;
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
 		});
 		
 	 });
@@ -471,5 +500,4 @@ $(document).ready(function() {
 		 var placeholder = $(".tagsDiv .tags .tagInput input").attr("placeholder");
 		 $(".tagsDiv .tags .tagInput input").attr("placeholder", placeholder.replace(id+",",""));
 	 });
-	 
 });

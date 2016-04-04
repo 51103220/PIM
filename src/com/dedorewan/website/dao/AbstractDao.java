@@ -2,10 +2,8 @@ package com.dedorewan.website.dao;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-
-import javax.persistence.Query;
-
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +14,9 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 
 	@SuppressWarnings("unchecked")
 	public AbstractDao() {
-		this.persistentClass = (Class<T>) ((ParameterizedType) this.getClass()
-				.getGenericSuperclass
+		this.persistentClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass
 
-				()).getActualTypeArguments()[1];
+		()).getActualTypeArguments()[1];
 	}
 
 	@Autowired
@@ -46,9 +43,10 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 		return getSession().createCriteria(persistentClass);
 	}
 
-	protected Query createQuery(String query) {
-		Query result = (Query) getSession().createQuery(query);
-		return result;
+	protected SQLQuery createQuery(String querySQL) {
+		SQLQuery query = getSession().createSQLQuery(querySQL);
+		query.addEntity(persistentClass);
+		return query;
 	}
 
 }

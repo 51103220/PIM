@@ -32,14 +32,11 @@ class SortedFilterProjects implements Comparator<Project> {
 }
 
 @Repository
-public class ProjectRepository extends AbstractDao<Integer, Project> implements
-		IProjectRepository {
+public class ProjectRepository extends AbstractDao<Long, Project>implements IProjectRepository {
 	@Value("${projects.maxProjectPerPage}")
 	Integer projectsPerPage;
 	@Autowired
 	private IEmployeeRepository employeeRepository;
-	@Autowired
-	private IProjectEmployeeRepository projectEmployeeRepository;
 	@Autowired
 	private IGroupRepository groupRepository;
 
@@ -49,9 +46,8 @@ public class ProjectRepository extends AbstractDao<Integer, Project> implements
 
 	@SuppressWarnings("unchecked")
 	public List<Project> findAll() {
-		Criteria criteria = createEntityCriteria().addOrder(
-				Order.asc("projectNumber"));
-		pList = (List<Project>) criteria.list();
+		Criteria criteria = createEntityCriteria().addOrder(Order.asc("projectNumber"));
+		pList = (List<Project>) criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 		return pList;
 	}
 
@@ -60,28 +56,25 @@ public class ProjectRepository extends AbstractDao<Integer, Project> implements
 	}
 
 	public Project getProject(Long id) {
-		for (Project p : pList) {
-			if (id == p.getId()) {
-				return p;
+		Project project = null;
+		if (id != null) {
+			Project result = getByKey(id);
+			if (result != null) {
+				project = new Project(result.getId(), result.getGroupId(), result.getProjectNumber(), result.getName(),
+						result.getCustomer(), result.getStatus(), result.getStartDate(), result.getEndDate(),
+						result.getVersion());
+				project.setEmployees(result.getEmployees());
+				project.setGroup(result.getGroup());
 			}
 		}
-		return null;
+		return project;
 	}
 
 	public void addProject(Project project) {
-		project.setId(pList.get(pList.size() - 1).getId() + 1);
-		project.setVersion(205512);
-		pList.add(project);
-		String[] visas = project.getMembers();
-		if (visas.length > 0) {
-			for (String visa : visas) {
-				projectEmployeeRepository.addProjectEmployee(project.getId(),
-						employeeRepository.getEmployeeId(visa));
-			}
-		} else {
-			projectEmployeeRepository.addProjectEmployee(project.getId(),
-					Long.valueOf(-1));
-		}
+		project.setVersion(2050512000);
+		project.setGroup(groupRepository.getGroup(project.getGroupId()));
+		project.setEmployees(employeeRepository.getEmployees(project.getMembers()));
+		getSession().merge(project);
 	}
 
 	public void addDummyProjects() {
@@ -89,10 +82,9 @@ public class ProjectRepository extends AbstractDao<Integer, Project> implements
 	}
 
 	public boolean projectNumberExisted(Integer project_number) {
-		for (Project p : pList) {
-			if (project_number == p.getProjectNumber()) {
-				return true;
-			}
+		Criteria criteria = createEntityCriteria().add(Restrictions.eq("projectNumber", project_number));
+		if (criteria.list().size() > 0) {
+			return true;
 		}
 		return false;
 	}
@@ -102,20 +94,53 @@ public class ProjectRepository extends AbstractDao<Integer, Project> implements
 	}
 
 	public void updateProject(Project project) {
-		for (Project p : pList) {
-			if (p.getId() == project.getId()) {
-				p.editData(project);
-				break;
+		project.setVersion(2050512011);
+		project.setGroup(groupRepository.getGroup(project.getGroupId()));
+		project.setEmployees(employeeRepository.getEmployees(project.getMembers()));
+		Project existing_project = getByKey(project.getId());
+		Integer current_version = 0;
+		if (existing_project != null) {
+			current_version = existing_project.getVersion();
+			existing_project.setProjectNumber(project.getProjectNumber());
+			existing_project.setGroupId(project.getGroupId());
+			existing_project.setName(project.getName());
+			existing_project.setCustomer(project.getCustomer());
+			existing_project.setMembers(project.getMembers());
+			existing_project.setStatus(project.getStatus());
+			existing_project.setStartDate(project.getStartDate());
+			existing_project.setEndDate(project.getEndDate());
+			existing_project.setGroup(project.getGroup());
+			existing_project.setEmployees(project.getEmployees());
+		}
+		Project same_project = getByKey(project.getId());
+		if (same_project != null) {
+			if (current_version != 0 && current_version == same_project.getVersion()) {
+				existing_project.setVersion(project.getVersion());
+				getSession().merge(existing_project);
+			} else {
+				getSession().getTransaction().rollback();
 			}
+		} else {
+			getSession().getTransaction().rollback();
 		}
 	}
 
 	public void deleteProject(Long id) {
-		for (Project p : pList) {
-			if (p.getId() == id && p.getStatus() == STATUS.NEW) {
-				pList.remove(p);
-				break;
+		Integer current_version = 0;
+		Project existing_project = getByKey(id);
+		if (existing_project != null) {
+			current_version = existing_project.getVersion();
+		}
+		Project same_project = (Project) getSession().load(Project.class, id);
+		if (same_project != null) {
+			if (current_version != 0 && current_version == same_project.getVersion()) {
+				existing_project.getEmployees().clear();
+				delete(existing_project);
+			}else{
+				getSession().getTransaction().rollback();
 			}
+		} else {
+			getSession().getTransaction().rollback();
 		}
 	}
 
@@ -127,11 +152,9 @@ public class ProjectRepository extends AbstractDao<Integer, Project> implements
 
 	@SuppressWarnings("unchecked")
 	public TreeSet<Project> filterProjects(String keywords, STATUS statusKey) {
-		TreeSet<Project> filterResult = new TreeSet<Project>(
-				new SortedFilterProjects());
+		TreeSet<Project> filterResult = new TreeSet<Project>(new SortedFilterProjects());
 		searchResults.clear();
-		Criteria criteria = createEntityCriteria().addOrder(
-				Order.asc("projectNumber"));
+		Criteria criteria = createEntityCriteria().addOrder(Order.asc("projectNumber"));
 		Criterion condition;
 
 		if (keywords.matches("^[0-9]+")) {
@@ -139,20 +162,17 @@ public class ProjectRepository extends AbstractDao<Integer, Project> implements
 			projectNumber = Integer.parseInt(keywords);
 			condition = Restrictions.eq("projectNumber", projectNumber);
 		} else {
-			condition = Restrictions.or(Restrictions.ilike("name", "%"
-					+ keywords + "%", MatchMode.END), Restrictions.ilike(
-					"customer", "%" + keywords + "%", MatchMode.END));
+			condition = Restrictions.or(Restrictions.ilike("name", "%" + keywords + "%", MatchMode.END),
+					Restrictions.ilike("customer", "%" + keywords + "%", MatchMode.END));
 		}
 
-		searchResults = (List<Project>) criteria.add(
-				Restrictions.and(condition,
-						Restrictions.eq("status", statusKey))).list();
+		searchResults = (List<Project>) criteria.add(Restrictions.and(condition, Restrictions.eq("status", statusKey)))
+				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 		return filterResult;
 	}
 
 	public TreeSet<Project> projectsInPage(List<Project> pList, Integer page) {
-		TreeSet<Project> projects = new TreeSet<Project>(
-				new SortedFilterProjects());
+		TreeSet<Project> projects = new TreeSet<Project>(new SortedFilterProjects());
 		Integer start_index = (page - 1) * 5;
 		Integer end_index = page * projectsPerPage;
 		for (Integer i = 0; i < pList.size(); i++) {
@@ -174,6 +194,6 @@ public class ProjectRepository extends AbstractDao<Integer, Project> implements
 	}
 
 	public String groupLeaderVisa(Project project) {
-		return groupRepository.groupLeaderVisa(project.getGroupId());
+		return project.getGroup().getLeader().getVisa();
 	}
 }

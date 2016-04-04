@@ -39,7 +39,12 @@ public class GroupRepository extends AbstractDao<Long, Group> implements
 
 	public Long getGroupId(Long groupLeaderId) {
 		Long id = Long.valueOf(-1);
-		//Criteria criteria = createEntityCriteria().add(Restrictions.eq("leader", groupLeaderId));
+
 		return id;
+	}
+
+	public Group getGroup(Long key) {
+		Group group = (Group) getByKey(key);
+		return group;
 	}
 }
