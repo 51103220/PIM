@@ -2,7 +2,7 @@
 	GENERAL
 *****************************/
 .formName {
-	color: #777;
+	color: #666666;
 	font-size: 18px;
 	font-family: "Segoe UI Semibold";
 }
@@ -160,6 +160,11 @@
 		width: 200px !important;
 	}
 }
+#reset_btn{
+	font-family: "Segoe UI Semibold";
+	size: 14pt;
+}
+
 
 select option {
 	color: black;
@@ -183,7 +188,7 @@ select.empty {
 
 #searchDatas td {
 	font-family: "Segoe UI Semibold";
-	color: #777;
+	color: #666666;
 	size: 14pt;
 }
 

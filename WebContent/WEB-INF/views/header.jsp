@@ -21,12 +21,12 @@
 			<ul class="nav navbar-nav navbar-right" id="langOption">
 				<c:choose>
 					<c:when test="${lang == 'fr'}">
-						<li><a href="<c:url value='/?lang=en'/>" class="selected">EN</a></li>
-						<li><a href="<c:url value='/?lang=fr'/>">&nbsp;|&nbsp;FR</a></li>
+						<li><a href="<c:url value='?lang=en'/>">EN</a></li>
+						<li><a href="<c:url value='?lang=fr'/>" class="selected">&nbsp;|&nbsp;FR</a></li>
 					</c:when>
 					<c:otherwise>
-						<li><a href="<c:url value='/?lang=en'/>">EN</a></li>
-						<li><a href="<c:url value='/?lang=fr'/>" class="selected">&nbsp;|&nbsp;FR</a></li>
+						<li><a href="<c:url value='?lang=en'/>" class="selected">EN</a></li>
+						<li><a href="<c:url value='?lang=fr'/>">&nbsp;|&nbsp;FR</a></li>
 					</c:otherwise>
 				</c:choose>
 
