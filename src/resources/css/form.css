@@ -4,6 +4,7 @@
 .formName {
 	color: #777;
 	font-size: 18px;
+	font-family: "Segoe UI Semibold";
 }
 
 .formContent {
@@ -182,7 +183,7 @@ select.empty {
 
 #searchDatas td {
 	font-family: "Segoe UI Semibold";
-	color: #666666;
+	color: #777;
 	size: 14pt;
 }
 
