@@ -94,13 +94,10 @@ public class ProjectRepository extends AbstractDao<Long, Project>implements IPro
 	}
 
 	public void updateProject(Project project) {
-		project.setVersion(2050512011);
 		project.setGroup(groupRepository.getGroup(project.getGroupId()));
 		project.setEmployees(employeeRepository.getEmployees(project.getMembers()));
 		Project existing_project = getByKey(project.getId());
-		Integer current_version = 0;
 		if (existing_project != null) {
-			current_version = existing_project.getVersion();
 			existing_project.setProjectNumber(project.getProjectNumber());
 			existing_project.setGroupId(project.getGroupId());
 			existing_project.setName(project.getName());
@@ -111,36 +108,14 @@ public class ProjectRepository extends AbstractDao<Long, Project>implements IPro
 			existing_project.setEndDate(project.getEndDate());
 			existing_project.setGroup(project.getGroup());
 			existing_project.setEmployees(project.getEmployees());
-		}
-		Project same_project = getByKey(project.getId());
-		if (same_project != null) {
-			if (current_version != 0 && current_version == same_project.getVersion()) {
-				existing_project.setVersion(project.getVersion());
-				getSession().merge(existing_project);
-			} else {
-				getSession().getTransaction().rollback();
-			}
-		} else {
-			getSession().getTransaction().rollback();
+			getSession().merge(existing_project);
 		}
 	}
 
 	public void deleteProject(Long id) {
-		Integer current_version = 0;
 		Project existing_project = getByKey(id);
 		if (existing_project != null) {
-			current_version = existing_project.getVersion();
-		}
-		Project same_project = (Project) getSession().load(Project.class, id);
-		if (same_project != null) {
-			if (current_version != 0 && current_version == same_project.getVersion()) {
-				existing_project.getEmployees().clear();
-				delete(existing_project);
-			}else{
-				getSession().getTransaction().rollback();
-			}
-		} else {
-			getSession().getTransaction().rollback();
+			delete(existing_project);
 		}
 	}
 
