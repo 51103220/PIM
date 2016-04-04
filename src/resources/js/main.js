@@ -1,4 +1,6 @@
 var maxPaginationLinks = 2;
+var formHasChanged = false;
+var submitted = false;
 /**********************************
  * *SELECT ON CHANGE
  **********************************/
@@ -72,7 +74,21 @@ function handlePagination(id){
 	});
 };
 $(document).ready(function() {
-
+	/***************************************************************************
+	 * * New Form Has Changed and on Before Unload Events
+	 **************************************************************************/
+	$("#main #contentBody").on("change",".general-form input", function(){
+		formHasChanged = true;
+	});
+	window.onbeforeunload = function (e) {
+        if (formHasChanged && !submitted) {
+            var message = "Your changes have not been saved! Are you sure you want to leave?", e = e || window.event;
+            if (e) {
+                e.returnValue = message;
+            }
+            return message;
+        }
+    }
 	/***************************************************************************
 	 * * Dialog Delete Confirmation
 	 **************************************************************************/
@@ -95,14 +111,28 @@ $(document).ready(function() {
 		}
 		// AJAX NAVIGATOR
 		var url = $(this).attr("href");
-		$.ajax({
-			method : "GET",
-			url : url
-		}).done(function(data) {
-			$("#main #contentBody").html(data);
-		}).fail(function(jqXHR, textStatus,errorThrown) {
-			window.location.href = $(".header #projectName").attr("href") + "errorsunexpected=" + errorThrown;
-		});
+		if(formHasChanged && !submitted){
+			if(confirm("Your changes have not been saved! Are you sure you want to leave?")){
+				formHasChanged = false;
+				$.ajax({
+					method : "GET",
+					url : url
+				}).done(function(data) {
+					$("#main #contentBody").html(data);
+				}).fail(function(jqXHR, textStatus,errorThrown) {
+					window.location.href = $(".header #projectName").attr("href") + "errorsunexpected=" + errorThrown;
+				});
+			}
+		}else{
+			$.ajax({
+				method : "GET",
+				url : url
+			}).done(function(data) {
+				$("#main #contentBody").html(data);
+			}).fail(function(jqXHR, textStatus,errorThrown) {
+				window.location.href = $(".header #projectName").attr("href") + "errorsunexpected=" + errorThrown;
+			});
+		}
 	});
 
 	/***************************************************************************
@@ -199,6 +229,7 @@ $(document).ready(function() {
 						
 					}
 				} else {
+					submitted = true;
 					window.location.href = $(".header #projectName").attr("href");
 				}
 			},
