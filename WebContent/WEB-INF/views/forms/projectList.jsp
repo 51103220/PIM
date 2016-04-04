@@ -104,6 +104,9 @@
 				selected items <span class="glyphicon glyphicon-trash"></span>
 			</a>
 		</div>
+		<div>
+			<p class="searchResult">${searchResult}</p>
+		</div>
 	</div>
 	<input type="hidden" id="paginationMax" value="${pages}">
 	<c:choose>

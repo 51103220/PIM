@@ -142,17 +142,22 @@ public class ProjectController {
 			@RequestParam(value = "statusKey") STATUS statusKey,
 			HttpServletRequest request) {
 		ModelAndView model;
+		List<Project> projects;
+		Boolean isSearchResult = false;
 		if (statusKey == null && keywords == "") {
-			model = makeProjectModel("forms/projectList",
-					projectService.findAll(), FIRST_PAGE, DEFAULT_SELECTED,
-					false);
+			projects = projectService.findAll();
 			request.getSession().setAttribute("searchValue", "");
 		} else {
 			projectService.filterProjects(keywords, statusKey);
-			model = makeProjectModel("forms/projectList",
-					projectService.findAllSearchResults(), FIRST_PAGE,
-					DEFAULT_SELECTED, true);
+			projects = projectService.findAllSearchResults();
+			isSearchResult = true;
 			request.getSession().setAttribute("searchValue", keywords);
+		}
+		model = makeProjectModel("forms/projectList",
+				projects, FIRST_PAGE,
+				DEFAULT_SELECTED, isSearchResult);
+		if (projects.size() == 0){
+			model.addObject("searchResult", "No Results Found");
 		}
 		return model;
 	}
