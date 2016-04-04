@@ -82,7 +82,7 @@
 							<td class="col4">${project.getCustomer()}</td>
 							<fmt:formatDate value="${project.getStartDate()}"
 								var="dateString" pattern="dd.MM.yyyy" />
-							<td class="col5">${dateString}</td>
+							<td class="col5 dateAlign">${dateString}</td>
 							<td align="center"><a
 								href="project/${project.getId()}/delete" class="deleteIcon">
 									<c:choose>

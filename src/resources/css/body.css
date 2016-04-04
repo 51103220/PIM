@@ -97,3 +97,12 @@
 	background-color: rgba(255, 0, 0, 0.0) !important;
 	color: #fff !important;
 }
+/*************
+**ALIGN
+**************/
+.dateAlign{
+	text-align: center;
+}
+input[type="number"] {
+	text-align: right;
+}
