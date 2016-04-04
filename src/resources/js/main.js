@@ -146,7 +146,7 @@ $(document).ready(function() {
 	});
 	$('#main #contentBody').on("click", ".datePickerIcon",function(e){
 		e.preventDefault();
-		$(this).parent().find("input").datepicker("show");
+		$(this).parent().find("input").focus();
 	});
 	fixBodyHeight();
 

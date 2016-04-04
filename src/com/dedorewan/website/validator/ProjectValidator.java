@@ -68,6 +68,11 @@ public class ProjectValidator implements Validator {
 			errors.rejectValue("startDate", "NotNull",
 					"Must choose a startingDate");
 		}
+		if (project.getEndDate() != null && project.getStartDate() != null
+				&& project.getEndDate().before(project.getStartDate())) {
+			errors.rejectValue("endDate", "DateNotValid",
+					"End Date must be after Start Date");
+		}
 		if (projectService.getProject(project.getId()) == null
 				&& projectService.projectNumberExisted(project
 						.getProjectNumber())) {
