@@ -57,6 +57,14 @@ public class ProjectValidator implements Validator {
 			errors.rejectValue("name", "NotEmpty",
 					"Project Name must not be left empty");
 		}
+		if (project.getName().length() > 50) {
+			errors.rejectValue("name", "InvalidLength",
+					"Project Name must be less than 50 characters");
+		}
+		if (project.getCustomer().length() > 50) {
+			errors.rejectValue("customer", "InvalidLength",
+					"Customer Name must be less than 50 characters");
+		}
 		if (project.getCustomer().length() == 0) {
 			errors.rejectValue("customer", "NotEmpty",
 					"Customer Name must not be left empty");
