@@ -1,9 +1,7 @@
 package com.dedorewan.website.dom;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,7 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
-
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -44,7 +41,7 @@ public class Project {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.PERSIST })
+	@Cascade({CascadeType.MERGE})
 	@JoinColumn(name = "GROUP_ID", nullable = false)
 	private Group group;
 	@Transient
@@ -73,11 +70,11 @@ public class Project {
 	private Integer version;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.DELETE, CascadeType.MERGE })
+	@Cascade({CascadeType.DELETE, CascadeType.MERGE })
 	@JoinTable(name = "PROJECT_EMPLOYEE", joinColumns = {
-			@JoinColumn(name = "PROJECT_ID", nullable = false, updatable = true) }, inverseJoinColumns = {
-					@JoinColumn(name = "EMPLOYEE_ID", nullable = false, updatable = true) })
-	private List<Employee> employees = new ArrayList<Employee>();
+			@JoinColumn(name = "PROJECT_ID", nullable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "EMPLOYEE_ID", nullable = false) })
+	private List<Employee> employees;
 	@Transient
 	private String[] members;
 

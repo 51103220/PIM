@@ -101,6 +101,16 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 	}
 
 	public void delete(Long id) {
+		Session session = sessionFactory.getCurrentSession();
+		Project existing_project = (Project) session.get(Project.class, id, new LockOptions(LockMode.OPTIMISTIC));
+		if (existing_project != null && existing_project.getStatus() == STATUS.NEW) {
+			existing_project.setGroup(null);
+			existing_project.getEmployees().clear();
+			session.delete(existing_project);
+		} else {
+			throw new CustomException("999", "CANT DELETE PROJECT");
+
+		}
 
 	}
 }
