@@ -11,6 +11,7 @@ import org.hibernate.LockOptions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.dedorewan.website.dom.Project;
 import com.dedorewan.website.dom.Project.STATUS;
@@ -26,6 +27,8 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 	private List<Project> searchResult = new ArrayList<Project>();
 	@Autowired
 	private SessionFactory sessionFactory;
+	@Value("${projects.maxProjectPerPage}")
+	Integer projectsPerPage;
 
 	@SuppressWarnings("unchecked")
 	public List<Project> filterProjects(String keywords, STATUS statusKey) {
@@ -50,8 +53,8 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 
 	public List<Project> projectsInPage(List<Project> pList, Integer page) {
 		List<Project> projects = new ArrayList<Project>();
-		Integer start_index = (page - 1) * 5;
-		Integer end_index = page * 5;
+		Integer start_index = (page - 1) * projectsPerPage;
+		Integer end_index = page * projectsPerPage;
 		for (Integer i = 0; i < pList.size(); i++) {
 			if (i >= start_index && i < end_index) {
 				projects.add(pList.get(i));
