@@ -1,14 +1,15 @@
 package com.dedorewan.website.service;
 
 import java.util.List;
-import java.util.TreeSet;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import com.dedorewan.website.dao.IProjectRepository;
+import com.dedorewan.website.dao.ICustomProjectRepository;
 import com.dedorewan.website.dom.Project;
 import com.dedorewan.website.dom.Project.STATUS;
 
@@ -16,9 +17,13 @@ import com.dedorewan.website.dom.Project.STATUS;
 @Transactional
 public class ProjectService implements IProjectService {
 	@Autowired
+	private ICustomProjectRepository customProjectRepository;
+	@Autowired
+
 	private IProjectRepository projectRepository;
+
 	public List<Project> findAll() {
-		return projectRepository.findAll();
+		return projectRepository.findAllByOrderByProjectNumberAsc();
 	}
 
 	public List<Project> findAllSearchResults() {
@@ -26,46 +31,46 @@ public class ProjectService implements IProjectService {
 	}
 
 	public Project getProject(Long id) {
-		return projectRepository.getProject(id);
+		return customProjectRepository.getProject(id);
 	}
 
 	public void addProject(Project project) {
-		projectRepository.addProject(project);
+		customProjectRepository.addProject(project);
 	}
 
 	public boolean projectNumberExisted(Integer project_number) {
-		return projectRepository.projectNumberExisted(project_number);
+		return customProjectRepository.projectNumberExisted(project_number);
 	}
 
 	public boolean visaExsisted(String visa) {
-		return projectRepository.visaExsisted(visa);
+		return customProjectRepository.visaExsisted(visa);
 	}
 
 	public void updateProject(Project project) {
-		projectRepository.updateProject(project);
+		customProjectRepository.updateProject(project);
 	}
 
 	public void deleteProject(Long id) {
-		projectRepository.deleteProject(id);
+		customProjectRepository.deleteProject(id);
 	}
 
 	public void deleteProjects(Long[] ids) {
-		projectRepository.deleteProjects(ids);
+		customProjectRepository.deleteProjects(ids);
 	}
 
-	public TreeSet<Project> filterProjects(String keywords, STATUS statusKey) {
+	public List<Project> filterProjects(String keywords, STATUS statusKey) {
 		return projectRepository.filterProjects(keywords, statusKey);
 	}
 
-	public TreeSet<Project> projectsInPage(List<Project> projects, Integer page) {
+	public List<Project> projectsInPage(List<Project> projects, Integer page) {
 		return projectRepository.projectsInPage(projects, page);
 	}
 
 	public Integer numberPages(List<Project> projects, Integer maxProjects) {
-		return projectRepository.numberPages(projects, maxProjects);
+		return customProjectRepository.numberPages(projects, maxProjects);
 	}
 
 	public String groupLeaderVisa(Project project) {
-		return projectRepository.groupLeaderVisa(project);
+		return customProjectRepository.groupLeaderVisa(project);
 	}
 }

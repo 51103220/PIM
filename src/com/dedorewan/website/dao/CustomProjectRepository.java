@@ -32,7 +32,7 @@ class SortedFilterProjects implements Comparator<Project> {
 }
 
 @Repository
-public class ProjectRepository extends AbstractDao<Long, Project>implements IProjectRepository {
+public class CustomProjectRepository extends AbstractDao<Long, Project>implements ICustomProjectRepository {
 	@Value("${projects.maxProjectPerPage}")
 	Integer projectsPerPage;
 	@Autowired
