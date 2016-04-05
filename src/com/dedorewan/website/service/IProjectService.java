@@ -12,7 +12,6 @@ public interface IProjectService {
 	TreeSet<Project> projectsInPage(List<Project> projects,Integer page);
 	Project getProject(Long id);
 	void addProject(Project project);
-	void addDummyProjects();
 	boolean projectNumberExisted(Integer project_number);
 	boolean visaExsisted(String visa);
 	void updateProject(Project project);

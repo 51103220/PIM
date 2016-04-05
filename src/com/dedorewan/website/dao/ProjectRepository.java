@@ -77,10 +77,6 @@ public class ProjectRepository extends AbstractDao<Long, Project>implements IPro
 		getSession().merge(project);
 	}
 
-	public void addDummyProjects() {
-
-	}
-
 	public boolean projectNumberExisted(Integer project_number) {
 		Criteria criteria = createEntityCriteria().add(Restrictions.eq("projectNumber", project_number));
 		if (criteria.list().size() > 0) {

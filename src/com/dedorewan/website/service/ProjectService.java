@@ -17,20 +17,16 @@ import com.dedorewan.website.dom.Project.STATUS;
 public class ProjectService implements IProjectService {
 	@Autowired
 	private IProjectRepository projectRepository;
-
 	public List<Project> findAll() {
 		return projectRepository.findAll();
 	}
-	public List<Project> findAllSearchResults(){
+
+	public List<Project> findAllSearchResults() {
 		return projectRepository.findAllSearchResults();
 	}
 
 	public Project getProject(Long id) {
 		return projectRepository.getProject(id);
-	}
-
-	public void addDummyProjects() {
-		projectRepository.addDummyProjects();
 	}
 
 	public void addProject(Project project) {
@@ -68,7 +64,8 @@ public class ProjectService implements IProjectService {
 	public Integer numberPages(List<Project> projects, Integer maxProjects) {
 		return projectRepository.numberPages(projects, maxProjects);
 	}
-	public String groupLeaderVisa(Project project){
+
+	public String groupLeaderVisa(Project project) {
 		return projectRepository.groupLeaderVisa(project);
 	}
 }
