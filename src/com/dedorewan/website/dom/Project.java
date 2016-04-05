@@ -220,15 +220,16 @@ public class Project {
 		return builder.toString();
 	}
 
-	public void editData(Project project) {
+	public void updateData(Project project) {
 		this.groupId = project.getGroupId();
-		this.customer = project.customer;
+		this.customer = project.getCustomer();
 		this.members = project.getMembers();
 		this.endDate = project.getEndDate();
 		this.startDate = project.getStartDate();
 		this.name = project.getName();
 		this.projectNumber = project.getProjectNumber();
-		this.version = project.getVersion();
 		this.status = project.getStatus();
+		this.group = project.getGroup();
+		this.employees = project.getEmployees();
 	}
 }

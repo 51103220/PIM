@@ -6,18 +6,26 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.hibernate.LockMode;
+import org.hibernate.LockOptions;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dedorewan.website.dom.Project;
 import com.dedorewan.website.dom.Project.STATUS;
+import com.dedorewan.website.exception.CustomException;
 
 public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 	@PersistenceContext
 	private EntityManager entityManager;
 	@Autowired
 	IEmployeeRepository employeeRepository;
-	
+	@Autowired
+	IGroupRepository groupRepository;
 	private List<Project> searchResult = new ArrayList<Project>();
+	@Autowired
+	private SessionFactory sessionFactory;
 
 	@SuppressWarnings("unchecked")
 	public List<Project> filterProjects(String keywords, STATUS statusKey) {
@@ -25,18 +33,14 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 		if (keywords.matches("^[0-9]+")) {
 			Integer projectNumber = -1;
 			projectNumber = Integer.parseInt(keywords);
-			query = "select p from Project p where project_number = "
-					+ projectNumber + "and status = '" + statusKey
+			query = "select p from Project p where project_number = " + projectNumber + "and status = '" + statusKey
 					+ "' order by project_number ASC";
 		} else {
 			keywords = keywords.toLowerCase();
-			query = "select p from Project p where LOWER(name) like '%"
-					+ keywords + "%' or LOWER(customer) like '%" + keywords
-					+ "%' and status ='" + statusKey
-					+ "' order by project_number ASC";
+			query = "select p from Project p where LOWER(name) like '%" + keywords + "%' or LOWER(customer) like '%"
+					+ keywords + "%' and status ='" + statusKey + "' order by project_number ASC";
 		}
-		searchResult = (List<Project>) entityManager.createQuery(query)
-				.getResultList();
+		searchResult = (List<Project>) entityManager.createQuery(query).getResultList();
 		return searchResult;
 	}
 
@@ -67,9 +71,36 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 	}
 
 	public boolean visaExsisted(String visa) {
-		if(employeeRepository.findByVisa(visa).size() > 0){
+		if (employeeRepository.findByVisa(visa).size() > 0) {
 			return true;
 		}
 		return false;
+	}
+
+	public void insert(Project project) {
+		project.setVersion(2050512000);
+		project.setGroup(groupRepository.getOne(project.getGroupId()));
+		project.setEmployees(employeeRepository.getAllEmployeeByVisa(project.getMembers()));
+		Session session = sessionFactory.getCurrentSession();
+		session.merge(project);
+	}
+
+	public void update(Project project) {
+		project.setGroup(groupRepository.getOne(project.getGroupId()));
+		project.setEmployees(employeeRepository.getAllEmployeeByVisa(project.getMembers()));
+		Session session = sessionFactory.getCurrentSession();
+		Project existing_project = (Project) session.get(Project.class, project.getId(),
+				new LockOptions(LockMode.OPTIMISTIC));
+		if (existing_project != null) {
+			existing_project.updateData(project);
+			session.merge(existing_project);
+		} else {
+			throw new CustomException("999", "CANT UPDATE PROJECT");
+
+		}
+	}
+
+	public void delete(Long id) {
+
 	}
 }

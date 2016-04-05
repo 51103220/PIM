@@ -28,7 +28,7 @@ public class ProjectService implements IProjectService {
 	}
 
 	public void addProject(Project project) {
-		//projectRepository.save(project)
+		projectRepository.insert(project);
 	}
 
 	public boolean projectNumberExisted(Long id, Integer project_number) {
@@ -48,15 +48,17 @@ public class ProjectService implements IProjectService {
 	}
 
 	public void updateProject(Project project) {
-		//customProjectRepository.updateProject(project);
+		projectRepository.update(project);
 	}
 
 	public void deleteProject(Long id) {
-		//customProjectRepository.deleteProject(id);
+		projectRepository.delete(id);
 	}
 
 	public void deleteProjects(Long[] ids) {
-		//customProjectRepository.deleteProjects(ids);
+		for(long id : ids){
+			deleteProject(id);
+		}
 	}
 
 	public List<Project> filterProjects(String keywords, STATUS statusKey) {
