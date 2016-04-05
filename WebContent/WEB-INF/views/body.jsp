@@ -26,9 +26,9 @@
 									code="menu.new" /></a></li>
 						<li><a href="newProject"><spring:message
 									code="menu.project" /></a></li>
-						<li><a href="newCustomer"><spring:message
+						<li><a href="listProject"><spring:message
 									code="menu.customer" /></a></li>
-						<li><a href="newSupply"><spring:message
+						<li><a href="listProject"><spring:message
 									code="menu.supply" /></a></li>
 					</ul>
 				</div>
