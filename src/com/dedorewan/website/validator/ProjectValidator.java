@@ -73,9 +73,7 @@ public class ProjectValidator implements Validator {
 			errors.rejectValue("endDate", "DateNotValid",
 					"End Date must be after Start Date");
 		}
-		if (projectService.getProject(project.getId()) == null
-				&& projectService.projectNumberExisted(project
-						.getProjectNumber())) {
+		if (projectService.projectNumberExisted(project.getId(),project.getProjectNumber())) {
 			message = messageSource.getMessage("errors.projectNumberExisted",
 					new Object[] {}, locale);
 			errors.rejectValue("projectNumber", "projectNumberExisted", message);

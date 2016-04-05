@@ -2,15 +2,16 @@ package com.dedorewan.website.dao;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
 import com.dedorewan.website.dom.Employee;
 
+@Repository
+public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
+	List<Employee> findByVisa(String visa);
 
-public interface IEmployeeRepository {
-	List<Employee> findAll();
-	boolean visaExsisted(String visa);
-	Long getEmployeeId(String visa);
-	String getEmployeeVisa(Long id);
+	@Query("SELECT e FROM Employee e where e.id NOT IN (SELECT g.leader.id FROM Group g)")
 	List<Employee> availableEmployee();
-	Employee getEmployee(String visa);
-	List<Employee> getEmployees(String[] visas);
 }

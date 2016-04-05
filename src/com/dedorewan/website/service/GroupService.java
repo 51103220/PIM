@@ -17,10 +17,12 @@ public class GroupService implements IGroupService {
 	@Autowired
 	private IGroupRepository groupRepository;
 
-	public List<Group> findAll() {
-		return groupRepository.findAll();
-	}
-	public HashMap<Long,String> groupLeaders(){
-		return groupRepository.groupLeaders();
+	public HashMap<Long, String> groupLeaders() {
+		List<Group> groups = groupRepository.findAll();
+		HashMap<Long, String> leaders = new HashMap<Long, String>();
+		for (Group group : groups) {
+			leaders.put(group.getId(), group.getLeader().getVisa());
+		}
+		return leaders;
 	}
 }
