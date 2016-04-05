@@ -12,6 +12,7 @@ import com.dedorewan.website.dom.Employee;
 public class EmployeeService implements IEmployeeService {
 	@Autowired
 	private IEmployeeRepository employeeRepository;
+	
 	public List<Employee> availableEmployee(){
 		return employeeRepository.availableEmployee();
 	}

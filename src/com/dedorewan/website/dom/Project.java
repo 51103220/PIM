@@ -41,11 +41,13 @@ public class Project {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@Cascade({CascadeType.MERGE})
+	@Cascade({ CascadeType.MERGE })
 	@JoinColumn(name = "GROUP_ID", nullable = false)
 	private Group group;
+
 	@Transient
 	private Long groupId;
+
 	@Column(name = "PROJECT_NUMBER", nullable = false)
 	private Integer projectNumber;
 
@@ -70,11 +72,12 @@ public class Project {
 	private Integer version;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@Cascade({CascadeType.DELETE, CascadeType.MERGE })
+	@Cascade({ CascadeType.DELETE, CascadeType.MERGE })
 	@JoinTable(name = "PROJECT_EMPLOYEE", joinColumns = {
 			@JoinColumn(name = "PROJECT_ID", nullable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "EMPLOYEE_ID", nullable = false) })
 	private List<Employee> employees;
+
 	@Transient
 	private String[] members;
 

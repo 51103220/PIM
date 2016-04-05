@@ -13,6 +13,7 @@ import com.dedorewan.website.dom.Employee;
 public class IEmployeeRepositoryImpl implements IEmployeeRepositoryCustom {
 	@PersistenceContext
 	private EntityManager entityManager;
+
 	@Autowired
 	IEmployeeRepository employeeRepository;
 

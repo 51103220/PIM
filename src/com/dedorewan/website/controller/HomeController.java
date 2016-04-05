@@ -25,32 +25,32 @@ public class HomeController {
 
 	@Autowired
 	private IProjectService projectService;
+
 	@Value("${projects.maxProjectPerPage}")
 	Integer projectsPerPage;
+
 	private static final int FIRST_PAGE = 1;
 	private static final int DEFAULT_SELECTED = 1;
 
-	private ModelAndView makeProjectModel(String view,
-			List<Project> projectList, Integer page, Integer selectedPage,
+	private ModelAndView makeProjectModel(String view, List<Project> projectList, Integer page, Integer selectedPage,
 			Boolean isSearchResult) {
 		ModelAndView model = new ModelAndView(view);
-		model.addObject("projects",
-				projectService.projectsInPage(projectList, page));
-		model.addObject("pages",
-				projectService.numberPages(projectList, projectsPerPage));
+		model.addObject("projects", projectService.projectsInPage(projectList, page));
+		model.addObject("pages", projectService.numberPages(projectList, projectsPerPage));
 		model.addObject("isSearchResult", isSearchResult);
 		model.addObject("selected", selectedPage);
 		return model;
 	}
-	private ModelAndView makeErrorModel(String message){
+
+	private ModelAndView makeErrorModel(String message) {
 		ModelAndView model = new ModelAndView("errors");
 		model.addObject("message", message);
 		return model;
 	}
+
 	@RequestMapping(method = RequestMethod.GET, value = "/")
 	public ModelAndView index(Locale locale) {
-		ModelAndView model = makeProjectModel("index",
-				projectService.findAll(), FIRST_PAGE, DEFAULT_SELECTED, false);
+		ModelAndView model = makeProjectModel("index", projectService.findAll(), FIRST_PAGE, DEFAULT_SELECTED, false);
 		return model;
 	}
 
@@ -59,21 +59,23 @@ public class HomeController {
 		ModelAndView model = makeErrorModel(message);
 		return model;
 	}
+
 	@ExceptionHandler(Exception.class)
 	public ModelAndView handleAllException(Exception ex) {
 		ModelAndView model = makeErrorModel(ex.getMessage());
 		return model;
 
 	}
+
 	@ExceptionHandler(CustomException.class)
 	public ModelAndView handleCustomException(CustomException ex) {
-		ModelAndView model = makeErrorModel(ex.getErrCode() +"\n"+ ex.getErrMsg());
+		ModelAndView model = makeErrorModel(ex.getErrCode() + "\n" + ex.getErrMsg());
 		return model;
 
 	}
 
 	@ModelAttribute("statusValues")
-	private STATUS[] statusList(){
+	private STATUS[] statusList() {
 		STATUS[] status = STATUS.values();
 		return status;
 	}

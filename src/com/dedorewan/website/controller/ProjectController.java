@@ -33,15 +33,20 @@ import com.dedorewan.website.validator.ProjectValidator;
 public class ProjectController {
 	@Value("${projects.maxProjectPerPage}")
 	Integer projectsPerPage;
+
 	@Autowired
 	private ProjectValidator projectValidator;
+
 	@Autowired
 	private IProjectService projectService;
 	@Autowired
+
 	private IGroupService groupService;
 	@Autowired
+
 	private IEmployeeService employeeService;
 	@Autowired
+
 	JsonResponse jsonResponse;
 	private static final int FIRST_PAGE = 1;
 	private static final int DEFAULT_SELECTED = 1;
@@ -180,9 +185,9 @@ public class ProjectController {
 		if (result.hasErrors()) {
 			jsonResponse.setStatus("FAIL");
 			jsonResponse.setResult(result.getFieldErrors());
-		} else {	
-				projectService.updateProject(project);
-				jsonResponse.setStatus("SUCCESS");
+		} else {
+			projectService.updateProject(project);
+			jsonResponse.setStatus("SUCCESS");
 		}
 		return jsonResponse;
 	}

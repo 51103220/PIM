@@ -20,15 +20,19 @@ import com.dedorewan.website.exception.CustomException;
 public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 	@PersistenceContext
 	private EntityManager entityManager;
+
 	@Autowired
 	IEmployeeRepository employeeRepository;
+
 	@Autowired
 	IGroupRepository groupRepository;
-	private List<Project> searchResult = new ArrayList<Project>();
+
 	@Autowired
 	private SessionFactory sessionFactory;
 	@Value("${projects.maxProjectPerPage}")
+
 	Integer projectsPerPage;
+	private List<Project> searchResult = new ArrayList<Project>();
 
 	@SuppressWarnings("unchecked")
 	public List<Project> filterProjects(String keywords, STATUS statusKey) {
