@@ -133,8 +133,6 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 		project.setEmployees(employeeRepository.getAllEmployeeByVisa(project
 				.getMembers()));
 		Session session = sessionFactory.getCurrentSession();
-		// Project existing_project = (Project) session.get(Project.class,
-		// project.getId());
 		Project existing_project = getEdditingProjects(project.getId());
 		if (existing_project != null) {
 			existing_project.updateData(project);
@@ -142,12 +140,12 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 				session.merge(existing_project);
 				updateEdittingProjects(project.getId());
 			} else {
-				throw new CustomException("999",
-						"UPDATE FAILED: PROJECT HAS BEEN USING BY ANOTHER PROCESS");
+				throw new CustomException("updateProjectFailed",
+						"UPDATE PROJECT FAILED (ROJECT HAS BEEN UPDATED BY ANOTHER PROCESS)");
 			}
 		} else {
-			throw new CustomException("999",
-					"UPDATE FAILED: PROJECT HAS BEEN DELETED");
+			throw new CustomException("updateProjectFailed",
+					"UPDATE PROJECT FAILED (PROJECT HAS BEEN DELETED)");
 		}
 	}
 
@@ -161,8 +159,8 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 			deleteEdittingProjects(id);
 			session.delete(existing_project);
 		} else {
-			throw new CustomException("1000",
-					"DELETE FAILED: PROJECT DOES NOT EXIST");
+			throw new CustomException("deleteProjectFailed",
+					"DELETE PROJECT FAILED (PROJECT DOES NOT EXIST)");
 		}
 
 	}
