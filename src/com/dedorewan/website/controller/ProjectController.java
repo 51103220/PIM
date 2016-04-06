@@ -24,7 +24,6 @@ import com.dedorewan.website.dom.Employee;
 import com.dedorewan.website.dom.Project;
 import com.dedorewan.website.dom.Project.STATUS;
 import com.dedorewan.website.domain.JsonResponse;
-import com.dedorewan.website.exception.ProjectNumberAlreadyExistsException;
 import com.dedorewan.website.service.IEmployeeService;
 import com.dedorewan.website.service.IGroupService;
 import com.dedorewan.website.service.IProjectService;
@@ -106,11 +105,6 @@ public class ProjectController {
 	@ResponseBody
 	public JsonResponse newProject(@Validated @RequestBody Project project,
 			BindingResult result) throws Exception {
-		if (projectService.projectNumberExisted(null,
-				project.getProjectNumber())) {
-			throw new ProjectNumberAlreadyExistsException(
-					project.getProjectNumber());
-		}
 		if (result.hasErrors()) {
 			jsonResponse.setStatus("FAIL");
 			jsonResponse.setResult(result.getFieldErrors());

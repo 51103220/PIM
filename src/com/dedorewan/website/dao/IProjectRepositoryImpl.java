@@ -24,8 +24,10 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 
 	@Autowired
 	private SessionFactory sessionFactory;
+	
 	@Value("${projects.maxProjectPerPage}")
 	Integer projectsPerPage;
+	
 	private List<Project> searchResult = new ArrayList<Project>();
 	private List<Project> editingProjects = new ArrayList<Project>();
 
@@ -33,15 +35,6 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 		for (Project p : editingProjects) {
 			if (p.getId() == id) {
 				editingProjects.remove(p);
-				break;
-			}
-		}
-	}
-
-	private void updateEdittingProjects(Long id) {
-		for (Project p : editingProjects) {
-			if (p.getId() == id) {
-				p.setVersion(p.getVersion() + 1);
 				break;
 			}
 		}
@@ -59,8 +52,10 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 
 	public void addEdittingProjects(Project project) {
 		for (Project p : editingProjects) {
-			if (p.getId() == project.getId())
-				return;
+			if (p.getId() == project.getId()){
+				editingProjects.remove(p);
+				break;
+			}
 		}
 		editingProjects.add(project);
 	}
@@ -135,14 +130,8 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 		Session session = sessionFactory.getCurrentSession();
 		Project existing_project = getEdditingProjects(project.getId());
 		if (existing_project != null) {
-			existing_project.updateData(project);
-			if (project.getVersion().equals(existing_project.getVersion())) {
-				session.merge(existing_project);
-				updateEdittingProjects(project.getId());
-			} else {
-				throw new CustomException("updateProjectFailed",
-						"UPDATE PROJECT FAILED (ROJECT HAS BEEN UPDATED BY ANOTHER PROCESS)");
-			}
+			existing_project.updateData(project);		
+			session.merge(existing_project);
 		} else {
 			throw new CustomException("updateProjectFailed",
 					"UPDATE PROJECT FAILED (PROJECT HAS BEEN DELETED)");

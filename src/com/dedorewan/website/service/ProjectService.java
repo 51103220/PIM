@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.StaleObjectStateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,9 +29,9 @@ public class ProjectService implements IProjectService {
 	}
 
 	public Project getProject(Long id) throws Exception {
-		Project project =projectRepository.findOne(id);
-		if(project == null){
-			throw new CustomException("ProjecNotExist","requested project does not exist");
+		Project project = projectRepository.findOne(id);
+		if (project == null) {
+			throw new CustomException("ProjecNotExist", "requested project does not exist");
 		}
 		projectRepository.addEdittingProjects(project);
 		return project;
@@ -41,8 +42,7 @@ public class ProjectService implements IProjectService {
 	}
 
 	public boolean projectNumberExisted(Long id, Integer project_number) {
-		List<Project> projects = projectRepository
-				.findByProjectNumber(project_number);
+		List<Project> projects = projectRepository.findByProjectNumber(project_number);
 		if (projects.size() > 0) {
 			if (projects.get(0).getId() == id) {
 				return false;
@@ -57,7 +57,12 @@ public class ProjectService implements IProjectService {
 	}
 
 	public void updateProject(Project project) throws Exception {
-		projectRepository.update(project);
+		try {
+			projectRepository.update(project);
+		} catch (StaleObjectStateException s) {
+			throw new CustomException("updateProjectFailed",
+					"UPDATE PROJECT FAILED (PROJECT HAS BEEN UPDATED OR DELETED BY ANOTHER TRANSACTION)");
+		}
 	}
 
 	public void deleteProject(Long id) throws Exception {
@@ -65,7 +70,7 @@ public class ProjectService implements IProjectService {
 	}
 
 	public void deleteProjects(Long[] ids) throws Exception {
-		for(long id : ids){
+		for (long id : ids) {
 			deleteProject(id);
 		}
 	}
