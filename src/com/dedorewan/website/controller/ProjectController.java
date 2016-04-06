@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.dedorewan.website.dom.Employee;
 import com.dedorewan.website.dom.Project;
 import com.dedorewan.website.dom.Project.STATUS;
 import com.dedorewan.website.domain.JsonResponse;
+import com.dedorewan.website.exception.ProjectNumberAlreadyExistsException;
 import com.dedorewan.website.service.IEmployeeService;
 import com.dedorewan.website.service.IGroupService;
 import com.dedorewan.website.service.IProjectService;
@@ -40,13 +40,10 @@ public class ProjectController {
 	@Autowired
 	private IProjectService projectService;
 	@Autowired
-
 	private IGroupService groupService;
 	@Autowired
-
 	private IEmployeeService employeeService;
 	@Autowired
-
 	JsonResponse jsonResponse;
 	private static final int FIRST_PAGE = 1;
 	private static final int DEFAULT_SELECTED = 1;
@@ -56,11 +53,14 @@ public class ProjectController {
 		binder.addValidators(projectValidator);
 	}
 
-	private ModelAndView makeProjectModel(String view, List<Project> projectList, Integer page, Integer selectedPage,
+	private ModelAndView makeProjectModel(String view,
+			List<Project> projectList, Integer page, Integer selectedPage,
 			Boolean isSearchResult) {
 		ModelAndView model = new ModelAndView(view);
-		model.addObject("projects", projectService.projectsInPage(projectList, page));
-		model.addObject("pages", projectService.numberPages(projectList, projectsPerPage));
+		model.addObject("projects",
+				projectService.projectsInPage(projectList, page));
+		model.addObject("pages",
+				projectService.numberPages(projectList, projectsPerPage));
 		model.addObject("isSearchResult", isSearchResult);
 		model.addObject("selected", selectedPage);
 		return model;
@@ -68,16 +68,18 @@ public class ProjectController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/listProject")
 	@ResponseBody
-	public ModelAndView listProjectPage() {
-		ModelAndView model = makeProjectModel("forms/projectList", projectService.findAll(), FIRST_PAGE,
-				DEFAULT_SELECTED, false);
+	public ModelAndView listProjectPage(){
+		
+		ModelAndView model = makeProjectModel("forms/projectList",
+				projectService.findAll(), FIRST_PAGE, DEFAULT_SELECTED, false);
 		return model;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "projects/page/{page}")
 	@ResponseBody
 	public ModelAndView projectsPage(@PathVariable Integer page) {
-		ModelAndView model = makeProjectModel("forms/projectList", projectService.findAll(), page, page, false);
+		ModelAndView model = makeProjectModel("forms/projectList",
+				projectService.findAll(), page, page, false);
 		return model;
 	}
 
@@ -85,8 +87,8 @@ public class ProjectController {
 	@ResponseBody
 	public ModelAndView searchResultPage(@PathVariable Integer page) {
 
-		ModelAndView model = makeProjectModel("forms/projectList", projectService.findAllSearchResults(), page, page,
-				true);
+		ModelAndView model = makeProjectModel("forms/projectList",
+				projectService.findAllSearchResults(), page, page, true);
 		return model;
 	}
 
@@ -101,11 +103,17 @@ public class ProjectController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/NewProject")
 	@ResponseBody
-	public JsonResponse newProject(@Validated @RequestBody Project project, BindingResult result) {
-
+	public JsonResponse newProject(@Validated @RequestBody Project project,
+			BindingResult result) throws Exception {
+		if (projectService.projectNumberExisted(null,
+				project.getProjectNumber())) {
+			throw new ProjectNumberAlreadyExistsException(
+					project.getProjectNumber());
+		}
 		if (result.hasErrors()) {
 			jsonResponse.setStatus("FAIL");
 			jsonResponse.setResult(result.getFieldErrors());
+
 		} else {
 			projectService.addProject(project);
 			jsonResponse.setStatus("SUCCESS");
@@ -129,16 +137,18 @@ public class ProjectController {
 	@RequestMapping(method = RequestMethod.GET, value = "/resetCriteria")
 	@ResponseBody
 	public ModelAndView resetCriteria(HttpServletRequest request) {
-		ModelAndView model = makeProjectModel("forms/projectList", projectService.findAll(), FIRST_PAGE,
-				DEFAULT_SELECTED, false);
+		ModelAndView model = makeProjectModel("forms/projectList",
+				projectService.findAll(), FIRST_PAGE, DEFAULT_SELECTED, false);
 		request.getSession().setAttribute("searchValue", "");
 		return model;
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/filterProject")
 	@ResponseBody
-	public ModelAndView filterProjects(@RequestParam(value = "keywords") String keywords,
-			@RequestParam(value = "statusKey") STATUS statusKey, HttpServletRequest request) {
+	public ModelAndView filterProjects(
+			@RequestParam(value = "keywords") String keywords,
+			@RequestParam(value = "statusKey") STATUS statusKey,
+			HttpServletRequest request) {
 		ModelAndView model;
 		List<Project> projects;
 		Boolean isSearchResult = false;
@@ -151,7 +161,8 @@ public class ProjectController {
 			isSearchResult = true;
 			request.getSession().setAttribute("searchValue", keywords);
 		}
-		model = makeProjectModel("forms/projectList", projects, FIRST_PAGE, DEFAULT_SELECTED, isSearchResult);
+		model = makeProjectModel("forms/projectList", projects, FIRST_PAGE,
+				DEFAULT_SELECTED, isSearchResult);
 		if (projects.size() == 0) {
 			model.addObject("searchResult", "No Results Found");
 		}
@@ -180,7 +191,8 @@ public class ProjectController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/EditProject")
 	@ResponseBody
-	public JsonResponse editProject(@Validated @RequestBody Project project, BindingResult result) {
+	public JsonResponse editProject(@Validated @RequestBody Project project,
+			BindingResult result) {
 
 		if (result.hasErrors()) {
 			jsonResponse.setStatus("FAIL");

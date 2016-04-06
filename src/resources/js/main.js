@@ -130,7 +130,7 @@ $(document).ready(function() {
 			}).done(function(data) {
 				$("#main #contentBody").html(data);
 			}).fail(function(jqXHR, textStatus,errorThrown) {
-				window.location.href = $(".header #projectName").attr("href") + "errorsunexpected=" + errorThrown;
+				window.location.href = $(".header #projectName").attr("href") + "errorsunexpected=" + jqXHR.responseText;
 			});
 		}
 	});
@@ -234,7 +234,7 @@ $(document).ready(function() {
 				}
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				window.location.href = $(".header #projectName").attr("href") + "errorsunexpected=" + errorThrown;
+				window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + XMLHttpRequest.responseText;
 			}
 		})
 	});
