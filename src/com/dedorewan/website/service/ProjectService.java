@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.dedorewan.website.dao.IProjectRepository;
 import com.dedorewan.website.dom.Project;
 import com.dedorewan.website.dom.Project.STATUS;
+import com.dedorewan.website.exception.CustomException;
 
 @Service
 @Transactional
@@ -26,8 +27,13 @@ public class ProjectService implements IProjectService {
 		return projectRepository.findAllSearchResults();
 	}
 
-	public Project getProject(Long id) {
-		return projectRepository.findOne(id);
+	public Project getProject(Long id) throws Exception {
+		Project project =projectRepository.findOne(id);
+		if(project == null){
+			throw new CustomException("ProjecNotExist","requested project does not exist");
+		}
+		projectRepository.addEdittingProjects(project);
+		return project;
 	}
 
 	public void addProject(Project project) throws Exception {

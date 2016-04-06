@@ -12,7 +12,7 @@ public interface IProjectService {
 
 	List<Project> projectsInPage(List<Project> projects, Integer page);
 
-	Project getProject(Long id);
+	Project getProject(Long id) throws Exception;
 
 	void addProject(Project project) throws Exception;
 

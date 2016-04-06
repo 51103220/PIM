@@ -24,7 +24,9 @@
 						code="form.number" /><span class="isRequired">*</span> </label>
 				<div class="col-sm-9">
 					<input type="hidden" name="id" class="form-control shortWidth"
-						value="${project.getId()}"> <input type="number"
+						value="${project.getId()}">
+						<input type="hidden" name="version" class="form-control shortWidth"
+						value="${project.getVersion()}"> <input type="number"
 						class="form-control shortWidth firstInput" name="projectNumber"
 						id="pNumber" value="${project.getProjectNumber()}">
 					<p class="hiddenError"></p>

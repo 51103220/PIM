@@ -124,7 +124,7 @@ public class ProjectController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/project/{id}/detail")
 	@ResponseBody
-	public ModelAndView getProject(@PathVariable Long id) {
+	public ModelAndView getProject(@PathVariable Long id) throws Exception {
 		Project project = projectService.getProject(id);
 		ModelAndView model = new ModelAndView("forms/newProject");
 		String leaderVisa = projectService.groupLeaderVisa(project);
