@@ -43,15 +43,16 @@
 					<div id="message">
 						<p>
 							<spring:message code="application.errors.default" />
-							${message}.
+							[${message}].
 						</p>
 						<p>
-							Please <a href="#">contact your administrator</a>
+							<spring:message code="application.errors.please" />
+							<a href="#"><spring:message code="application.errors.contact" /></a>
 						</p>
 					</div>
 					<div id="backLink">
 						<p>
-							or <a href="<c:url value='/'/>">back to search project</a>
+							<spring:message code="application.errors.or" /> <a href="<c:url value='/'/>"><spring:message code="application.errors.backLink" /></a>
 						</p>
 
 					</div>
