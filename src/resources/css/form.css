@@ -215,16 +215,17 @@ select.empty {
 	font-family: "Segoe UI Semibold";
 	display: inline;
 }
-
+.delCol{
+	max-width:78px;
+}
 .resultRow  .deleteMultiple {
 	color: red;
 	size: 12pt;
 	font-family: "Segoe UI";
 	display: inline;
-	margin-right: 40px;
+	margin-right: 32px;
 	float: right;
 }
-
 .pagination .selected {
 	color: #000 !important;
 	background-color: #ddd;

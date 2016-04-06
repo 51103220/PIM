@@ -66,7 +66,7 @@
 							class="form-control"></th>
 						<th class="col30px"><input type="text" name="pDate"
 							class="form-control"></th>
-						<th></th>
+						<th ></th>
 					</tr>
 
 				</thead>
@@ -99,9 +99,9 @@
 			</table>
 		</div>
 		<div class="resultRow">
-			<p class="totalItems">2 items selected</p>
-			<a href="<c:url value='/deleteMultiple'/>" class="deleteMultiple">delete
-				selected items <span class="glyphicon glyphicon-trash"></span>
+			<p class="totalItems"></p>
+			<a href="<c:url value='/deleteMultiple'/>" class="deleteMultiple"><spring:message
+					code="delete.all" />&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-trash"></span>
 			</a>
 		</div>
 		<div>
@@ -169,28 +169,27 @@
 		selectorHeaders : '.sorter-true'
 	});
 	var maxPaginationLinks = 2;
-	function handlePagination(id){
+	function handlePagination(id) {
 		var links = $("#projectList .pagination .paging");
-		id =  parseInt(id);
-		var i =1;
-		var start,end =0;
-		if(id%maxPaginationLinks ==0){
-			start = id -maxPaginationLinks+1;
+		id = parseInt(id);
+		var i = 1;
+		var start, end = 0;
+		if (id % maxPaginationLinks == 0) {
+			start = id - maxPaginationLinks + 1;
 			end = id;
-		}
-		else{
+		} else {
 			start = id;
-			end = id+maxPaginationLinks-1;
+			end = id + maxPaginationLinks - 1;
 		}
-		links.each(function(){
-			var link =$(this);
-			if (i>=start && i <=end){
+		links.each(function() {
+			var link = $(this);
+			if (i >= start && i <= end) {
 				link.show();
-			}else{
+			} else {
 				link.hide();
 			}
-				
-			i=i+1;
+
+			i = i + 1;
 		});
 	};
 	handlePagination("2");

@@ -63,6 +63,7 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 	@SuppressWarnings("unchecked")
 	public List<Project> filterProjects(String keywords, STATUS statusKey) {
 		String query;
+		searchResult.clear();
 		if (keywords.matches("^[0-9]+")) {
 			Integer projectNumber = -1;
 			projectNumber = Integer.parseInt(keywords);
@@ -71,9 +72,9 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 					+ "' order by project_number ASC";
 		} else {
 			keywords = keywords.toLowerCase();
-			query = "select p from Project p where LOWER(name) like '%"
+			query = "select p from Project p where (LOWER(name) like '%"
 					+ keywords + "%' or LOWER(customer) like '%" + keywords
-					+ "%' and status ='" + statusKey
+					+ "%') and status ='" + statusKey
 					+ "' order by project_number ASC";
 		}
 		searchResult = (List<Project>) entityManager.createQuery(query)
