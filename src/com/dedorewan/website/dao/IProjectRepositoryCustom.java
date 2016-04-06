@@ -16,9 +16,9 @@ public interface IProjectRepositoryCustom {
 
 	boolean visaExsisted(String visa);
 	
-	void insert(Project project);
+	void insert(Project project) throws Exception;
 	
-	void update(Project project);
+	void update(Project project) throws Exception;
 	
-	void delete(Long id);
+	void delete(Long id) throws Exception;
 }

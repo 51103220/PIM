@@ -84,7 +84,7 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 		return false;
 	}
 
-	public void insert(Project project) {
+	public void insert(Project project) throws Exception {
 		project.setVersion(2050512000);
 		project.setGroup(groupRepository.getOne(project.getGroupId()));
 		project.setEmployees(employeeRepository.getAllEmployeeByVisa(project.getMembers()));
@@ -92,7 +92,7 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 		session.merge(project);
 	}
 
-	public void update(Project project) {
+	public void update(Project project) throws Exception {
 		project.setGroup(groupRepository.getOne(project.getGroupId()));
 		project.setEmployees(employeeRepository.getAllEmployeeByVisa(project.getMembers()));
 		Session session = sessionFactory.getCurrentSession();
@@ -102,12 +102,11 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 			existing_project.updateData(project);
 			session.merge(existing_project);
 		} else {
-			throw new CustomException("999", "CANT UPDATE PROJECT");
-
+			throw new CustomException("999", "CAN NOT UPDATE PROJECT");
 		}
 	}
 
-	public void delete(Long id) {
+	public void delete(Long id) throws Exception {
 		Session session = sessionFactory.getCurrentSession();
 		Project existing_project = (Project) session.get(Project.class, id, new LockOptions(LockMode.OPTIMISTIC));
 		if (existing_project != null && existing_project.getStatus() == STATUS.NEW) {
@@ -115,8 +114,7 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 			existing_project.getEmployees().clear();
 			session.delete(existing_project);
 		} else {
-			throw new CustomException("999", "CANT DELETE PROJECT");
-
+			throw new CustomException("1000", "CANT DELETE PROJECT");
 		}
 
 	}

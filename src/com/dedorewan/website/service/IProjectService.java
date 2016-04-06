@@ -14,17 +14,17 @@ public interface IProjectService {
 
 	Project getProject(Long id);
 
-	void addProject(Project project);
+	void addProject(Project project) throws Exception;
 
 	boolean projectNumberExisted(Long id, Integer project_number);
 
 	boolean visaExsisted(String visa);
 
-	void updateProject(Project project);
+	void updateProject(Project project) throws Exception;
 
-	void deleteProject(Long id);
+	void deleteProject(Long id) throws Exception;
 
-	void deleteProjects(Long[] ids);
+	void deleteProjects(Long[] ids) throws Exception;
 
 	Integer numberPages(List<Project> projects, Integer maxProjects);
 

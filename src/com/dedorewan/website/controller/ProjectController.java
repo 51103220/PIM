@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.dedorewan.website.dom.Employee;
 import com.dedorewan.website.dom.Project;
 import com.dedorewan.website.dom.Project.STATUS;
@@ -171,14 +172,14 @@ public class ProjectController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/project/{id}/delete")
 	@ResponseBody
-	public String deleteProject(@PathVariable Long id) {
+	public String deleteProject(@PathVariable Long id) throws Exception {
 		projectService.deleteProject(id);
 		return "success";
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/deleteMultiple")
 	@ResponseBody
-	public String deleteProjects(@RequestParam(value = "ids[]") Long[] ids) {
+	public String deleteProjects(@RequestParam(value = "ids[]") Long[] ids) throws Exception {
 		projectService.deleteProjects(ids);
 		return "success";
 	}
@@ -192,7 +193,7 @@ public class ProjectController {
 	@RequestMapping(method = RequestMethod.POST, value = "/EditProject")
 	@ResponseBody
 	public JsonResponse editProject(@Validated @RequestBody Project project,
-			BindingResult result) {
+			BindingResult result) throws Exception {
 
 		if (result.hasErrors()) {
 			jsonResponse.setStatus("FAIL");

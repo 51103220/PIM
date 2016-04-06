@@ -279,7 +279,7 @@ $(document).ready(function() {
 	    		}).done(function(data) {
 	    			link.parent().parent().remove();
 	    		}).fail(function(jqXHR, textStatus,errorThrown) {
-	    			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
+	    			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + jqXHR.responseText;
 	    		});
 	        	$(this).dialog("close");
 	        },
@@ -323,7 +323,7 @@ $(document).ready(function() {
 		    			});
 		    			$("#projectList .resultRow").hide();
 		    		}).fail(function(jqXHR, textStatus,errorThrown) {
-		    			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
+		    			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + jqXHR.responseText;
 		    		});
 		        	$(this).dialog("close");
 		        },

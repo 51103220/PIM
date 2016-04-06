@@ -1,9 +1,12 @@
 package com.dedorewan.website.service;
 
 import java.util.List;
+
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.dedorewan.website.dao.IProjectRepository;
 import com.dedorewan.website.dom.Project;
 import com.dedorewan.website.dom.Project.STATUS;
@@ -27,7 +30,7 @@ public class ProjectService implements IProjectService {
 		return projectRepository.findOne(id);
 	}
 
-	public void addProject(Project project) {
+	public void addProject(Project project) throws Exception {
 		projectRepository.insert(project);
 	}
 
@@ -47,15 +50,15 @@ public class ProjectService implements IProjectService {
 		return projectRepository.visaExsisted(visa);
 	}
 
-	public void updateProject(Project project) {
+	public void updateProject(Project project) throws Exception {
 		projectRepository.update(project);
 	}
 
-	public void deleteProject(Long id) {
+	public void deleteProject(Long id) throws Exception {
 		projectRepository.delete(id);
 	}
 
-	public void deleteProjects(Long[] ids) {
+	public void deleteProjects(Long[] ids) throws Exception {
 		for(long id : ids){
 			deleteProject(id);
 		}
