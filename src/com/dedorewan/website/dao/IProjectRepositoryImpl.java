@@ -2,17 +2,12 @@ package com.dedorewan.website.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import org.hibernate.LockMode;
-import org.hibernate.LockOptions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
 import com.dedorewan.website.dom.Project;
 import com.dedorewan.website.dom.Project.STATUS;
 import com.dedorewan.website.exception.CustomException;
@@ -96,8 +91,7 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 		project.setGroup(groupRepository.getOne(project.getGroupId()));
 		project.setEmployees(employeeRepository.getAllEmployeeByVisa(project.getMembers()));
 		Session session = sessionFactory.getCurrentSession();
-		Project existing_project = (Project) session.get(Project.class, project.getId(),
-				new LockOptions(LockMode.OPTIMISTIC));
+		Project existing_project = (Project) session.get(Project.class, project.getId());
 		if (existing_project != null) {
 			existing_project.updateData(project);
 			session.merge(existing_project);
@@ -108,7 +102,7 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 
 	public void delete(Long id) throws Exception {
 		Session session = sessionFactory.getCurrentSession();
-		Project existing_project = (Project) session.get(Project.class, id, new LockOptions(LockMode.OPTIMISTIC));
+		Project existing_project = (Project) session.get(Project.class, id);
 		if (existing_project != null && existing_project.getStatus() == STATUS.NEW) {
 			existing_project.setGroup(null);
 			existing_project.getEmployees().clear();

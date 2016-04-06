@@ -41,14 +41,17 @@
 				</div>
 				<div class="col-md-6" id="errorMessage">
 					<div id="message">
-						<p><spring:message code="application.errors.default" /> ${message}.</p>
+						<p>
+							<spring:message code="application.errors.default" />
+							${message}.
+						</p>
 						<p>
 							Please <a href="#">contact your administrator</a>
 						</p>
 					</div>
 					<div id="backLink">
 						<p>
-							or <a href="<c:url value='/'/>" >back to search project</a>
+							or <a href="<c:url value='/'/>">back to search project</a>
 						</p>
 
 					</div>
