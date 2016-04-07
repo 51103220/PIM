@@ -1,5 +1,6 @@
 package com.dedorewan.website.dom;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -17,7 +18,12 @@ import javax.persistence.Version;
 
 @Entity
 @Table(name = "GROUPS")
-public class Group {
+public class Group implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

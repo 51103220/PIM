@@ -1,4 +1,5 @@
 package com.dedorewan.website.dom;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
@@ -13,7 +14,12 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 @Entity
 @Table(name = "EMPLOYEE")
-public class Employee {
+public class Employee implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
