@@ -32,12 +32,25 @@
 			</div>
 			<div class="form-group">
 				<select class="form-control empty" id="statusKey">
-					<option value="" selected disabled>${searchStatus}</option>
-					<option></option>
+					<c:choose>
+						<c:when test="${statusKey !=null}">
+							<option value="${statusKey}"><spring:message
+									code="status.${statusKey}" /></option>
+						</c:when>
+						<c:otherwise>
+							<option value="" selected disabled>${searchStatus}</option>
+						</c:otherwise>
+					</c:choose>
+
 					<c:forEach items="${statusValues}" var="status">
-						<option value="${status}"><spring:message
-								code="status.${status}" /></option>
+						<c:choose>
+							<c:when test="${status!=statusKey}">
+								<option value="${status}"><spring:message
+										code="status.${status}" /></option>
+							</c:when>
+						</c:choose>
 					</c:forEach>
+					<option></option>
 				</select>
 
 			</div>

@@ -26,34 +26,49 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 
 	@Autowired
 	private SessionFactory sessionFactory;
-	
+
 	@Autowired
 	private IProjectRepository projectRepository;
-	
+
 	@Value("${projects.maxProjectPerPage}")
 	Integer projectsPerPage;
-	
+
 	private List<Project> searchResult = new ArrayList<Project>();
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Project> filterProjects(String keywords, STATUS statusKey) {
-		String query;
+
+		String queryKeywords;
+		String queryStatus;
+		String order = " order by project_number ASC";
 		searchResult.clear();
-		if (keywords.matches("^[0-9]+")) {
-			Integer projectNumber = -1;
-			projectNumber = Integer.parseInt(keywords);
-			query = "select p from Project p where project_number = "
-					+ projectNumber + "and status = '" + statusKey
-					+ "' order by project_number ASC";
+		if (!keywords.isEmpty()) {
+			if (statusKey != null) {
+				queryStatus = " and status = '" + statusKey + "'";
+			} else {
+				queryStatus = " ";
+			}
+			if (keywords.matches("^[0-9]+")) {
+				Integer projectNumber = -1;
+				projectNumber = Integer.parseInt(keywords);
+				queryKeywords = "select p from Project p where project_number = "
+						+ projectNumber;
+
+			} else {
+				keywords = keywords.toLowerCase();
+				queryKeywords = "select p from Project p where (LOWER(name) like '%"
+						+ keywords
+						+ "%' or LOWER(customer) like '%"
+						+ keywords
+						+ "%')";
+			}
 		} else {
-			keywords = keywords.toLowerCase();
-			query = "select p from Project p where (LOWER(name) like '%"
-					+ keywords + "%' or LOWER(customer) like '%" + keywords
-					+ "%') and status ='" + statusKey
-					+ "' order by project_number ASC";
+			queryKeywords = "";
+			queryStatus = "select p from Project p where status = '"
+					+ statusKey + "'";
 		}
-		searchResult = (List<Project>) entityManager.createQuery(query)
-				.getResultList();
+		searchResult = (List<Project>) entityManager.createQuery(
+				queryKeywords + queryStatus + order).getResultList();
 		return searchResult;
 	}
 
@@ -106,7 +121,7 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 		Session session = sessionFactory.getCurrentSession();
 		session.merge(project);
 	}
-	
+
 	public void delete(Long id) throws Exception {
 		Session session = sessionFactory.getCurrentSession();
 		Project existing_project = (Project) session.get(Project.class, id);
@@ -115,7 +130,7 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 			existing_project.setGroup(null);
 			existing_project.getEmployees().clear();
 			session.delete(existing_project);
-		} 
+		}
 
 	}
 }

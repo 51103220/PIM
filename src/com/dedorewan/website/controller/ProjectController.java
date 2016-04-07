@@ -135,6 +135,7 @@ public class ProjectController {
 		ModelAndView model = makeProjectModel("forms/projectList",
 				projectService.findAll(), FIRST_PAGE, DEFAULT_SELECTED, false);
 		request.getSession().setAttribute("searchValue", "");
+		request.getSession().setAttribute("statusKey", null);
 		return model;
 	}
 
@@ -150,11 +151,13 @@ public class ProjectController {
 		if (statusKey == null && keywords == "") {
 			projects = projectService.findAll();
 			request.getSession().setAttribute("searchValue", "");
+			request.getSession().setAttribute("statusKey", null);
 		} else {
 			projectService.filterProjects(keywords, statusKey);
 			projects = projectService.findAllSearchResults();
 			isSearchResult = true;
 			request.getSession().setAttribute("searchValue", keywords);
+			request.getSession().setAttribute("statusKey", statusKey);
 		}
 		model = makeProjectModel("forms/projectList", projects, FIRST_PAGE,
 				DEFAULT_SELECTED, isSearchResult);
