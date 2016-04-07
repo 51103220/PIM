@@ -22,10 +22,6 @@ public class ProjectService implements IProjectService {
 		return projectRepository.findAllByOrderByProjectNumberAsc();
 	}
 
-	public List<Project> findAllSearchResults() {
-		return projectRepository.findAllSearchResults();
-	}
-
 	public Project getProject(Long id) throws Exception {
 		Project project = projectRepository.findOne(id);
 		if (project == null) {

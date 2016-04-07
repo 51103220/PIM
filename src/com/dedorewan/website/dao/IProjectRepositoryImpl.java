@@ -33,15 +33,13 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 	@Value("${projects.maxProjectPerPage}")
 	Integer projectsPerPage;
 
-	private List<Project> searchResult = new ArrayList<Project>();
 
 	@SuppressWarnings("unchecked")
 	public List<Project> filterProjects(String keywords, STATUS statusKey) {
-
+		List<Project> searchResult = new ArrayList<Project>();
 		String queryKeywords;
 		String queryStatus;
 		String order = " order by project_number ASC";
-		searchResult.clear();
 		if (!keywords.isEmpty()) {
 			if (statusKey != null) {
 				queryStatus = " and status = '" + statusKey + "'";
@@ -69,10 +67,6 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 		}
 		searchResult = (List<Project>) entityManager.createQuery(
 				queryKeywords + queryStatus + order).getResultList();
-		return searchResult;
-	}
-
-	public List<Project> findAllSearchResults() {
 		return searchResult;
 	}
 

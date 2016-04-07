@@ -66,29 +66,26 @@ public class ProjectController {
 		return model;
 	}
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET, value = "/listProject")
 	@ResponseBody
-	public ModelAndView listProjectPage(){
-		
-		ModelAndView model = makeProjectModel("forms/projectList",
-				projectService.findAll(), FIRST_PAGE, DEFAULT_SELECTED, false);
+	public ModelAndView listProjectPage(HttpServletRequest request) {
+		List<Project> projects = (List<Project>) request.getSession()
+				.getAttribute("projectList");
+		ModelAndView model = makeProjectModel("forms/projectList", projects,
+				FIRST_PAGE, DEFAULT_SELECTED, false);
 		return model;
 	}
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET, value = "projects/page/{page}")
 	@ResponseBody
-	public ModelAndView projectsPage(@PathVariable Integer page) {
-		ModelAndView model = makeProjectModel("forms/projectList",
-				projectService.findAll(), page, page, false);
-		return model;
-	}
-
-	@RequestMapping(method = RequestMethod.GET, value = "search/page/{page}")
-	@ResponseBody
-	public ModelAndView searchResultPage(@PathVariable Integer page) {
-
-		ModelAndView model = makeProjectModel("forms/projectList",
-				projectService.findAllSearchResults(), page, page, true);
+	public ModelAndView projectsPage(@PathVariable Integer page,
+			HttpServletRequest request) {
+		List<Project> projects = (List<Project>) request.getSession()
+				.getAttribute("projectList");
+		ModelAndView model = makeProjectModel("forms/projectList", projects,
+				page, page, false);
 		return model;
 	}
 
@@ -132,10 +129,12 @@ public class ProjectController {
 	@RequestMapping(method = RequestMethod.GET, value = "/resetCriteria")
 	@ResponseBody
 	public ModelAndView resetCriteria(HttpServletRequest request) {
-		ModelAndView model = makeProjectModel("forms/projectList",
-				projectService.findAll(), FIRST_PAGE, DEFAULT_SELECTED, false);
+		List<Project> projects = projectService.findAll();
+		ModelAndView model = makeProjectModel("forms/projectList", projects,
+				FIRST_PAGE, DEFAULT_SELECTED, false);
 		request.getSession().setAttribute("searchValue", "");
 		request.getSession().setAttribute("statusKey", null);
+		request.getSession().setAttribute("projectList", projects);
 		return model;
 	}
 
@@ -145,26 +144,22 @@ public class ProjectController {
 			@RequestParam(value = "keywords") String keywords,
 			@RequestParam(value = "statusKey") STATUS statusKey,
 			HttpServletRequest request) {
-		ModelAndView model;
-		List<Project> projects;
-		Boolean isSearchResult = false;
+
 		if (statusKey == null && keywords == "") {
-			projects = projectService.findAll();
-			request.getSession().setAttribute("searchValue", "");
-			request.getSession().setAttribute("statusKey", null);
+			return resetCriteria(request);
 		} else {
-			projectService.filterProjects(keywords, statusKey);
-			projects = projectService.findAllSearchResults();
-			isSearchResult = true;
+			List<Project> projects = projectService.filterProjects(keywords,
+					statusKey);
 			request.getSession().setAttribute("searchValue", keywords);
 			request.getSession().setAttribute("statusKey", statusKey);
+			request.getSession().setAttribute("projectList", projects);
+			ModelAndView model = makeProjectModel("forms/projectList",
+					projects, FIRST_PAGE, DEFAULT_SELECTED, false);
+			if (projects.size() == 0) {
+				model.addObject("searchResult", "No Results Found");
+			}
+			return model;
 		}
-		model = makeProjectModel("forms/projectList", projects, FIRST_PAGE,
-				DEFAULT_SELECTED, isSearchResult);
-		if (projects.size() == 0) {
-			model.addObject("searchResult", "No Results Found");
-		}
-		return model;
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/project/{id}/delete")
@@ -176,7 +171,8 @@ public class ProjectController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/deleteMultiple")
 	@ResponseBody
-	public String deleteProjects(@RequestParam(value = "ids[]") Long[] ids) throws Exception {
+	public String deleteProjects(@RequestParam(value = "ids[]") Long[] ids)
+			throws Exception {
 		projectService.deleteProjects(ids);
 		return "success";
 	}

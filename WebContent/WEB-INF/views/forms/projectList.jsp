@@ -150,14 +150,7 @@
 			</c:choose>
 		</c:otherwise>
 	</c:choose>
-	<c:choose>
-		<c:when test="${isSearchResult==true}">
-			<c:set var="directiveClass" value="search/page/" />
-		</c:when>
-		<c:otherwise>
-			<c:set var="directiveClass" value="projects/page/" />
-		</c:otherwise>
-	</c:choose>
+	<c:set var="directiveClass" value="projects/page/" />
 	<ul class="pagination">
 		<li><a href="${directiveClass}" class="directives" id="previous"><img
 				id="logo" src="resources/images/previous_page.png"></a></li>

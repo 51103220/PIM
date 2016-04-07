@@ -8,8 +8,6 @@ import com.dedorewan.website.dom.Project.STATUS;
 public interface IProjectService {
 	List<Project> findAll();
 
-	List<Project> findAllSearchResults();
-
 	List<Project> projectsInPage(List<Project> projects, Integer page);
 
 	Project getProject(Long id) throws Exception;
