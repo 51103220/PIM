@@ -109,4 +109,6 @@
 }
 input[type="number"] {
 	text-align: right;
+	padding-bottom: 5px;
+    padding-top: 5px;
 }

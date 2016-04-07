@@ -557,7 +557,7 @@ $(document).ready(function() {
 			}
 		});
 		if (!exists){
-			var newContent = "<li class='tag' id='"+link.attr("id")+"'>" +link.html() +"<a class='tagClose' href='#'><span class='glyphicon glyphicon-remove'></span></a></li>";
+			var newContent = "<li class='tag' id='"+link.attr("id")+"'>" +link.html() +"&nbsp;<a class='tagClose' href='#'><span class='glyphicon glyphicon-remove'></span></a></li>";
 			$(".tagsDiv .tags").html(newContent+oldContent);
 			var placeholder = $(".tagsDiv .tags .tagInput input").attr("placeholder");
 			$(".tagsDiv .tags .tagInput input").attr("placeholder", placeholder + link.attr("id") + ",");
