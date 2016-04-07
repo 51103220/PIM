@@ -2,7 +2,6 @@ package com.dedorewan.website.dom;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,7 +30,7 @@ public class Group {
 	@Column(name = "VERSION", nullable = false)
 	Long version;
 	
-	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "GROUP_LEADER_ID", nullable = false)
 	private Employee leader;
 	

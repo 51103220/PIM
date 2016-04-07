@@ -313,6 +313,11 @@ $(document).ready(function() {
 				ids.push(box.attr("id"));
 			}
 		});
+		if(!ids.length){
+			$(".errorPanel").show();
+			$(".errorPanel .panelMessage").html("Can not delete these items");
+			return;
+		}
 		$("#dialog").dialog({
 		      buttons : {
 		        "Delete" : function() {

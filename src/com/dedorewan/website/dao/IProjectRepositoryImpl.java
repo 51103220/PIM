@@ -2,15 +2,17 @@ package com.dedorewan.website.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+
 import com.dedorewan.website.dom.Project;
 import com.dedorewan.website.dom.Project.STATUS;
-import com.dedorewan.website.exception.CustomException;
 
 public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 	@PersistenceContext
@@ -25,41 +27,14 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
+	@Autowired
+	private IProjectRepository projectRepository;
+	
 	@Value("${projects.maxProjectPerPage}")
 	Integer projectsPerPage;
 	
 	private List<Project> searchResult = new ArrayList<Project>();
-	private List<Project> editingProjects = new ArrayList<Project>();
-
-	private void deleteEdittingProjects(Long id) {
-		for (Project p : editingProjects) {
-			if (p.getId() == id) {
-				editingProjects.remove(p);
-				break;
-			}
-		}
-	}
-
-	private Project getEdditingProjects(Long id) {
-		for (Project p : editingProjects) {
-			if (p.getId() == id) {
-				return p;
-
-			}
-		}
-		return null;
-	}
-
-	public void addEdittingProjects(Project project) {
-		for (Project p : editingProjects) {
-			if (p.getId() == project.getId()){
-				editingProjects.remove(p);
-				break;
-			}
-		}
-		editingProjects.add(project);
-	}
-
+	
 	@SuppressWarnings("unchecked")
 	public List<Project> filterProjects(String keywords, STATUS statusKey) {
 		String query;
@@ -129,16 +104,9 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 		project.setEmployees(employeeRepository.getAllEmployeeByVisa(project
 				.getMembers()));
 		Session session = sessionFactory.getCurrentSession();
-		Project existing_project = getEdditingProjects(project.getId());
-		if (existing_project != null) {
-			existing_project.updateData(project);		
-			session.merge(existing_project);
-		} else {
-			throw new CustomException("updateProjectFailed",
-					"UPDATE PROJECT FAILED (PROJECT HAS BEEN DELETED)");
-		}
+		session.merge(project);
 	}
-
+	
 	public void delete(Long id) throws Exception {
 		Session session = sessionFactory.getCurrentSession();
 		Project existing_project = (Project) session.get(Project.class, id);
@@ -146,12 +114,8 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 				&& existing_project.getStatus() == STATUS.NEW) {
 			existing_project.setGroup(null);
 			existing_project.getEmployees().clear();
-			deleteEdittingProjects(id);
 			session.delete(existing_project);
-		} else {
-			throw new CustomException("deleteProjectFailed",
-					"DELETE PROJECT FAILED (PROJECT DOES NOT EXIST)");
-		}
+		} 
 
 	}
 }

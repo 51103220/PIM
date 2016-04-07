@@ -3,11 +3,9 @@ package com.dedorewan.website.service;
 import java.util.List;
 
 import javax.transaction.Transactional;
-
 import org.hibernate.StaleObjectStateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.dedorewan.website.dao.IProjectRepository;
 import com.dedorewan.website.dom.Project;
 import com.dedorewan.website.dom.Project.STATUS;
@@ -31,9 +29,9 @@ public class ProjectService implements IProjectService {
 	public Project getProject(Long id) throws Exception {
 		Project project = projectRepository.findOne(id);
 		if (project == null) {
-			throw new CustomException("ProjecNotExist", "requested project does not exist");
+			throw new CustomException("ProjecNotExist",
+					"requested project does not exist");
 		}
-		projectRepository.addEdittingProjects(project);
 		return project;
 	}
 
@@ -42,7 +40,8 @@ public class ProjectService implements IProjectService {
 	}
 
 	public boolean projectNumberExisted(Long id, Integer project_number) {
-		List<Project> projects = projectRepository.findByProjectNumber(project_number);
+		List<Project> projects = projectRepository
+				.findByProjectNumber(project_number);
 		if (projects.size() > 0) {
 			if (projects.get(0).getId() == id) {
 				return false;
@@ -60,13 +59,17 @@ public class ProjectService implements IProjectService {
 		try {
 			projectRepository.update(project);
 		} catch (StaleObjectStateException s) {
-			throw new CustomException("updateProjectFailed",
-					"UPDATE PROJECT FAILED (PROJECT HAS BEEN UPDATED OR DELETED BY ANOTHER TRANSACTION)");
+			throw new CustomException("custom",
+					"Update Project Failed (Project has been updated or deleted by another user)");
 		}
 	}
 
 	public void deleteProject(Long id) throws Exception {
-		projectRepository.delete(id);
+		if (id != null && projectRepository.exists(id)) {
+			projectRepository.delete(id);
+		} else {
+			new CustomException("custom", "delete unsucessfully.");
+		}
 	}
 
 	public void deleteProjects(Long[] ids) throws Exception {

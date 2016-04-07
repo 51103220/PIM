@@ -2,6 +2,7 @@ package com.dedorewan.website.dom;
 
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -18,6 +19,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.persistence.CascadeType;
+
 @Entity
 @Table(name = "PROJECT")
 public class Project {
@@ -38,8 +40,7 @@ public class Project {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
-
+	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE})
 	@JoinColumn(name = "GROUP_ID", nullable = false)
 	private Group group;
 
@@ -64,15 +65,14 @@ public class Project {
 
 	@Column(name = "END_DATE", nullable = true)
 	private Date endDate;
-	
+
 	@Version
 	@Column(name = "VERSION", nullable = false)
 	private Integer version;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-	@JoinTable(name = "PROJECT_EMPLOYEE", joinColumns = {
-			@JoinColumn(name = "PROJECT_ID", nullable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "EMPLOYEE_ID", nullable = false) })
+	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE,
+			CascadeType.REMOVE })
+	@JoinTable(name = "PROJECT_EMPLOYEE", joinColumns = { @JoinColumn(name = "PROJECT_ID", nullable = false) }, inverseJoinColumns = { @JoinColumn(name = "EMPLOYEE_ID", nullable = false) })
 	private List<Employee> employees;
 
 	@Transient
@@ -82,8 +82,9 @@ public class Project {
 
 	}
 
-	public Project(Long id, Long groupId, Integer project_number, String name, String customer, STATUS status,
-			Date start_date, Date end_date, Integer version) {
+	public Project(Long id, Long groupId, Integer project_number, String name,
+			String customer, STATUS status, Date start_date, Date end_date,
+			Integer version) {
 		this.id = id;
 		this.groupId = groupId;
 		this.projectNumber = project_number;

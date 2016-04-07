@@ -20,7 +20,6 @@ public interface IProjectRepositoryCustom {
 	
 	void update(Project project) throws Exception;
 	
-	void delete(Long id) throws Exception;
+	public void delete(Long id) throws Exception;
 	
-	void addEdittingProjects(Project project);
 }

@@ -14,7 +14,16 @@
 	</p>
 	<spring:message code="placeholder.search" var="searchPlaceholder" />
 	<spring:message code="placeholder.status" var="searchStatus" />
+
 	<div class="formContent">
+		<div class="errorPanel">
+			<p class="panelMessage">
+				<spring:message code="errors.mandatory" />
+			</p>
+			<a href="#" class="closePanel"> <span
+				class="glyphicon glyphicon-remove"></span>
+			</a>
+		</div>
 		<form class="form-inline" action="filterProject" role="form"
 			id="searchInputs">
 			<div class="form-group">
@@ -66,7 +75,7 @@
 							class="form-control"></th>
 						<th class="col30px"><input type="text" name="pDate"
 							class="form-control"></th>
-						<th ></th>
+						<th></th>
 					</tr>
 
 				</thead>
@@ -101,8 +110,8 @@
 		<div class="resultRow">
 			<p class="totalItems"></p>
 			<a href="<c:url value='/deleteMultiple'/>" class="deleteMultiple"><spring:message
-					code="delete.all" />&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-trash"></span>
-			</a>
+					code="delete.all" />&nbsp;&nbsp;&nbsp;&nbsp;<span
+				class="glyphicon glyphicon-trash"></span> </a>
 		</div>
 		<div>
 			<p class="searchResult">${searchResult}</p>
@@ -169,7 +178,7 @@
 	$("#projectList #searchDatas").tablesorter({
 		selectorHeaders : '.sorter-true'
 	});
-	
+
 	var maxPaginationLinks = 2;
 	function handlePagination(id) {
 		var links = $("#projectList .pagination .paging");

@@ -58,6 +58,9 @@
 	padding: 10px 5px 10px 20px;
 	border-radius: 3px;
 }
+#projectList .errorPanel{
+	margin-bottom:10px;
+}
 
 .errorPanel .panelMessage {
 	font-family: "Segoe UI Semibold";
