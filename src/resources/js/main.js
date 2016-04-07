@@ -155,10 +155,14 @@ $(document).ready(function() {
 	 **************************************************************************/
 	$('#main #contentBody').on("click",".general-content .processBtn",function(e) {
 		e.preventDefault();
+		var btn = $(this);
 		var form = $(this).parent().parent().find(".general-form").first();
 		var $inputs = form.find("input");
 		var $selects = form.find("select");
 		var values = {};
+		if(btn.data("requestRunning")){
+			return;
+		}
 		$inputs.each(function() {
 			setErrorInput($(this), false, "");
 			var id = $(this);
@@ -192,11 +196,12 @@ $(document).ready(function() {
 				}
 			}
 		});
-	
+		
 		$selects.each(function() {
 			setErrorInput($(this), false, "");
 			values[$(this).attr("name")] = $(this).val();
 		});
+		btn.data('requestRunning', true);
 		$.ajax({
 			contentType : 'application/json',
 			type : form.attr("method"),
@@ -235,6 +240,9 @@ $(document).ready(function() {
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {
 				window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + XMLHttpRequest.responseText;
+			},
+			complete: function(){
+				btn.data('requestRunning', false);
 			}
 		})
 	});
@@ -338,9 +346,14 @@ $(document).ready(function() {
 	//Search 
 	$('#main #contentBody').on("click","#projectList #searchInputs #search_btn",function(e){
 		e.preventDefault();
+		var btn = $(this);
+		if(btn.data("requestRunning")){
+			return;
+		}
 		var form = $("#projectList #searchInputs");
 		var keywords =  $("#projectList #searchInputs #keywords").val();
 		var statusKey = $("#projectList #searchInputs #statusKey").val();
+		btn.data('requestRunning', true);
 		$.ajax({
 			method : "POST",
 			url : form.attr("action"),
@@ -351,8 +364,11 @@ $(document).ready(function() {
 		}).done(function(data) {
 			$("#main #contentBody").html(data);
 		}).fail(function(jqXHR, textStatus,errorThrown) {
-			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + errorThrown;
+			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + jqXHR.responseText;
+		}).complete(function(){
+			btn.data('requestRunning', false);
 		});
+		
 	});
 	//Reset Search
 	$('#main #contentBody').on("click","#projectList #searchInputs #reset_btn",function(e){
