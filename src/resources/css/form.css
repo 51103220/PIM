@@ -233,6 +233,16 @@ select.empty {
 	color: #000 !important;
 	background-color: #ddd;
 }
+.headerSortDown{
+	background: url(../images/asc.gif) no-repeat 99% !important;
+}
+.headerSortUp{
+	background: url(../images/desc.gif) no-repeat 99% !important;
+}
+.sorter-true{
+	background: url(../images/bg.gif) no-repeat 99%;
+}
+
 /****************************
 	OTHER FORMS
 *****************************/
