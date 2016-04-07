@@ -27,9 +27,6 @@ public class IProjectRepositoryImpl implements IProjectRepositoryCustom {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	@Autowired
-	private IProjectRepository projectRepository;
-
 	@Value("${projects.maxProjectPerPage}")
 	Integer projectsPerPage;
 

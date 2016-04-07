@@ -163,21 +163,12 @@
 					<c:set var="className" value="paging" />
 				</c:otherwise>
 			</c:choose>
-			<c:choose>
-				<c:when test="${isSearchResult==true}">
-					<li><a class="${className}" id="${loop.index}"
-						href="search/page/${loop.index}">${loop.index}</a></li>
-				</c:when>
-				<c:otherwise>
-					<li><a class="${className}" id="${loop.index}"
-						href="projects/page/${loop.index}">${loop.index}</a></li>
-				</c:otherwise>
-			</c:choose>
+			<li><a class="${className}" id="${loop.index}"
+				href="projects/page/${loop.index}">${loop.index}</a></li>
 		</c:forEach>
 		<li><a href="${directiveClass}" class="directives" id="next"><img
 				id="logo" src="resources/images/nextpage_icon.png"></a></li>
 	</ul>
-
 </div>
 <script>
 	$("#projectList .firstInput").focus();

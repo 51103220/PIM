@@ -47,25 +47,30 @@ public class ProjectController {
 	JsonResponse jsonResponse;
 	private static final int FIRST_PAGE = 1;
 	private static final int DEFAULT_SELECTED = 1;
-
+	
+	/**
+	 * Bind Project Validation
+	 */
 	@InitBinder
 	public void dataBinding(WebDataBinder binder) {
 		binder.addValidators(projectValidator);
 	}
-
+	/**
+	 * Return modeAndView of Project List page with pagination
+	 */
 	private ModelAndView makeProjectModel(String view,
-			List<Project> projectList, Integer page, Integer selectedPage,
-			Boolean isSearchResult) {
+			List<Project> projectList, Integer page, Integer selectedPage) {
 		ModelAndView model = new ModelAndView(view);
 		model.addObject("projects",
 				projectService.projectsInPage(projectList, page));
 		model.addObject("pages",
 				projectService.numberPages(projectList, projectsPerPage));
-		model.addObject("isSearchResult", isSearchResult);
 		model.addObject("selected", selectedPage);
 		return model;
 	}
-
+	/**
+	 * Return modeAndView of Project List page
+	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET, value = "/listProject")
 	@ResponseBody
@@ -73,7 +78,7 @@ public class ProjectController {
 		List<Project> projects = (List<Project>) request.getSession()
 				.getAttribute("projectList");
 		ModelAndView model = makeProjectModel("forms/projectList", projects,
-				FIRST_PAGE, DEFAULT_SELECTED, false);
+				FIRST_PAGE, DEFAULT_SELECTED);
 		return model;
 	}
 
@@ -85,7 +90,7 @@ public class ProjectController {
 		List<Project> projects = (List<Project>) request.getSession()
 				.getAttribute("projectList");
 		ModelAndView model = makeProjectModel("forms/projectList", projects,
-				page, page, false);
+				page, page);
 		return model;
 	}
 
@@ -101,13 +106,16 @@ public class ProjectController {
 	@RequestMapping(method = RequestMethod.POST, value = "/NewProject")
 	@ResponseBody
 	public JsonResponse newProject(@Validated @RequestBody Project project,
-			BindingResult result) throws Exception {
+			BindingResult result, HttpServletRequest request) throws Exception {
 		if (result.hasErrors()) {
 			jsonResponse.setStatus("FAIL");
 			jsonResponse.setResult(result.getFieldErrors());
 
 		} else {
 			projectService.addProject(project);
+			request.getSession().setAttribute("searchValue", "");
+			request.getSession().setAttribute("statusKey", null);
+			request.getSession().setAttribute("projectList", projectService.findAll());
 			jsonResponse.setStatus("SUCCESS");
 		}
 		return jsonResponse;
@@ -131,7 +139,7 @@ public class ProjectController {
 	public ModelAndView resetCriteria(HttpServletRequest request) {
 		List<Project> projects = projectService.findAll();
 		ModelAndView model = makeProjectModel("forms/projectList", projects,
-				FIRST_PAGE, DEFAULT_SELECTED, false);
+				FIRST_PAGE, DEFAULT_SELECTED);
 		request.getSession().setAttribute("searchValue", "");
 		request.getSession().setAttribute("statusKey", null);
 		request.getSession().setAttribute("projectList", projects);
@@ -154,7 +162,7 @@ public class ProjectController {
 			request.getSession().setAttribute("statusKey", statusKey);
 			request.getSession().setAttribute("projectList", projects);
 			ModelAndView model = makeProjectModel("forms/projectList",
-					projects, FIRST_PAGE, DEFAULT_SELECTED, false);
+					projects, FIRST_PAGE, DEFAULT_SELECTED);
 			if (projects.size() == 0) {
 				model.addObject("searchResult", "No Results Found");
 			}
