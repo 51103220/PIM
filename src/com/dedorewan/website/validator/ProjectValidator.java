@@ -48,8 +48,7 @@ public class ProjectValidator implements Validator {
 		} else if (project.getProjectNumber() <= 0) {
 			errors.rejectValue("projectNumber", "NotLessThan",
 					"Project Number must be greater than 0");
-		} else if (project.getProjectNumber() >= 10000
-				|| project.getProjectNumber() < 1000) {
+		} else if (project.getProjectNumber() >= 10000) {
 			errors.rejectValue("projectNumber", "GreaterThan",
 					"Project Number must be 4 digits");
 		}

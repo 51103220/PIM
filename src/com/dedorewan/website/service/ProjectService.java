@@ -29,7 +29,7 @@ public class ProjectService implements IProjectService {
 	public Project getProject(Long id) throws Exception {
 		Project project = projectRepository.findOne(id);
 		if (project == null) {
-			throw new CustomException("ProjecNotExist",
+			throw new CustomException("custom",
 					"requested project does not exist");
 		}
 		return project;

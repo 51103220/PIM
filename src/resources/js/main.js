@@ -238,8 +238,13 @@ $(document).ready(function() {
 					window.location.href = $(".header #projectName").attr("href");
 				}
 			},
-			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + XMLHttpRequest.responseText;
+			error : function(XMLHttpRequest, textStatus, errorThrown){
+				if (XMLHttpRequest.status == 409){
+					$(".errorPanel").show();
+					$(".errorPanel .panelMessage").html(XMLHttpRequest.responseText);
+				}else{
+					window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + XMLHttpRequest.responseText;
+				}
 			},
 			complete: function(){
 				btn.data('requestRunning', false);
@@ -258,7 +263,12 @@ $(document).ready(function() {
 		}).done(function(data) {
 			$("#main #contentBody").html(data);
 		}).fail(function(jqXHR, textStatus,errorThrown) {
-			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + jqXHR.responseText;
+			if (jqXHR.status == 409){
+				$(".errorPanel").show();
+				$(".errorPanel .panelMessage").html(jqXHR.responseText);
+			}else{
+				window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + jqXHR.responseText;
+			}
 		});
 	});
 	/***************************************************************************
@@ -287,7 +297,12 @@ $(document).ready(function() {
 	    		}).done(function(data) {
 	    			link.parent().parent().remove();
 	    		}).fail(function(jqXHR, textStatus,errorThrown) {
-	    			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + jqXHR.responseText;
+	    			if (jqXHR.status == 409){
+						$(".errorPanel").show();
+						$(".errorPanel .panelMessage").html(jqXHR.responseText);
+					}else{
+						window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + jqXHR.responseText;
+					}
 	    		});
 	        	$(this).dialog("close");
 	        },
@@ -336,7 +351,12 @@ $(document).ready(function() {
 		    			});
 		    			$("#projectList .resultRow").hide();
 		    		}).fail(function(jqXHR, textStatus,errorThrown) {
-		    			window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + jqXHR.responseText;
+		    			if (jqXHR.status == 409){
+							$(".errorPanel").show();
+							$(".errorPanel .panelMessage").html(jqXHR.responseText);
+						}else{
+							window.location.href = $(".header #projectName").attr("href") + "/errorsunexpected=" + jqXHR.responseText;
+						}
 		    		});
 		        	$(this).dialog("close");
 		        },

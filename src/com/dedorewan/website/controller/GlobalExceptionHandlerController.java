@@ -25,7 +25,7 @@ public class GlobalExceptionHandlerController {
 	}
 
 	@ExceptionHandler(CustomException.class)
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	@ResponseStatus(value = HttpStatus.CONFLICT)
 	@ResponseBody
 	public String handleCustomException(CustomException ex) {
 		return ex.getErrMsg();
