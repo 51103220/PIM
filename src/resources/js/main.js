@@ -139,10 +139,10 @@ $(document).ready(function() {
 	 * *Date Picking event
 	 **************************************************************************/
 	$('#main #contentBody').on("click", ".datePicker", function(){
-		$(this).datepicker();
+		$(this).datepicker({ dateFormat: 'dd, MM, yy' });
 	});
 	$('#main #contentBody').on("focus", ".datePicker", function(){
-		$(this).datepicker();
+		$(this).datepicker({ dateFormat: 'dd, MM, yy' });
 	});
 	$('#main #contentBody').on("click", ".datePickerIcon",function(e){
 		e.preventDefault();

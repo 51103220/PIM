@@ -1,5 +1,6 @@
 package com.dedorewan.website.dom;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +23,12 @@ import javax.persistence.CascadeType;
 
 @Entity
 @Table(name = "PROJECT")
-public class Project {
+public class Project implements Serializable  {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public static enum STATUS {
 		NEW("New"), PLA("Planned"), INP("In Progress"), FIN("Finished");
 		String m_name;
