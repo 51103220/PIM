@@ -165,9 +165,11 @@
 
 </div>
 <script>
+	$("#projectList .firstInput").focus();
 	$("#projectList #searchDatas").tablesorter({
 		selectorHeaders : '.sorter-true'
 	});
+	
 	var maxPaginationLinks = 2;
 	function handlePagination(id) {
 		var links = $("#projectList .pagination .paging");

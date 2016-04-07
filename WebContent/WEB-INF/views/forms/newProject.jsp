@@ -28,7 +28,7 @@
 						<input type="hidden" name="version" class="form-control shortWidth"
 						value="${project.getVersion()}"> <input type="number"
 						class="form-control shortWidth firstInput" name="projectNumber"
-						id="pNumber" value="${project.getProjectNumber()}">
+						id="pNumber" value="${project.getProjectNumber()}" autofocus>
 					<p class="hiddenError"></p>
 				</div>
 			</div>
@@ -170,3 +170,6 @@
 		</div>
 	</div>
 </div>
+<script>
+$("#newProject .firstInput").focus();
+</script>

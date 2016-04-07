@@ -448,8 +448,7 @@ $(document).ready(function() {
 	      $(".processBtn").click();
 	    }
 	  });
-	 $("#projectList .firstInput").focus();
-	 $("#newProject .firstInput").focus();
+	 
 	 /***************************************************************************
 		 * * TABLE HEADER SORTING
 	 **************************************************************************/
